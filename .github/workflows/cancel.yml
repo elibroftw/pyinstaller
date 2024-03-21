@@ -2,8 +2,9 @@ name: Cancel Previous Runs
 on:
   workflow_run:
     workflows: ["CI"]
-    types:
-      - requested
+    # commented for testing purposes
+    # types:
+    #   - requested
 permissions: {}
 jobs:
   cancel:

@@ -12,7 +12,13 @@ on:
       - '**'
       - '!master'
       - '!pyup/**'
-
+# one running CI workflow per PR and branch. Avoids using the cancel
+concurrency:
+  # the group is this workflow and the ref that kicked off the build
+  #   this last part allows job runs on the same non-PR ref to run in parallel
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ startsWith(github.ref, 'refs/pull/') || github.run_number }}
+  # only cancel the PR build as if there is an issue with the project, the breaking commit needs to be known
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 env:
   # Colored pytest output on CI despite not having a tty
   FORCE_COLOR: 1
