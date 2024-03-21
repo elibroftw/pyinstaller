@@ -11,6 +11,7 @@
 """
 Various classes and functions to provide some backwards-compatibility with previous versions of Python onward.
 """
+
 from __future__ import annotations
 
 import errno
@@ -45,6 +46,7 @@ else:
             import importlib_metadata
         except ImportError as e:
             from PyInstaller.exceptions import ImportlibMetadataError
+
             raise ImportlibMetadataError() from e
 
         import packaging.version  # For importlib_metadata version check
@@ -52,6 +54,7 @@ else:
         # Validate the version
         if packaging.version.parse(importlib_metadata.version("importlib-metadata")) < packaging.version.parse("4.6"):
             from PyInstaller.exceptions import ImportlibMetadataError
+
             raise ImportlibMetadataError()
 
 # Strict collect mode, which raises error when trying to collect duplicate files into PKG/CArchive or COLLECT.
@@ -120,24 +123,13 @@ if is_win or is_cygwin:
     }  # For MSYS2 environment
 elif is_darwin:
     # libpython%d.%dm.dylib for Conda virtual environment installations
-    PYDYLIB_NAMES = {
-        'Python',
-        '.Python',
-        'Python%d' % _pyver[0],
-        'libpython%d.%d.dylib' % _pyver,
-    }
+    PYDYLIB_NAMES = {'Python', '.Python', 'Python%d' % _pyver[0], 'libpython%d.%d.dylib' % _pyver}
 elif is_aix:
     # Shared libs on AIX may be archives with shared object members, hence the ".a" suffix. However, starting with
     # python 2.7.11 libpython?.?.so and Python3 libpython?.?m.so files are produced.
-    PYDYLIB_NAMES = {
-        'libpython%d.%d.a' % _pyver,
-        'libpython%d.%d.so' % _pyver,
-    }
+    PYDYLIB_NAMES = {'libpython%d.%d.a' % _pyver, 'libpython%d.%d.so' % _pyver}
 elif is_freebsd:
-    PYDYLIB_NAMES = {
-        'libpython%d.%d.so.1' % _pyver,
-        'libpython%d.%d.so.1.0' % _pyver,
-    }
+    PYDYLIB_NAMES = {'libpython%d.%d.so.1' % _pyver, 'libpython%d.%d.so.1.0' % _pyver}
 elif is_openbsd:
     PYDYLIB_NAMES = {'libpython%d.%d.so.0.0' % _pyver}
 elif is_hpux:
@@ -269,6 +261,7 @@ def is_wine_dll(filename: str | os.PathLike):
 if is_win:
     try:
         import ctypes.util  # noqa: E402
+
         is_win_wine = is_wine_dll(ctypes.util.find_library('kernel32'))
     except Exception:
         pass
@@ -443,7 +436,7 @@ def exec_command_all(*cmdargs: str, encoding: str | None = None, **kwargs: int |
         bufsize=-1,  # Default OS buffer size.
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        **kwargs
+        **kwargs,
     )
     # Waits for subprocess to complete.
     try:
@@ -643,15 +636,11 @@ SPECIAL_MODULE_TYPES = {
     'BuiltinModule',
     'RuntimeModule',
     'RuntimePackage',
-
     # PyInstaller handles scripts differently and not as standard Python modules.
     'Script',
 }
 # Object types of Binary Python modules (extensions, etc) in modulegraph dependency graph.
-BINARY_MODULE_TYPES = {
-    'Extension',
-    'ExtensionPackage',
-}
+BINARY_MODULE_TYPES = {'Extension', 'ExtensionPackage'}
 # Object types of valid Python modules in modulegraph dependency graph.
 VALID_MODULE_TYPES = PURE_PYTHON_MODULE_TYPES | SPECIAL_MODULE_TYPES | BINARY_MODULE_TYPES
 # Object types of bad/missing/invalid Python modules in modulegraph dependency graph.
@@ -662,7 +651,6 @@ BAD_MODULE_TYPES = {
     'InvalidSourceModule',
     'InvalidCompiledModule',
     'MissingModule',
-
     # Runtime modules and packages are technically valid rather than bad, but exist only in-memory rather than on-disk
     # (typically due to pre_safe_import_module() hooks), and hence cannot be physically frozen. For simplicity, these
     # nodes are categorized as bad rather than valid.

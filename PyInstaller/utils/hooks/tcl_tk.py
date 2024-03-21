@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -58,12 +58,7 @@ def _get_tcl_tk_info():
 
 
 # Populate the variables. If `tkinter` is unavailable, the values are set to `None` or `False`.
-(
-    tcl_dir,
-    tcl_version,
-    tk_version,
-    tcl_threaded,
-) = _get_tcl_tk_info()
+(tcl_dir, tcl_version, tk_version, tcl_threaded) = _get_tcl_tk_info()
 
 
 def _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree):
@@ -117,7 +112,8 @@ difficulty freezing. To fix this, comment out all references to "teapot" in:
      %s
 
 See https://github.com/pyinstaller/pyinstaller/issues/621 for more information.
-            """ % init_resource
+            """
+            % init_resource
         )
 
 
@@ -241,7 +237,7 @@ def collect_tcl_tk_files(tkinter_ext_file):
     # discovery is fixed).
     if compat.is_darwin and not tcl_root and not tk_root:
         logger.info(
-            "Not collecting Tcl/Tk data - either python is using macOS\' system Tcl/Tk framework, or Tcl/Tk data "
+            "Not collecting Tcl/Tk data - either python is using macOS' system Tcl/Tk framework, or Tcl/Tk data "
             "directories could not be found."
         )
         return []

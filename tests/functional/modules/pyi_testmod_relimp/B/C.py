@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,18 +7,22 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 name = 'pyi_testmod_relimp.B.C'
 
 # Import pyi_testmod_relimp.B.D
 from . import D  # noqa: E402
+
 # Import pyi_testmod_relimp.B.D.X
 from .D import X  # noqa: E402, F401
+
 # Import pyi_testmod_relimp.E
 from .. import E  # noqa: E402
+
 # Import pyi_testmod_relimp.F.G
 from ..F import G  # noqa: E402
+
 # Import pyi_testmod_relimp.F.H
 from ..F import H  # noqa: E402
 

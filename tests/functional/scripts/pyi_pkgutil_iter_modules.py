@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import sys
@@ -17,29 +17,15 @@ import importlib
 
 # Argument parser
 parser = argparse.ArgumentParser(description="pkgutil iter_modules test")
-parser.add_argument(
-    'package',
-    type=str,
-    help="Package to test.",
-)
-parser.add_argument(
-    '--prefix',
-    type=str,
-    default='',
-    help="Optional prefix to pass to iter_modules.",
-)
+parser.add_argument('package', type=str, help="Package to test.")
+parser.add_argument('--prefix', type=str, default='', help="Optional prefix to pass to iter_modules.")
 parser.add_argument(
     '--resolve-pkg-path',
     action='store_true',
     default=False,
     help="Resolve symbolic links in package path before passing it to pkgutil.iter_modules.",
 )
-parser.add_argument(
-    '--output-file',
-    default=None,
-    type=str,
-    help="Output file.",
-)
+parser.add_argument('--output-file', default=None, type=str, help="Output file.")
 args = parser.parse_args()
 
 # Output file (optional)

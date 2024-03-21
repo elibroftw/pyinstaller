@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Automatically build spec files containing a description of the project.
 """
@@ -58,18 +58,19 @@ class SourceDestAction(argparse.Action):
     """
     A command line option which takes multiple source:dest pairs.
     """
+
     def __init__(self, *args, default=None, metavar=None, **kwargs):
         super().__init__(*args, default=[], metavar='SOURCE:DEST', **kwargs)
 
     def __call__(self, parser, namespace, value, option_string=None):
         try:
             # Find the only separator that isn't a Windows drive.
-            separator, = (m for m in re.finditer(rf"(^\w:[/\\])|[:{os.pathsep}]", value) if not m[1])
+            (separator,) = (m for m in re.finditer(rf"(^\w:[/\\])|[:{os.pathsep}]", value) if not m[1])
         except ValueError:
             # Split into SRC and DEST failed, wrong syntax
             raise argparse.ArgumentError(self, f'Wrong syntax, should be {self.option_strings[0]}=SOURCE:DEST')
-        src = value[:separator.start()]
-        dest = value[separator.end():]
+        src = value[: separator.start()]
+        dest = value[separator.end() :]
         if not src or not dest:
             # Syntax was correct, but one or both of SRC and DEST was not given
             raise argparse.ArgumentError(self, "You have to specify both SOURCE and DEST")
@@ -86,8 +87,8 @@ def make_variable_path(filename, conversions=path_conversions):
         # os.path.commonpath can not compare relative and absolute paths, and if filename is not absolute, none of the
         # paths in conversions will match anyway.
         return None, filename
-    for (from_path, to_name) in conversions:
-        assert os.path.abspath(from_path) == from_path, ("path '%s' should already be absolute" % from_path)
+    for from_path, to_name in conversions:
+        assert os.path.abspath(from_path) == from_path, "path '%s' should already be absolute" % from_path
         try:
             common_path = os.path.commonpath([filename, from_path])
         except ValueError:
@@ -95,7 +96,7 @@ def make_variable_path(filename, conversions=path_conversions):
             # cases which prevent computing a common path.
             common_path = None
         if common_path == from_path:
-            rest = filename[len(from_path):]
+            rest = filename[len(from_path) :]
             if rest.startswith(('\\', '/')):
                 rest = rest[1:]
             return to_name, rest
@@ -104,6 +105,7 @@ def make_variable_path(filename, conversions=path_conversions):
 
 def removed_key_option(x):
     from PyInstaller.exceptions import RemovedCipherFeatureError
+
     raise RemovedCipherFeatureError("Please remove your --key=xxx argument.")
 
 
@@ -117,18 +119,21 @@ class _RemovedFlagAction(argparse.Action):
 class _RemovedNoEmbedManifestAction(_RemovedFlagAction):
     def __call__(self, *args, **kwargs):
         from PyInstaller.exceptions import RemovedExternalManifestError
+
         raise RemovedExternalManifestError("Please remove your --no-embed-manifest argument.")
 
 
 class _RemovedWinPrivateAssembliesAction(_RemovedFlagAction):
     def __call__(self, *args, **kwargs):
         from PyInstaller.exceptions import RemovedWinSideBySideSupportError
+
         raise RemovedWinSideBySideSupportError("Please remove your --win-private-assemblies argument.")
 
 
 class _RemovedWinNoPreferRedirectsAction(_RemovedFlagAction):
     def __call__(self, *args, **kwargs):
         from PyInstaller.exceptions import RemovedWinSideBySideSupportError
+
         raise RemovedWinSideBySideSupportError("Please remove your --win-no-prefer-redirects argument.")
 
 
@@ -151,8 +156,16 @@ class Path:
 # command-line
 class Preamble:
     def __init__(
-        self, datas, binaries, hiddenimports, collect_data, collect_binaries, collect_submodules, collect_all,
-        copy_metadata, recursive_copy_metadata
+        self,
+        datas,
+        binaries,
+        hiddenimports,
+        collect_data,
+        collect_binaries,
+        collect_submodules,
+        collect_all,
+        copy_metadata,
+        recursive_copy_metadata,
     ):
         # Initialize with literal values - will be switched to preamble variable name later, if necessary
         self.binaries = binaries or []
@@ -231,7 +244,7 @@ class Preamble:
     def _add_collect_all(self, name):
         self.content += [
             'tmp_ret = collect_all(\'{0}\')'.format(name),
-            'datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]'
+            'datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]',
         ]
 
 
@@ -257,14 +270,10 @@ def __add_options(parser):
         help="Create a one-file bundled executable.",
     )
     g.add_argument(
-        "--specpath",
-        metavar="DIR",
-        help="Folder to store the generated spec file (default: current directory)",
+        "--specpath", metavar="DIR", help="Folder to store the generated spec file (default: current directory)"
     )
     g.add_argument(
-        "-n",
-        "--name",
-        help="Name to assign to the bundled app and spec file (default: first script's basename)",
+        "-n", "--name", help="Name to assign to the bundled app and spec file (default: first script's basename)"
     )
     g.add_argument(
         "--contents-directory",
@@ -282,7 +291,7 @@ def __add_options(parser):
         'value should be in form of "source:dest_dir", where source is the path to file (or directory) to be '
         "collected, dest_dir is the destination directory relative to the top-level application directory, and both "
         "paths are separated by a colon (:). To put a file in the top-level application directory, use . as a "
-        "dest_dir. This option can be used multiple times."
+        "dest_dir. This option can be used multiple times.",
     )
     g.add_argument(
         '--add-binary',
@@ -299,8 +308,8 @@ def __add_options(parser):
         action="append",
         default=[],
         help="A path to search for imports (like using PYTHONPATH). Multiple paths are allowed, separated by ``%s``, "
-        "or use this option multiple times. Equivalent to supplying the ``pathex`` argument in the spec file." %
-        repr(os.pathsep),
+        "or use this option multiple times. Equivalent to supplying the ``pathex`` argument in the spec file."
+        % repr(os.pathsep),
     )
     g.add_argument(
         '--hidden-import',
@@ -386,12 +395,7 @@ def __add_options(parser):
         help='Optional module or package (the Python name, not the path name) that will be ignored (as though it was '
         'not found). This option can be used multiple times.',
     )
-    g.add_argument(
-        '--key',
-        dest='key',
-        help=argparse.SUPPRESS,
-        type=removed_key_option,
-    )
+    g.add_argument('--key', dest='key', help=argparse.SUPPRESS, type=removed_key_option)
     g.add_argument(
         '--splash',
         dest='splash',
@@ -525,21 +529,10 @@ def __add_options(parser):
 
     g = parser.add_argument_group('Windows specific options')
     g.add_argument(
-        "--version-file",
-        dest="version_file",
-        metavar="FILE",
-        help="Add a version resource from FILE to the exe.",
+        "--version-file", dest="version_file", metavar="FILE", help="Add a version resource from FILE to the exe."
     )
-    g.add_argument(
-        "-m",
-        "--manifest",
-        metavar="<FILE or XML>",
-        help="Add manifest FILE or XML to the exe.",
-    )
-    g.add_argument(
-        "--no-embed-manifest",
-        action=_RemovedNoEmbedManifestAction,
-    )
+    g.add_argument("-m", "--manifest", metavar="<FILE or XML>", help="Add manifest FILE or XML to the exe.")
+    g.add_argument("--no-embed-manifest", action=_RemovedNoEmbedManifestAction)
     g.add_argument(
         "-r",
         "--resource",
@@ -569,14 +562,8 @@ def __add_options(parser):
     )
 
     g = parser.add_argument_group('Windows Side-by-side Assembly searching options (advanced)')
-    g.add_argument(
-        "--win-private-assemblies",
-        action=_RemovedWinPrivateAssembliesAction,
-    )
-    g.add_argument(
-        "--win-no-prefer-redirects",
-        action=_RemovedWinNoPreferRedirectsAction,
-    )
+    g.add_argument("--win-private-assemblies", action=_RemovedWinPrivateAssembliesAction)
+    g.add_argument("--win-no-prefer-redirects", action=_RemovedWinNoPreferRedirectsAction)
 
     g = parser.add_argument_group('Mac OS specific options')
     g.add_argument(
@@ -684,7 +671,7 @@ def main(
     entitlements_file=None,
     argv_emulation=False,
     hide_console=None,
-    **_kwargs
+    **_kwargs,
 ):
     # Default values for onefile and console when not explicitly specified on command-line (indicated by None)
     if onefile is None:
@@ -773,8 +760,15 @@ def main(
 
     # Create preamble (for collect_*() calls)
     preamble = Preamble(
-        datas, binaries, hiddenimports, collect_data, collect_binaries, collect_submodules, collect_all, copy_metadata,
-        recursive_copy_metadata
+        datas,
+        binaries,
+        hiddenimports,
+        collect_data,
+        collect_binaries,
+        collect_submodules,
+        collect_all,
+        copy_metadata,
+        recursive_copy_metadata,
     )
 
     if splash:

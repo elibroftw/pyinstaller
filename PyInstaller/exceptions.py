@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from PyInstaller import compat
 
@@ -20,6 +20,7 @@ class HookError(Exception):
     """
     Base class for hook related errors.
     """
+
     pass
 
 
@@ -52,8 +53,7 @@ class RemovedWinSideBySideSupportError(SystemExit):
         )
 
 
-_MISSING_PYTHON_LIB_MSG = \
-"""Python library not found: {0}
+_MISSING_PYTHON_LIB_MSG = """Python library not found: {0}
     This means your Python installation does not come with proper shared library files.
     This usually happens due to missing development package, or unsuitable build parameters of the Python installation.
 
@@ -66,7 +66,7 @@ _MISSING_PYTHON_LIB_MSG = \
 
 class PythonLibraryNotFoundError(IOError):
     def __init__(self):
-        super().__init__(_MISSING_PYTHON_LIB_MSG.format(", ".join(compat.PYDYLIB_NAMES),))
+        super().__init__(_MISSING_PYTHON_LIB_MSG.format(", ".join(compat.PYDYLIB_NAMES)))
 
 
 class InvalidSrcDestTupleError(SystemExit):

@@ -5,6 +5,7 @@ from . import submodule_feature3
 feature1_available = False
 try:
     import mymodule_feature1  # noqa: F401
+
     feature1_available = True
 except ImportError:
     pass
@@ -13,6 +14,7 @@ except ImportError:
 feature2_available = False
 try:
     import mymodule_feature2  # noqa: F401
+
     feature2_available = True
 except ImportError:
     pass

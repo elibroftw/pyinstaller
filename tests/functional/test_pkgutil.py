@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # Tests for pkgutil.iter_modules(). The test attempts to list contents of a package in both unfrozen and frozen version,
 # and compares the obtained lists.
@@ -51,7 +51,7 @@ def _read_results_file(filename):
         'json',  # pure python package (stdlib)
         'xml.dom',  # sub-package (stdlib)
         'psutil',  # package with extensions (3rd party)
-    ]
+    ],
 )
 @pytest.mark.parametrize('archive', ['archive', 'noarchive'])
 def test_pkgutil_iter_modules(package, script_dir, tmpdir, pyi_builder, archive, resolve_pkg_path=False):
@@ -161,10 +161,7 @@ def test_pkgutil_iter_modules_macos_app_bundle(script_dir, tmpdir, pyi_builder, 
     for idx, exe in enumerate(executables):
         out_frozen = os.path.join(tmpdir, f"output-frozen-{idx}.txt")
         rc = pyi_builder._run_executable(
-            exe,
-            args=[package, '--output-file', out_frozen],
-            run_from_path=False,
-            runtime=None,
+            exe, args=[package, '--output-file', out_frozen], run_from_path=False, runtime=None
         )
         assert rc == 0
         results_frozen = _read_results_file(out_frozen)

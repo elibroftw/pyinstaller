@@ -20,12 +20,6 @@ def test_module_info_with_versions():
 def hook_api_for_module_version(module, version):
     class hook_api_stub:
         class analysis:
-            hooksconfig = {
-                "gi": {
-                    "module-versions": {
-                        module: version,
-                    }
-                }
-            }
+            hooksconfig = {"gi": {"module-versions": {module: version}}}
 
     return hook_api_stub

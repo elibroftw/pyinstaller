@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import pathlib
@@ -407,17 +407,20 @@ class BUNDLE(Target):
                 continue
 
             logger.debug(
-                "Creating symlink to work around the dot in the name of directory %r (%s)...", str(directory_path),
-                directory_type
+                "Creating symlink to work around the dot in the name of directory %r (%s)...",
+                str(directory_path),
+                directory_type,
             )
 
             # Create a SYMLINK entry, but only for this level. In case of nested directories with dots in names, the
             # symlinks for ancestors will be created by corresponding loop iteration.
-            bundle_toc.append((
-                os.path.join('Contents/Frameworks', directory_path),
-                directory_path.name.replace('.', DOT_REPLACEMENT),
-                'SYMLINK',
-            ))
+            bundle_toc.append(
+                (
+                    os.path.join('Contents/Frameworks', directory_path),
+                    directory_path.name.replace('.', DOT_REPLACEMENT),
+                    'SYMLINK',
+                )
+            )
 
         # Step 4: process the entries for collected files, and decide whether they should be placed into
         # `Contents/MacOS`, `Contents/Frameworks`, or `Contents/Resources`, and whether they should be cross-linked into
@@ -561,7 +564,6 @@ class BUNDLE(Target):
         info_plist_dict = {
             "CFBundleDisplayName": self.appname,
             "CFBundleName": self.appname,
-
             # Required by 'codesign' utility.
             # The value for CFBundleIdentifier is used as the default unique name of your program for Code Signing
             # purposes. It even identifies the APP for access to restricted OS X areas like Keychain.
@@ -649,9 +651,8 @@ class BUNDLE(Target):
                 # re-build attempts or when trying to move the application bundle. For binaries (and data files with
                 # executable bit set), we manually set the executable bits after copying the file.
                 shutil.copyfile(src_name, dest_path)
-            if (
-                typecode in ('EXTENSION', 'BINARY', 'EXECUTABLE')
-                or (typecode == 'DATA' and os.access(src_name, os.X_OK))
+            if typecode in ('EXTENSION', 'BINARY', 'EXECUTABLE') or (
+                typecode == 'DATA' and os.access(src_name, os.X_OK)
             ):
                 os.chmod(dest_path, 0o755)
 

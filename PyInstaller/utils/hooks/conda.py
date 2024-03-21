@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # language=rst
 """
@@ -33,6 +33,7 @@ a conditional clause::
 Packages are all referenced by the *distribution name* you use to install it, rather than the *package name* you import
 it with. I.e., use ``distribution("pillow")`` instead of ``distribution("PIL")`` or use ``package_distribution("PIL")``.
 """
+
 from __future__ import annotations
 
 import fnmatch
@@ -78,6 +79,7 @@ class Distribution:
     This class is not intended to be constructed directly by users. Rather use :meth:`distribution` or
     :meth:`package_distribution` to provide one for you.
     """
+
     def __init__(self, json_path: str):
         try:
             self._json_path = Path(json_path)
@@ -177,6 +179,7 @@ class PackagePath(_PackagePath):
     This class inherits from :class:`pathlib.PurePosixPath` even on non-Posix OSs. To convert to a :class:`pathlib.Path`
     pointing to the real file, use the :meth:`locate` method.
     """
+
     def locate(self):
         """
         Return a path-like object for this path pointing to the file's true location.
@@ -202,6 +205,7 @@ def walk_dependency_tree(initial: str, excludes: Iterable[str] | None = None):
 
     # Rather than use true recursion, mimic it with a to-do queue.
     from collections import deque
+
     done = {}
     names_to_do = deque([initial])
 
@@ -215,7 +219,9 @@ def walk_dependency_tree(initial: str, excludes: Iterable[str] | None = None):
         except ModuleNotFoundError:
             logger.warning(
                 "Conda distribution '%s', dependency of '%s', was not found. "
-                "If you installed this distribution with pip then you may ignore this warning.", name, initial
+                "If you installed this distribution with pip then you may ignore this warning.",
+                name,
+                initial,
             )
             continue
         # For each dependency:

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 PEP-302 and PEP-451 importers for frozen applications.
 """
@@ -52,6 +52,7 @@ def _decode_source(source_bytes):
     """
     # Local import to avoid including `tokenize` and its dependencies in `base_library.zip`
     from tokenize import detect_encoding
+
     source_bytes_readline = io.BytesIO(source_bytes).readline
     encoding = detect_encoding(source_bytes_readline)
     newline_decoder = io.IncrementalNewlineDecoder(decoder=None, translate=True)
@@ -64,6 +65,7 @@ class PyiFrozenImporterState:
     a custom type allows us to verify that module spec indeed contains the original loader state data, as set by
     `PyiFrozenImporter.find_spec`.
     """
+
     def __init__(self, entry_name):
         # Module name, as recorded in the PYZ archive.
         self.pyz_entry_name = entry_name
@@ -89,6 +91,7 @@ class PyiFrozenImporter:
     method find_spec(), a PEP-451 loader requires methods exec_module(), load_module() and (optionally) create_module().
     All these methods are implemented in this one class.
     """
+
     def __init__(self):
         """
         Load, unzip and initialize the Zip archive bundled with the executable.
@@ -159,7 +162,7 @@ class PyiFrozenImporter:
         else:
             raise ImportError(f'PyiFrozenImporter cannot handle module {fullname!r}')
 
-    #-- Optional Extensions to the PEP-302 Importer Protocol --
+    # -- Optional Extensions to the PEP-302 Importer Protocol --
 
     def is_package(self, fullname):
         if fullname in self.toc:
@@ -301,6 +304,7 @@ class PyiFrozenImporter:
 
         if self._is_pep420_namespace_package(entry_name):
             from importlib._bootstrap_external import _NamespacePath
+
             # PEP-420 namespace package; as per PEP 451, we need to return a spec with "loader" set to None
             # (a.k.a. not set)
             spec = _frozen_importlib.ModuleSpec(fullname, None, is_package=True)
@@ -328,7 +332,7 @@ class PyiFrozenImporter:
             is_package=is_pkg,
             origin=origin,
             # Provide the entry_name (name of module entry in the PYZ) for the loader to use during loading.
-            loader_state=PyiFrozenImporterState(entry_name)
+            loader_state=PyiFrozenImporterState(entry_name),
         )
 
         # Make the import machinery set __file__.
@@ -456,9 +460,11 @@ class PyiFrozenResourceReader:
       https://github.com/python/cpython/blob/839d7893943782ee803536a47f1d4de160314f85/Lib/importlib/abc.py#L422
       https://github.com/python/cpython/blob/839d7893943782ee803536a47f1d4de160314f85/Lib/importlib/abc.py#L312
     """
+
     def __init__(self, importer, name):
         # Local import to avoid including `pathlib` and its dependencies in `base_library.zip`
         from pathlib import Path
+
         self.importer = importer
         self.path = Path(sys._MEIPASS).joinpath(*name.split('.'))
 

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from pathlib import Path
 from importlib.machinery import EXTENSION_SUFFIXES
@@ -26,7 +26,8 @@ def test_issue_2492(monkeypatch, tmpdir):
 
     # Need to set up some values
     monkeypatch.setattr(
-        'PyInstaller.config.CONF', {
+        'PyInstaller.config.CONF',
+        {
             'workpath': str(tmpdir),
             'spec': str(tmpdir),
             'warnfile': str(tmpdir.join('warn.txt')),
@@ -35,7 +36,7 @@ def test_issue_2492(monkeypatch, tmpdir):
             'hiddenimports': [],
             'specnm': 'issue_2492_script',
             'code_cache': dict(),
-        }
+        },
     )
     # Speedup: avoid analyzing base_library.zip
     monkeypatch.setattr(analysis, 'PY3_BASE_MODULES', [])
@@ -54,6 +55,7 @@ def test_issue_5131(monkeypatch, tmpdir):
     PyInstaller.building._utils._load_code() tried to complete the source code for extension module - triggered by
     PYZ.assemble(), which is collecting all source files - caused by this being marked as "PYMODULE" in the TOC.
     """
+
     def get_imports(*args, **kwargs):
         # Our faked binary does not match the expected file-format for all platforms, thus the resp. code might crash.
         # Simply ignore this.
@@ -80,7 +82,8 @@ def test_issue_5131(monkeypatch, tmpdir):
 
     # Set up fake CONF for Analysis
     monkeypatch.setattr(
-        'PyInstaller.config.CONF', {
+        'PyInstaller.config.CONF',
+        {
             'workpath': str(tmpdir),
             'spec': str(tmpdir),
             'warnfile': str(tmpdir.join('warn.txt')),
@@ -89,7 +92,7 @@ def test_issue_5131(monkeypatch, tmpdir):
             'hiddenimports': [],
             'specnm': 'issue_5131_script',
             'code_cache': dict(),
-        }
+        },
     )
 
     # Speedup: avoid analyzing base_library.zip
@@ -118,6 +121,7 @@ def test_5734():
     on some Linux/gcc combinations.
     """
     from PyInstaller.depend.utils import _resolveCtypesImports
+
     _resolveCtypesImports(["libc"])
 
 

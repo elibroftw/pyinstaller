@@ -8,12 +8,7 @@ from types import CodeType
 from textwrap import dedent, indent
 import operator
 
-from PyInstaller.depend.bytecode import (
-    function_calls,
-    recursive_function_calls,
-    any_alias,
-    finditer,
-)
+from PyInstaller.depend.bytecode import function_calls, recursive_function_calls, any_alias, finditer
 
 
 def compile_(x):
@@ -83,11 +78,11 @@ def test_global_functions():
     # Having >256 constants will take us into extended arg territory where multiple byte-pair instructions are needed
     # to reference the constant. If everything works, we should not notice the difference.
     code = compile_(many_constants() + "foo(.123)")
-    assert function_calls(code) == [('foo', [.123])]
+    assert function_calls(code) == [('foo', [0.123])]
 
     # Similarly, >256 global names also requires special handling.
     code = compile_(many_globals() + "foo(.456)")
-    assert function_calls(code) == [('foo', [.456])]
+    assert function_calls(code) == [('foo', [0.456])]
 
     # And the unlikely case of >256 arguments to one function call.
     code = compile_(many_arguments())
@@ -150,7 +145,7 @@ def test_nested_codes():
     assert function_calls(code) == []
 
     # Get the body of foo().
-    foo_code, = (i for i in code.co_consts if isinstance(i, CodeType))
+    (foo_code,) = (i for i in code.co_consts if isinstance(i, CodeType))
     # foo() contains bar() and the iterable of the comprehension loop.
     assert function_calls(foo_code) == [('bar', []), ('range', [10])]
 
@@ -181,7 +176,7 @@ def test_local_functions():
     )
 
     code: CodeType
-    code, = (i for i in code_.co_consts if isinstance(i, CodeType))
+    (code,) = (i for i in code_.co_consts if isinstance(i, CodeType))
 
     # This test may mistakenly pass if co_names and co_varnames can be mixed up.
     # Ensure co_names[i] != co_varnames[i] holds for all `i`.

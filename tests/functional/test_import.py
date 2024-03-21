@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import sys
@@ -147,7 +147,8 @@ def test_import_submodule_from_aliased_pkg(pyi_builder, script_dir):
         sys.modules['alias_name'] = pyi_testmod_submodule_from_aliased_pkg
 
         from alias_name import submodule
-        """, ['--additional-hooks-dir=%s' % script_dir.join('pyi_hooks')]
+        """,
+        ['--additional-hooks-dir=%s' % script_dir.join('pyi_hooks')],
     )
 
 
@@ -169,7 +170,8 @@ def test_source_utf8_emoji(pyi_builder):
 
         # Retrieve source code
         source = inspect.getsource(module_with_utf8_emoji)
-        """, ['--add-data', datas]
+        """,
+        ['--add-data', datas],
     )
 
 
@@ -237,7 +239,7 @@ def test_import_pyqt5_uic_port(script_dir, pyi_builder):
     pyi_builder.test_script(
         'pyi_import_pyqt5_uic_port.py',
         # Add the path to a fake PyQt5 package, used for this test.
-        pyi_args=['--path', extra_path]
+        pyi_args=['--path', extra_path],
     )
 
 
@@ -251,7 +253,7 @@ def test_import_pyi_splash(pyi_builder):
     )
 
 
-#--- ctypes ----
+# --- ctypes ----
 
 
 @skipif_no_compiler
@@ -273,6 +275,7 @@ __orig_resolveCtypesImports = PyInstaller.depend.utils._resolveCtypesImports
 def __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib):
     def mocked_resolveCtypesImports(*args, **kwargs):
         from PyInstaller.config import CONF
+
         old_pathex = CONF['pathex']
         CONF['pathex'].append(str(compiled_dylib))
         res = __orig_resolveCtypesImports(*args, **kwargs)
@@ -284,7 +287,7 @@ def __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib):
     monkeypatch.setattr(PyInstaller.depend.utils, "_resolveCtypesImports", mocked_resolveCtypesImports)
 
 
-#FIXME: For reusability, move this to "PyInstaller.utils.tests".
+# FIXME: For reusability, move this to "PyInstaller.utils.tests".
 def skip_if_lib_missing(libname, text=None):
     """
     pytest decorator to evaluate the required shared lib.
@@ -326,7 +329,7 @@ def test_ctypes_CDLL_find_library__png(pyi_builder):
     pyi_builder.test_source(_template_ctypes_CDLL_find_library % locals())
 
 
-#-- Generate test-cases for the different types of ctypes objects.
+# -- Generate test-cases for the different types of ctypes objects.
 
 _template_ctypes_test = """
         print(lib)
@@ -360,10 +363,14 @@ def test_ctypes_gen(pyi_builder, monkeypatch, funcname, compiled_dylib, test_id)
     # only, not its path. See discussion in https://github.com/pyinstaller/pyinstaller/pull/1478#issuecomment-139622994.
     soname = compiled_dylib.basename
 
-    source = """
+    source = (
+        """
         import ctypes ; from ctypes import *
         lib = %s(%%(soname)r)
-    """ % funcname + _template_ctypes_test
+    """
+        % funcname
+        + _template_ctypes_test
+    )
 
     __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib.dirname)
     pyi_builder.test_source(source % locals(), test_id=test_id)
@@ -382,7 +389,10 @@ def test_ctypes_in_func_gen(pyi_builder, monkeypatch, funcname, compiled_dylib, 
     def f():
       def g():
         lib = %s(%%(soname)r)
-    """ % funcname + _template_ctypes_test + """
+    """
+        % funcname
+        + _template_ctypes_test
+        + """
       g()
     f()
     """
@@ -504,7 +514,7 @@ def test_egg_unzipped_metadata_importlib_metadata(pyi_builder):
     )
 
 
-#--- namespaces ---
+# --- namespaces ---
 
 
 def test_nspkg1(pyi_builder):
@@ -686,7 +696,7 @@ def test_nspkg_attributes_pep420(pyi_builder):
     )
 
 
-#--- hooks related stuff ---
+# --- hooks related stuff ---
 
 
 # imp leaks file handles.

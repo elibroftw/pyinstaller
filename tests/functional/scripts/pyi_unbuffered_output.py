@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # A simple program for testing unbuffered mode of python stdout and stderr streams (both binary and text layers).
 #
@@ -23,24 +23,9 @@ import sys
 
 # Argument parser
 parser = argparse.ArgumentParser(description="Unbuffered stdio test")
-parser.add_argument(
-    '--num-stars',
-    type=int,
-    default=5,
-    help="Number of star characters to print.",
-)
-parser.add_argument(
-    '--output-stream',
-    type=str,
-    default='stdout',
-    help="Output stream ('stdout' or 'stderr')",
-)
-parser.add_argument(
-    '--stream-mode',
-    type=str,
-    default='text',
-    help="Output stream mode ('text' or 'binary')",
-)
+parser.add_argument('--num-stars', type=int, default=5, help="Number of star characters to print.")
+parser.add_argument('--output-stream', type=str, default='stdout', help="Output stream ('stdout' or 'stderr')")
+parser.add_argument('--stream-mode', type=str, default='text', help="Output stream mode ('text' or 'binary')")
 args = parser.parse_args()
 
 # Select output stream and mode

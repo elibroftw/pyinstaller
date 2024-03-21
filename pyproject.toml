@@ -21,6 +21,9 @@ lint.select = [
   "W",       # pycodestyle warnings
 ]
 output-format = "full"
+[tool.ruff.format]
+quote-style = "preserve"
+skip-magic-trailing-comma = true
 
 [tool.towncrier]
 	filename = "doc/CHANGES.rst"

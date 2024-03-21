@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,12 +7,12 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # This test code is taken from the example code for the `future` library, with a few modifications to allow execution on
 # 32-bit platforms: http://python-future.org/overview.html#code-examples
 
-from builtins import (bytes, str, super, range, zip, round, int, pow, object)
+from builtins import bytes, str, super, range, zip, round, int, pow, object
 
 # Backported Py3 bytes object
 b = bytes(b'ABCD')

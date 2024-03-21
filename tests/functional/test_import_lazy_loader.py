@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,18 +7,14 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from PyInstaller.utils.tests import importorskip
 
 
 # A basic lazy loader test with a stdlib module
 def test_importlib_lazy_loader(pyi_builder):
-    pyi_builder.test_script(
-        'pyi_lazy_import.py',
-        app_args=['json'],
-        pyi_args=['--hiddenimport', 'json'],
-    )
+    pyi_builder.test_script('pyi_lazy_import.py', app_args=['json'], pyi_args=['--hiddenimport', 'json'])
 
 
 # Lazy loader test with aliased module - using original name

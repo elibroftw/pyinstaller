@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2014-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Utils for Mac OS platform.
 """
@@ -95,8 +95,9 @@ def _find_version_cmd(header):
     # The SDK version is stored in LC_BUILD_VERSION command (used when targeting the latest versions of macOS) or in
     # older LC_VERSION_MIN_MACOSX command. Check for presence of either.
     version_cmd = [cmd for cmd in header.commands if cmd[0].cmd in {LC_BUILD_VERSION, LC_VERSION_MIN_MACOSX}]
-    assert len(version_cmd) == 1, \
-        f"Expected exactly one LC_BUILD_VERSION or LC_VERSION_MIN_MACOSX command, found {len(version_cmd)}!"
+    assert (
+        len(version_cmd) == 1
+    ), f"Expected exactly one LC_BUILD_VERSION or LC_VERSION_MIN_MACOSX command, found {len(version_cmd)}!"
     return version_cmd[0]
 
 
@@ -119,7 +120,7 @@ def _hex_triplet(version):
     # Parse SDK version number
     major = (version & 0xFF0000) >> 16
     minor = (version & 0xFF00) >> 8
-    revision = (version & 0xFF)
+    revision = version & 0xFF
     return major, minor, revision
 
 
@@ -223,7 +224,7 @@ def fix_exe_for_code_signing(filename):
     linkedit_seg.filesize = file_size - (header.offset + linkedit_seg.fileoff)
 
     # Compute new vmsize by rounding filesize up to full page size.
-    page_size = (0x4000 if _get_arch_string(header.header).startswith('arm64') else 0x1000)
+    page_size = 0x4000 if _get_arch_string(header.header).startswith('arm64') else 0x1000
     linkedit_seg.vmsize = math.ceil(linkedit_seg.filesize / page_size) * page_size
 
     # NOTE: according to spec, segments need to be aligned to page boundaries: 0x4000 (16 kB) for arm64, 0x1000 (4 kB)
@@ -237,7 +238,8 @@ def fix_exe_for_code_signing(filename):
     # In fat binaries, we also need to adjust the fat header. macholib as of version 1.14 does not support this, so we
     # need to do it ourselves...
     if executable.fat:
-        from macholib.mach_o import (FAT_MAGIC, FAT_MAGIC_64, fat_arch, fat_arch64, fat_header)
+        from macholib.mach_o import FAT_MAGIC, FAT_MAGIC_64, fat_arch, fat_arch64, fat_header
+
         with open(filename, 'rb+') as fp:
             # Taken from MachO.load_fat() implementation. The fat header's signature has already been validated when we
             # loaded the file for the first time.
@@ -283,6 +285,7 @@ class InvalidBinaryError(Exception):
     """
     Exception raised by ˙get_binary_architectures˙ when it is passed an invalid binary.
     """
+
     pass
 
 
@@ -290,6 +293,7 @@ class IncompatibleBinaryArchError(Exception):
     """
     Exception raised by `binary_to_target_arch` when the passed binary fails the strict architecture check.
     """
+
     pass
 
 
@@ -429,13 +433,7 @@ def _set_dylib_dependency_paths(filename, target_rpath):
     """
 
     # Relocatable commands that we should overwrite - same list as used by `macholib`.
-    _RELOCATABLE = {
-        LC_LOAD_DYLIB,
-        LC_LOAD_UPWARD_DYLIB,
-        LC_LOAD_WEAK_DYLIB,
-        LC_PREBOUND_DYLIB,
-        LC_REEXPORT_DYLIB,
-    }
+    _RELOCATABLE = {LC_LOAD_DYLIB, LC_LOAD_UPWARD_DYLIB, LC_LOAD_WEAK_DYLIB, LC_PREBOUND_DYLIB, LC_REEXPORT_DYLIB}
 
     # Parse dylib's header to extract the following commands:
     #  - LC_LOAD_DYLIB (or any member of _RELOCATABLE list): dylib load commands (dependent libraries)
@@ -485,10 +483,7 @@ def _set_dylib_dependency_paths(filename, target_rpath):
         # /Library/Frameworks/Tk.framework/Versions/8.5/Tk, although the actual frameworks are located in
         # /System/Library/Frameworks. Therefore, they slip through the above in_system_path() check, and we need to
         # exempt them manually.
-        _exemptions = [
-            '/Library/Frameworks/Tcl.framework/',
-            '/Library/Frameworks/Tk.framework/',
-        ]
+        _exemptions = ['/Library/Frameworks/Tcl.framework/', '/Library/Frameworks/Tk.framework/']
         if any([x in linked_lib for x in _exemptions]):
             continue
 
@@ -517,18 +512,12 @@ def _set_dylib_dependency_paths(filename, target_rpath):
     for rpath in rpaths:
         if rpath == target_rpath:
             continue
-        install_name_tool_args += [
-            "-delete_rpath",
-            rpath,
-        ]
+        install_name_tool_args += ["-delete_rpath", rpath]
 
     # If any of linked libraries use @rpath now and our target rpath is not already added, add it.
     # NOTE: @rpath in the dylib identifier does not actually require the rpath to be set on the binary...
     if rpath_required and target_rpath not in rpaths:
-        install_name_tool_args += [
-            "-add_rpath",
-            target_rpath,
-        ]
+        install_name_tool_args += ["-add_rpath", target_rpath]
 
     # If we have no arguments, finish immediately.
     if not install_name_tool_args:
@@ -629,18 +618,16 @@ def collect_files_from_framework_bundles(collected_files):
         dest_framework_path = dest_path.parent.parent.parent  # Top-level .framework directory path.
 
         # Symlink the binary in the `Current` directory to the top-level .framework directory.
-        framework_files.add((
-            str(dest_framework_path / dest_path.name),
-            str(pathlib.PurePath("Versions/Current") / dest_path.name),
-            "SYMLINK",
-        ))
+        framework_files.add(
+            (
+                str(dest_framework_path / dest_path.name),
+                str(pathlib.PurePath("Versions/Current") / dest_path.name),
+                "SYMLINK",
+            )
+        )
 
         # Ditto for the `Resources` directory.
-        framework_files.add((
-            str(dest_framework_path / "Resources"),
-            "Versions/Current/Resources",
-            "SYMLINK",
-        ))
+        framework_files.add((str(dest_framework_path / "Resources"), "Versions/Current/Resources", "SYMLINK"))
 
         # Register the framework parent path to use in additional directories scan in subsequent pass.
         framework_paths.add(dest_framework_path)
@@ -671,11 +658,9 @@ def collect_files_from_framework_bundles(collected_files):
             if dir_name not in VALID_SUBDIRS:
                 continue
 
-            framework_files.add((
-                str(dest_framework_path / dir_name),
-                str(pathlib.PurePath("Versions/Current") / dir_name),
-                "SYMLINK",
-            ))
+            framework_files.add(
+                (str(dest_framework_path / dir_name), str(pathlib.PurePath("Versions/Current") / dir_name), "SYMLINK")
+            )
 
     # If we encountered an invalid .framework bundle without Info.plist, warn the user that code-signing will most
     # likely fail.

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Utilities to create data structures for embedding Python modules and additional files into the executable.
 """
@@ -29,6 +29,7 @@ class ZlibArchiveWriter:
     Writer for PyInstaller's PYZ (ZlibArchive) archive. The archive is used to store collected byte-compiled Python
     modules, as individually-compressed entries.
     """
+
     _PYZ_MAGIC_PATTERN = b'PYZ\0'
     _HEADER_LENGTH = 12 + 5
     _COMPRESSION_LEVEL = 6  # zlib compression level
@@ -109,6 +110,7 @@ class CArchiveWriter:
 
     The archive can be read from either C (bootloader code at application's run-time) or Python (for debug purposes).
     """
+
     _COOKIE_MAGIC_PATTERN = b'MEI\014\013\012\013\016'
 
     # For cookie and TOC entry structure, see `PyInstaller.archive.readers.CArchiveReader`.
@@ -300,6 +302,7 @@ class SplashWriter:
 
     The resulting archive is added as an entry into the CArchive with the typecode PKG_ITEM_SPLASH.
     """
+
     # This struct describes the splash resources as it will be in an buffer inside the bootloader. All necessary parts
     # are bundled, the *_len and *_offset fields describe the data beyond this header definition.
     # Whereas script and image fields are binary data, the requirements fields describe an array of strings. Each string

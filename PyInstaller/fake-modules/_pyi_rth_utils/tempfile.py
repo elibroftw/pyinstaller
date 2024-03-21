@@ -44,7 +44,7 @@ if os.name == 'nt':
                 continue  # try again
             except PermissionError:
                 # This exception is thrown when a directory with the chosen name already exists on windows.
-                if (os.name == 'nt' and os.path.isdir(dir) and os.access(dir, os.W_OK)):
+                if os.name == 'nt' and os.path.isdir(dir) and os.access(dir, os.W_OK):
                     continue
                 else:
                     raise

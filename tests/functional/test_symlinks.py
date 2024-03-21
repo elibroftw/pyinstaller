@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -59,9 +59,7 @@ def test_symlinks__samedir__symlink_and_file(tmpdir, script_dir, pyi_builder):
 
     # Run test script in 'samedir' mode
     pyi_builder.test_script(
-        os.path.join(str(script_dir), 'pyi_symlinks_test.py'),
-        pyi_args=add_data_args,
-        app_args=['samedir'],
+        os.path.join(str(script_dir), 'pyi_symlinks_test.py'), pyi_args=add_data_args, app_args=['samedir']
     )
 
 
@@ -79,9 +77,7 @@ def test_symlinks__samedir__wholedir(tmpdir, script_dir, pyi_builder):
 
     # Run test script in 'samedir' mode
     pyi_builder.test_script(
-        os.path.join(str(script_dir), 'pyi_symlinks_test.py'),
-        pyi_args=add_data_args,
-        app_args=['samedir'],
+        os.path.join(str(script_dir), 'pyi_symlinks_test.py'), pyi_args=add_data_args, app_args=['samedir']
     )
 
 
@@ -140,9 +136,7 @@ def test_symlinks__samedir__orig_multiple(tmpdir, script_dir, pyi_builder):
 
     # Run test script in 'samedir' mode
     pyi_builder.test_script(
-        os.path.join(str(script_dir), 'pyi_symlinks_test.py'),
-        pyi_args=add_data_args,
-        app_args=['samedir'],
+        os.path.join(str(script_dir), 'pyi_symlinks_test.py'), pyi_args=add_data_args, app_args=['samedir']
     )
 
 
@@ -159,9 +153,7 @@ def test_symlinks__subdir__wholedir(tmpdir, script_dir, pyi_builder):
 
     # Run test script in 'subdir' mode
     pyi_builder.test_script(
-        os.path.join(str(script_dir), 'pyi_symlinks_test.py'),
-        pyi_args=add_data_args,
-        app_args=['subdir'],
+        os.path.join(str(script_dir), 'pyi_symlinks_test.py'), pyi_args=add_data_args, app_args=['subdir']
     )
 
 
@@ -197,9 +189,7 @@ def test_symlinks__parentdir__wholedir(tmpdir, script_dir, pyi_builder):
 
     # Run test script in 'parentdir' mode
     pyi_builder.test_script(
-        os.path.join(str(script_dir), 'pyi_symlinks_test.py'),
-        pyi_args=add_data_args,
-        app_args=['parentdir'],
+        os.path.join(str(script_dir), 'pyi_symlinks_test.py'), pyi_args=add_data_args, app_args=['parentdir']
     )
 
 
@@ -290,7 +280,7 @@ def test_symlinks__chained_links_abc(tmpdir, pyi_builder):
         assert os.path.islink(file_c), "file_c is not a symbolic link!"
         assert os.readlink(file_c) == "file_b", "file_c does not point to file_b!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -313,7 +303,7 @@ def test_symlinks__chained_links_ab(tmpdir, pyi_builder):
         assert os.path.islink(file_b), "file_b is not a symbolic link!"
         assert os.readlink(file_b) == "file_a", "file_b does not point to file_a!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -336,7 +326,7 @@ def test_symlinks__chained_links_bc(tmpdir, pyi_builder):
         assert os.path.islink(file_c), "file_c is not a symbolic link!"
         assert os.readlink(file_c) == "file_b", "file_c does not point to file_b!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -360,7 +350,7 @@ def test_symlinks__chained_links_ac(tmpdir, pyi_builder):
         assert os.path.islink(file_c), "file_c is not a symbolic link!"
         assert os.readlink(file_c) == "file_a", "file_c does not point to file_a!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -384,7 +374,7 @@ def test_symlinks__chained_links_ad(tmpdir, pyi_builder):
         assert os.path.islink(file_d), "file_d is not a symbolic link!"
         assert os.readlink(file_d) == "file_a", "file_d does not point to file_a!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -408,7 +398,7 @@ def test_symlinks__chained_links_bd(tmpdir, pyi_builder):
         assert os.path.islink(file_d), "file_d is not a symbolic link!"
         assert os.readlink(file_d) == "file_b", "file_d does not point to file_b!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )
 
 
@@ -496,5 +486,5 @@ def test_symlinks__collect_chained_links_from_linked_directories(tmpdir, pyi_bui
         assert os.path.islink(file_d), "file_d is not a symbolic link!"
         assert os.readlink(file_d) == "file_a", "file_d does not point to file_a!"
         """,
-        pyi_args=list(_collect_data(data_path, collected_files))
+        pyi_args=list(_collect_data(data_path, collected_files)),
     )

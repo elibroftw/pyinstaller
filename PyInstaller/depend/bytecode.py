@@ -50,11 +50,7 @@ def bytecode_regex(pattern: bytes, flags=re.VERBOSE | re.DOTALL):
     assert isinstance(pattern, bytes)
 
     # Replace anything wrapped in backticks with regex-escaped opcodes.
-    pattern = re.sub(
-        rb"`(\w+)`",
-        lambda m: _instruction_to_regex(m[1].decode()),
-        pattern,
-    )
+    pattern = re.sub(rb"`(\w+)`", lambda m: _instruction_to_regex(m[1].decode()), pattern)
     return re.compile(pattern, flags=flags)
 
 
@@ -145,16 +141,24 @@ _call_function_bytecode = bytecode_regex(
 
     # Load the global function. In code with >256 of names, this may require extended name references.
     (
-     (?:(?:""" + _OPCODES_EXTENDED_ARG + rb""").)*
-     (?:(?:""" + _OPCODES_FUNCTION_GLOBAL + rb""").)
+     (?:(?:"""
+    + _OPCODES_EXTENDED_ARG
+    + rb""").)*
+     (?:(?:"""
+    + _OPCODES_FUNCTION_GLOBAL
+    + rb""").)
     )
 
     # For foo.bar.whizz(), the above is the 'foo', below is the 'bar.whizz' (one opcode per name component, each
     # possibly preceded by name reference extension).
     (
      (?:
-       (?:(?:""" + _OPCODES_EXTENDED_ARG + rb""").)*
-       (?:""" + _OPCODES_FUNCTION_LOAD + rb""").
+       (?:(?:"""
+    + _OPCODES_EXTENDED_ARG
+    + rb""").)*
+       (?:"""
+    + _OPCODES_FUNCTION_LOAD
+    + rb""").
      )*
     )
 
@@ -162,16 +166,24 @@ _call_function_bytecode = bytecode_regex(
     # Again, code with >256 constants may need extended enumeration.
     (
       (?:
-        (?:(?:""" + _OPCODES_EXTENDED_ARG + rb""").)*
-        (?:""" + _OPCODES_FUNCTION_ARGS + rb""").
+        (?:(?:"""
+    + _OPCODES_EXTENDED_ARG
+    + rb""").)*
+        (?:"""
+    + _OPCODES_FUNCTION_ARGS
+    + rb""").
       )*
     )
 
     # Call the function. If opcode is CALL_FUNCTION_EX, the parameter are flags. For other opcodes, the parameter
     # is the argument count (which may be > 256).
     (
-      (?:(?:""" + _OPCODES_EXTENDED_ARG + rb""").)*
-      (?:""" + _OPCODES_FUNCTION_CALL + rb""").
+      (?:(?:"""
+    + _OPCODES_EXTENDED_ARG
+    + rb""").)*
+      (?:"""
+    + _OPCODES_FUNCTION_CALL
+    + rb""").
     )
 """
 )
@@ -180,10 +192,14 @@ _call_function_bytecode = bytecode_regex(
 _extended_arg_bytecode = bytecode_regex(
     rb"""(
     # Arbitrary number of EXTENDED_ARG pairs.
-    (?:(?:""" + _OPCODES_EXTENDED_ARG + rb""").)*
+    (?:(?:"""
+    + _OPCODES_EXTENDED_ARG
+    + rb""").)*
 
     # Followed by some other instruction (usually a LOAD).
-    [^""" + _OPCODES_EXTENDED_ARG2 + rb"""].
+    [^"""
+    + _OPCODES_EXTENDED_ARG2
+    + rb"""].
 )"""
 )
 

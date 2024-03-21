@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import copy
 import glob
@@ -137,9 +137,8 @@ def _data_dir_copy(
     # The name of the subdirectory located in data/name to copy.
     subdir_name,
     # The tmpdir object for this test. See: https://pytest.org/latest/tmpdir.html.
-    tmpdir
+    tmpdir,
 ):
-
     # Form the source and tmp paths.
     source_data_dir = py.path.local(_get_data_dir(request)).join(subdir_name)
     tmp_data_dir = tmpdir.join('data', subdir_name)
@@ -158,9 +157,8 @@ def data_dir(
     # https://pytest.org/latest/fixture.html#fixtures-can-introspect-the-requesting-test-context.
     request,
     # The tmpdir object for this test. See https://pytest.org/latest/tmpdir.html.
-    tmpdir
+    tmpdir,
 ):
-
     # Strip the leading 'test_' from the test's name.
     name = request.function.__name__[5:]
     # Copy to tmpdir and return the path.
@@ -304,7 +302,7 @@ class AppBuilder:
             # Multipackage one-dir
             onedir_pt + '_?',
             # Multipackage one-file
-            onefile_pt + '_?'
+            onefile_pt + '_?',
         ]
         # For Windows append .exe extension to patterns.
         if is_win:
@@ -474,6 +472,7 @@ def pyi_modgraph():
     # Explicitly set the log level since the plugin `pytest-catchlog` (un-) sets the root logger's level to NOTSET for
     # the setup phase, which will lead to TRACE messages been written out.
     import PyInstaller.log as logging
+
     logging.logger.setLevel(logging.DEBUG)
     initialize_modgraph()
 
@@ -534,6 +533,7 @@ def compiled_dylib(tmpdir, request):
             if ret != 0:
                 # Find path to cl.exe file.
                 from distutils.msvccompiler import MSVCCompiler
+
                 comp = MSVCCompiler()
                 comp.initialize()
                 cl_path = comp.cc

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Viewer for PyInstaller-generated archives.
 """
@@ -242,11 +242,7 @@ def run():
         help='When displaying archive contents, show only file names. (default: %(default)s).',
     )
     PyInstaller.log.__add_options(parser)
-    parser.add_argument(
-        'filename',
-        metavar='pyi_archive',
-        help="PyInstaller archive to process.",
-    )
+    parser.add_argument('filename', metavar='pyi_archive', help="PyInstaller archive to process.")
 
     autocomplete(parser)
     args = parser.parse_args()

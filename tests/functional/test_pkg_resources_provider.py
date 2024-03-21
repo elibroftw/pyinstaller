@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # These tests run a test script (scripts/pyi_pkg_resources_provider.py) in unfrozen and frozen form, in combination with
 # a custom test package (modules/pyi_pkg_resources_provider/package).
@@ -57,7 +57,4 @@ def test_pkg_resources_provider_frozen(pyi_builder, tmpdir, script_dir, monkeypa
     pyi_args = ['--paths', pathex, '--hidden-import', 'pyi_pkgres_testpkg', '--additional-hooks-dir', hooks_dir]
     if is_darwin:
         pyi_args += ['--windowed']  # Also build and test .app bundle executable
-    pyi_builder.test_script(
-        test_script,
-        pyi_args=pyi_args,
-    )
+    pyi_builder.test_script(test_script, pyi_args=pyi_args)

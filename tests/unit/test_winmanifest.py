@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 import os
 import shutil
 
@@ -18,7 +18,7 @@ from PyInstaller.utils.tests import importorskip
 
 from PyInstaller.utils.win32 import winmanifest
 
-#- Helpers
+# - Helpers
 
 
 # Go from current DOM element to the top-level node, and collect element tags along the way. Then reverse the list so
@@ -71,7 +71,7 @@ _MS_COMMON_CONTROLS_ATTRIBUTES = {
     "language": "*",
 }
 
-#- Tests with default manifest template
+# - Tests with default manifest template
 
 
 # Generate default application manifest, which should be the same as the default XML template.
@@ -187,7 +187,7 @@ def test_manifest_default_manifest_uac_admin_and_uiaccess():
     assert _get_parent_tags(node) == _REQUEST_EXECUTION_LEVEL_TAGS
 
 
-#- Tests with custom manifest template
+# - Tests with custom manifest template
 
 
 # Generate application manifest from template that has no <trustInfo> element, which we need to add to store the
@@ -201,8 +201,7 @@ def test_manifest_custom_manifest_no_trust_info():
     import xmldiff.main
     import xmldiff.actions
 
-    _MANIFEST_XML = \
-b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    _MANIFEST_XML = b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
     <application>
@@ -276,8 +275,7 @@ def test_manifest_custom_manifest_no_ms_common_controls():
     import xmldiff.main
     import xmldiff.actions
 
-    _MANIFEST_XML = \
-b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    _MANIFEST_XML = b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>
@@ -346,8 +344,7 @@ def test_manifest_custom_manifest_different_ms_common_controls():
     import xmldiff.main
     import xmldiff.actions
 
-    _MANIFEST_XML = \
-b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    _MANIFEST_XML = b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>
@@ -421,8 +418,7 @@ def test_manifest_custom_manifest_no_ms_common_controls_with_custom_dependency()
     import xmldiff.main
     import xmldiff.actions
 
-    _MANIFEST_XML = \
-b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    _MANIFEST_XML = b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>
@@ -487,7 +483,7 @@ b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     assert added_attributes == _MS_COMMON_CONTROLS_ATTRIBUTES
 
 
-#- Test application manifest embedding and retrieval.
+# - Test application manifest embedding and retrieval.
 # Works only on Windows, because we need to test with actual executable with actual exeutable.
 
 
@@ -522,8 +518,7 @@ def test_manifest_write_to_exe_non_ascii_characters(tmp_path):
     import xmldiff.main
     import xmldiff.actions
 
-    _MANIFEST_XML = \
-"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    _MANIFEST_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <assemblyIdentity name="日本語で書かれた名前" processorArchitecture="amd64" type="win32" version="1.0.0.0"/>
   <dependency>
@@ -548,7 +543,7 @@ def test_manifest_write_to_exe_non_ascii_characters(tmp_path):
     </security>
   </trustInfo>
 </assembly>
-""".encode("utf-8") # noqa: E501
+""".encode("utf-8")  # noqa: E501
 
     # Locate bootloader executable
     bootloader_file = os.path.join(HOMEPATH, 'PyInstaller', 'bootloader', PLATFORM, 'run.exe')

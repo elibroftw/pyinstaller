@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import subprocess
@@ -137,6 +137,7 @@ def test_win_TEMP_has_shortpathname(pyi_builder, monkeypatch, tmp_path):
     tmp = tmp_path / "longlongfilename" / "xxx"
     tmp.mkdir(parents=True, exist_ok=True)
     import win32api
+
     tmp = win32api.GetShortPathName(str(tmp))
     monkeypatch.setenv("TMP", tmp)
     monkeypatch.setenv("TEMP", tmp)

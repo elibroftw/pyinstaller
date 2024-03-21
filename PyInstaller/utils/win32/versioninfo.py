@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import struct
 
@@ -88,13 +88,14 @@ class VSVersionInfo:
                           // structures (or both) that are children of the
                           // current version structure.
     """
+
     def __init__(self, ffi=None, kids=None):
         self.ffi = ffi
         self.kids = kids or []
 
     def fromRaw(self, data):
         i, (sublen, vallen, wType, nm) = parseCommon(data)
-        #vallen is length of the ffi, typ is 0, nm is 'VS_VERSION_INFO'.
+        # vallen is length of the ffi, typ is 0, nm is 'VS_VERSION_INFO'.
         i = nextDWord(i)
         # Now a VS_FIXEDFILEINFO
         self.ffi = FixedFileInfo()
@@ -141,18 +142,20 @@ class VSVersionInfo:
         indent = indent + '  '
         tmp = [kid.__str__(indent + '  ') for kid in self.kids]
         tmp = ', \n'.join(tmp)
-        return '\n'.join([
-            "# UTF-8",
-            "#",
-            "# For more details about fixed file info 'ffi' see:",
-            "# http://msdn.microsoft.com/en-us/library/ms646997.aspx",
-            "VSVersionInfo(",
-            indent + f"ffi={self.ffi.__str__(indent)},",
-            indent + "kids=[",
-            tmp,
-            indent + "]",
-            ")",
-        ])
+        return '\n'.join(
+            [
+                "# UTF-8",
+                "#",
+                "# For more details about fixed file info 'ffi' see:",
+                "# http://msdn.microsoft.com/en-us/library/ms646997.aspx",
+                "VSVersionInfo(",
+                indent + f"ffi={self.ffi.__str__(indent)},",
+                indent + "kids=[",
+                tmp,
+                indent + "]",
+                ")",
+            ]
+        )
 
     def __repr__(self):
         return "versioninfo.VSVersionInfo(ffi=%r, kids=%r)" % (self.ffi, self.kids)
@@ -168,7 +171,7 @@ def parseCommon(data, start=0):
 def parseUString(data, start, limit):
     i = start
     while i < limit:
-        if data[i:i + 2] == b'\000\000':
+        if data[i : i + 2] == b'\000\000':
             break
         i += 2
     text = data[start:i].decode('UTF-16LE')
@@ -200,23 +203,24 @@ class FixedFileInfo:
     DWORD dwFileDateMS;
     DWORD dwFileDateLS;
     """
+
     def __init__(
         self,
         filevers=(0, 0, 0, 0),
         prodvers=(0, 0, 0, 0),
-        mask=0x3f,
+        mask=0x3F,
         flags=0x0,
         OS=0x40004,
         fileType=0x1,
         subtype=0x0,
-        date=(0, 0)
+        date=(0, 0),
     ):
-        self.sig = 0xfeef04bd
+        self.sig = 0xFEEF04BD
         self.strucVersion = 0x10000
-        self.fileVersionMS = (filevers[0] << 16) | (filevers[1] & 0xffff)
-        self.fileVersionLS = (filevers[2] << 16) | (filevers[3] & 0xffff)
-        self.productVersionMS = (prodvers[0] << 16) | (prodvers[1] & 0xffff)
-        self.productVersionLS = (prodvers[2] << 16) | (prodvers[3] & 0xffff)
+        self.fileVersionMS = (filevers[0] << 16) | (filevers[1] & 0xFFFF)
+        self.fileVersionLS = (filevers[2] << 16) | (filevers[3] & 0xFFFF)
+        self.productVersionMS = (prodvers[0] << 16) | (prodvers[1] & 0xFFFF)
+        self.productVersionLS = (prodvers[2] << 16) | (prodvers[3] & 0xFFFF)
         self.fileFlagsMask = mask
         self.fileFlags = flags
         self.fileOS = OS
@@ -240,7 +244,7 @@ class FixedFileInfo:
             self.fileSubtype,
             self.fileDateMS,
             self.fileDateLS,
-        ) = struct.unpack('13L', data[i:i + 52])
+        ) = struct.unpack('13L', data[i : i + 52])
         return i + 52
 
     def toRaw(self):
@@ -312,8 +316,8 @@ class FixedFileInfo:
         return (
             'versioninfo.FixedFileInfo(filevers=%r, prodvers=%r, '
             'mask=0x%x, flags=0x%x, OS=0x%x, '
-            'fileType=%r, subtype=0x%x, date=%r)' %
-            (fv, pv, self.fileFlagsMask, self.fileFlags, self.fileOS, self.fileType, self.fileSubtype, fd)
+            'fileType=%r, subtype=0x%x, date=%r)'
+            % (fv, pv, self.fileFlagsMask, self.fileFlags, self.fileOS, self.fileType, self.fileSubtype, fd)
         )
 
 
@@ -327,6 +331,7 @@ class StringFileInfo:
     WORD        Padding[];
     StringTable Children[];   // list of zero or more String structures
     """
+
     def __init__(self, kids=None):
         self.name = 'StringFileInfo'
         self.kids = kids or []
@@ -372,6 +377,7 @@ class StringTable:
     WCHAR  szKey[];
     String Children[];    // list of zero or more String structures.
     """
+
     def __init__(self, name=None, kids=None):
         self.name = name or ''
         self.kids = kids or []
@@ -423,6 +429,7 @@ class StringStruct:
     WORD   Padding[];
     String Value[];
     """
+
     def __init__(self, name=None, val=None):
         self.name = name or ''
         self.val = val or ''
@@ -472,6 +479,7 @@ class VarFileInfo:
     WORD  Padding[];
     Var   Children[];     // list of zero or more Var structures
     """
+
     def __init__(self, kids=None):
         self.kids = kids or []
 
@@ -522,6 +530,7 @@ class VarStruct:
     WORD  Value[];        // list of one or more values that are language
                           // and code-page identifiers
     """
+
     def __init__(self, name=None, kids=None):
         self.name = name or ''
         self.kids = kids or []
@@ -530,7 +539,7 @@ class VarStruct:
         i, (self.sublen, self.wValueLength, self.wType, self.name) = parseCommon(data, i)
         i = nextDWord(i)
         for j in range(0, self.wValueLength, 2):
-            kid = struct.unpack('h', data[i:i + 2])[0]
+            kid = struct.unpack('h', data[i : i + 2])[0]
             self.kids.append(kid)
             i += 2
         return i
@@ -565,6 +574,7 @@ def load_version_info_from_text_file(filename):
 
     # Read and parse the version file. It may have a byte order marker or encoding cookie - respect it if it does.
     import PyInstaller.utils.misc as miscutils
+
     with open(filename, 'rb') as fp:
         text = miscutils.decode(fp.read())
 
@@ -575,8 +585,9 @@ def load_version_info_from_text_file(filename):
         raise ValueError("Failed to deserialize VSVersionInfo from text-based representation!") from e
 
     # Sanity check
-    assert isinstance(info, VSVersionInfo), \
-        f"Loaded incompatible structure type! Expected VSVersionInfo, got: {type(info)!r}"
+    assert isinstance(
+        info, VSVersionInfo
+    ), f"Loaded incompatible structure type! Expected VSVersionInfo, got: {type(info)!r}"
 
     return info
 

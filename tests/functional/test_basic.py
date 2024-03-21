@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import locale
 import os
@@ -64,6 +64,7 @@ def test_pyz_as_external_file(pyi_builder, monkeypatch):
         pytest.skip('only --onedir')
 
     import PyInstaller.building.build_main
+
     EXE = PyInstaller.building.build_main.EXE
     monkeypatch.setattr('PyInstaller.building.build_main.EXE', MyEXE)
 
@@ -250,7 +251,7 @@ def test_option_exclude_module(pyi_builder):
             # not bundle 'xml.sax' module.
             pass
         """,
-        pyi_args=['--exclude-module', 'xml.sax']
+        pyi_args=['--exclude-module', 'xml.sax'],
     )
 
 
@@ -268,6 +269,7 @@ def test_option_verbose(pyi_builder, monkeypatch):
         return EXE(*args, **kwargs)
 
     import PyInstaller.building.build_main
+
     EXE = PyInstaller.building.build_main.EXE
     monkeypatch.setattr('PyInstaller.building.build_main.EXE', MyEXE)
 
@@ -294,12 +296,14 @@ def test_option_w_ignore(pyi_builder, monkeypatch, capsys):
     """
     Test to ensure that option W can be set.
     """
+
     def MyEXE(*args, **kwargs):
         args = list(args)
         args.append([('W ignore', '', 'OPTION')])
         return EXE(*args, **kwargs)
 
     import PyInstaller.building.build_main
+
     EXE = PyInstaller.building.build_main.EXE
     monkeypatch.setattr('PyInstaller.building.build_main.EXE', MyEXE)
 
@@ -454,18 +458,11 @@ def test_user_preferred_locale(pyi_builder):
     exes = pyi_builder._find_executables('test_source')
     assert len(exes) == 1
 
-    test_locales = [
-        "en_US.UTF-8",
-        "en_US.ISO8859-1",
-        "sl_SI.UTF-8",
-        "sl_SI.ISO8859-2",
-    ]
+    test_locales = ["en_US.UTF-8", "en_US.ISO8859-1", "sl_SI.UTF-8", "sl_SI.ISO8859-2"]
 
     for test_locale in test_locales:
         print(f"Running test with locale: {test_locale!r}...", file=sys.stderr)
-        env = {
-            "LC_ALL": test_locale,
-        }
+        env = {"LC_ALL": test_locale}
         subprocess.run([exes[0], test_locale], check=True, env=env)
 
 
@@ -518,7 +515,7 @@ def test_argument(pyi_builder):
         import sys
         assert sys.argv[1] == "--argument", "sys.argv[1] was %r, expected %r" % (sys.argv[1], "--argument")
         """,
-        app_args=["--argument"]
+        app_args=["--argument"],
     )
 
 
@@ -536,7 +533,7 @@ def test_pywin32_win32com(pyi_builder):
     )
 
 
-#@pytest.mark.xfail(reason="Requires post-create-package hooks (issue #1322)")
+# @pytest.mark.xfail(reason="Requires post-create-package hooks (issue #1322)")
 @importorskip('win32com')
 def test_pywin32_comext(pyi_builder):
     pyi_builder.test_source(
@@ -573,7 +570,6 @@ def test_renamed_exe(pyi_builder):
         oldexes = _old_find_executables(name)
         newexes = []
         for old in oldexes:
-
             new = os.path.join(os.path.dirname(old), "renamed_" + os.path.basename(old))
             os.rename(old, new)
             newexes.append(new)
@@ -603,7 +599,8 @@ def test_hook_collect_submodules(pyi_builder, script_dir):
         """
         import pyi_collect_submodules_mod
         __import__('pyi_testmod_relimp.B.C')
-        """, ['--additional-hooks-dir=%s' % script_dir.join('pyi_hooks')]
+        """,
+        ['--additional-hooks-dir=%s' % script_dir.join('pyi_hooks')],
     )
 
 
@@ -631,7 +628,8 @@ def test_option_runtime_tmpdir(pyi_builder):
             raise SystemExit('Expected sys._MEIPASS to be under current working dir.'
                              ' sys._MEIPASS = ' + runtime_tmpdir + ', cwd = ' + cwd)
         print('test - done')
-        """, ['--runtime-tmpdir=.']
+        """,
+        ['--runtime-tmpdir=.'],
     )  # set runtime-tmpdir to current working dir
 
 
@@ -664,9 +662,12 @@ def test_pe_checksum(pyi_builder):
         # https://docs.microsoft.com/en-us/windows/win32/api/imagehlp/nf-imagehlp-mapfileandchecksumw
         header_sum = wintypes.DWORD()
         checksum = wintypes.DWORD()
-        assert ctypes.windll.imagehlp.MapFileAndCheckSumW(
-            ctypes.c_wchar_p(exe), ctypes.byref(header_sum), ctypes.byref(checksum)
-        ) == 0
+        assert (
+            ctypes.windll.imagehlp.MapFileAndCheckSumW(
+                ctypes.c_wchar_p(exe), ctypes.byref(header_sum), ctypes.byref(checksum)
+            )
+            == 0
+        )
 
         assert header_sum.value == checksum.value
 
@@ -700,7 +701,8 @@ def test_onefile_longpath(pyi_builder, tmpdir):
         with open(data_file, 'r') as fp:
             secret = fp.read()
         assert secret == r'{secret}'
-        """.format(data_file=dst_filename, secret=_SECRET), ['--add-data', str(add_data_name)]
+        """.format(data_file=dst_filename, secret=_SECRET),
+        ['--add-data', str(add_data_name)],
     )
 
 
@@ -745,6 +747,7 @@ def test_sys_executable(pyi_builder, append_pkg, monkeypatch):
     """
     # Set append_pkg; taken from test_pyz_as_external_file
     import PyInstaller.building.build_main
+
     EXE = PyInstaller.building.build_main.EXE
 
     def MyEXE(*args, **kwargs):
@@ -792,7 +795,7 @@ def test_subprocess_in_windowed_mode(pyi_windowed_builder):
         p = run([{0}], input="print('foo')\nprint('bar')\n", stdout=PIPE, universal_newlines=True)
         assert_equal(p.stdout, "foo\nbar\n", p.stdout)
         """.format(repr(sys.executable)),
-        pyi_args=["--windowed"]
+        pyi_args=["--windowed"],
     )
 
 
@@ -815,7 +818,7 @@ def test_package_entry_point_name_collision(pyi_builder):
     assert re.findall("Running (.*) as (.*)", p.stdout) == expected
 
     pyi_builder.test_script(str(script))
-    exe, = pyi_builder._find_executables("matching_name")
+    (exe,) = pyi_builder._find_executables("matching_name")
     p = subprocess.run([exe], stdout=subprocess.PIPE, encoding="utf-8")
     assert re.findall("Running (.*) as (.*)", p.stdout) == expected
 
@@ -828,7 +831,7 @@ def test_contents_directory(pyi_builder):
         pytest.skip('--contents-directory does not affect onefile builds.')
 
     pyi_builder.test_source("", pyi_args=["--contents-directory=foo"])
-    exe, = pyi_builder._find_executables("test_source")
+    (exe,) = pyi_builder._find_executables("test_source")
     bundle = Path(exe).parent
     assert (bundle / "foo").is_dir()
 
@@ -854,7 +857,7 @@ def test_legacy_onedir_layout(pyi_builder):
         assert sys._MEIPASS == os.path.dirname(sys.executable)
         assert os.path.dirname(__file__) == os.path.dirname(sys.executable)
         """,
-        pyi_args=["--contents-directory", "."]
+        pyi_args=["--contents-directory", "."],
     )
 
 
@@ -864,9 +867,9 @@ def test_spec_options(pyi_builder, SPEC_DIR, capsys):
 
     pyi_builder.test_spec(
         SPEC_DIR / "pyi_spec_options.spec",
-        pyi_args=["--", "--optional-dependency", "email", "--optional-dependency", "gzip"]
+        pyi_args=["--", "--optional-dependency", "email", "--optional-dependency", "gzip"],
     )
-    exe, = pyi_builder._find_executables("pyi_spec_options")
+    (exe,) = pyi_builder._find_executables("pyi_spec_options")
     p = subprocess.run([exe], stdout=subprocess.PIPE, encoding="utf-8")
     assert p.stdout == "Available dependencies: email gzip\n"
 

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import pathlib
@@ -59,14 +59,13 @@ class TOC(list):
     A TOC contains various types of files. A TOC contains no duplicates and preserves order.
     PyInstaller uses TOC data type to collect necessary files bundle them into an executable.
     """
+
     def __init__(self, initlist=None):
         super().__init__()
 
         # Deprecation warning
         warnings.warn(
-            "TOC class is deprecated. Use a plain list of 3-element tuples instead.",
-            DeprecationWarning,
-            stacklevel=2,
+            "TOC class is deprecated. Use a plain list of 3-element tuples instead.", DeprecationWarning, stacklevel=2
         )
 
         self.filenames = set()
@@ -214,6 +213,7 @@ class Tree(Target, list):
     This class is a way of creating a TOC (Table of Contents) list that describes some or all of the files within a
     directory.
     """
+
     def __init__(self, root=None, prefix=None, excludes=None, typecode='DATA'):
         """
         root
@@ -320,9 +320,7 @@ def normalize_toc(toc):
 
     def _type_case_normalization_fcn(typecode):
         # Case-normalize all entries except OPTION.
-        return typecode not in {
-            "OPTION",
-        }
+        return typecode not in {"OPTION"}
 
     return _normalize_toc(toc, _TOC_TYPE_PRIORITIES, _type_case_normalization_fcn)
 
@@ -331,7 +329,7 @@ def normalize_pyz_toc(toc):
     # Default priority: 0
     _TOC_TYPE_PRIORITIES = {
         # Ensure that modules are never shadowed by PYZ-embedded data files.
-        'PYMODULE': 1,
+        'PYMODULE': 1
     }
 
     return _normalize_toc(toc, _TOC_TYPE_PRIORITIES)

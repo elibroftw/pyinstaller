@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Define a modified ModuleGraph that can return its contents as a TOC and in other ways act like the old ImpTracker.
 TODO: This class, along with TOC and Tree, should be in a separate module.
@@ -45,12 +45,18 @@ from PyInstaller import HOMEPATH, PACKAGEPATH
 from PyInstaller import log as logging
 from PyInstaller.building.utils import add_suffix_to_extension
 from PyInstaller.compat import (
-    BAD_MODULE_TYPES, BINARY_MODULE_TYPES, MODULE_TYPES_TO_TOC_DICT, PURE_PYTHON_MODULE_TYPES, PY3_BASE_MODULES,
-    VALID_MODULE_TYPES, importlib_load_source, is_win
+    BAD_MODULE_TYPES,
+    BINARY_MODULE_TYPES,
+    MODULE_TYPES_TO_TOC_DICT,
+    PURE_PYTHON_MODULE_TYPES,
+    PY3_BASE_MODULES,
+    VALID_MODULE_TYPES,
+    importlib_load_source,
+    is_win,
 )
 from PyInstaller.depend import bytecode
 from PyInstaller.depend.imphook import AdditionalFilesCache, ModuleHookCache
-from PyInstaller.depend.imphookapi import (PreFindModulePathAPI, PreSafeImportModuleAPI)
+from PyInstaller.depend.imphookapi import PreFindModulePathAPI, PreSafeImportModuleAPI
 from PyInstaller.lib.modulegraph.find_modules import get_implies
 from PyInstaller.lib.modulegraph.modulegraph import ModuleGraph, DEFAULT_IMPORT_LEVEL, ABSOLUTE_IMPORT_LEVEL, Package
 from PyInstaller.log import DEBUG, INFO, TRACE
@@ -153,29 +159,40 @@ class PyiModuleGraph(ModuleGraph):
         assert isinstance(rthooks, dict), 'The root element in %s must be a dict.' % uhd_path
         for module_name, python_file_name_list in rthooks.items():
             # Ensure the key is a string.
-            assert isinstance(module_name, str), \
-                '%s must be a dict whose keys are strings; %s is not a string.' % (uhd_path, module_name)
+            assert isinstance(module_name, str), '%s must be a dict whose keys are strings; %s is not a string.' % (
+                uhd_path,
+                module_name,
+            )
             # Ensure the value is a list.
-            assert isinstance(python_file_name_list, list), \
-                'The value of %s key %s must be a list.' % (uhd_path, module_name)
+            assert isinstance(python_file_name_list, list), 'The value of %s key %s must be a list.' % (
+                uhd_path,
+                module_name,
+            )
             if module_name in self._available_rthooks:
                 logger.warning(
                     'Runtime hooks for %s have already been defined. Skipping the runtime hooks for %s that are '
-                    'defined in %s.', module_name, module_name, os.path.join(uhd, 'rthooks')
+                    'defined in %s.',
+                    module_name,
+                    module_name,
+                    os.path.join(uhd, 'rthooks'),
                 )
                 # Skip this module
                 continue
             # Merge this with existing run-time hooks.
             for python_file_name in python_file_name_list:
                 # Ensure each item in the list is a string.
-                assert isinstance(python_file_name, str), \
-                    '%s key %s, item %r must be a string.' % (uhd_path, module_name, python_file_name)
+                assert isinstance(python_file_name, str), '%s key %s, item %r must be a string.' % (
+                    uhd_path,
+                    module_name,
+                    python_file_name,
+                )
                 # Transform it into an absolute path.
                 abs_path = os.path.join(uhd, 'rthooks', python_file_name)
                 # Make sure this file exists.
-                assert os.path.exists(abs_path), \
-                    'In %s, key %s, the file %r expected to be located at %r does not exist.' % \
-                    (uhd_path, module_name, python_file_name, abs_path)
+                assert os.path.exists(abs_path), (
+                    'In %s, key %s, the file %r expected to be located at %r does not exist.'
+                    % (uhd_path, module_name, python_file_name, abs_path)
+                )
                 # Merge it.
                 self._available_rthooks[module_name].append(abs_path)
 
@@ -385,7 +402,7 @@ class PyiModuleGraph(ModuleGraph):
 
                     # Adjust the base module name based on level
                     if level > 1:
-                        base_module_name = '.'.join(base_module_name.split('.')[:-(level - 1)])
+                        base_module_name = '.'.join(base_module_name.split('.')[: -(level - 1)])
                 else:
                     base_module_name = target_module_partname
 
@@ -397,7 +414,7 @@ class PyiModuleGraph(ModuleGraph):
                     module_name_parts = module_name.split('.')
                     for excluded_import in excluded_imports:
                         excluded_import_parts = excluded_import.split('.')
-                        match = module_name_parts[:len(excluded_import_parts)] == excluded_import_parts
+                        match = module_name_parts[: len(excluded_import_parts)] == excluded_import_parts
                         if match:
                             return excluded_import
                     return None
@@ -409,8 +426,11 @@ class PyiModuleGraph(ModuleGraph):
                 if excluded_import_rule:
                     logger.debug(
                         "Suppressing import of %r from module %r due to excluded import %r specified in a hook for %r "
-                        "(or its parent package(s)).", base_module_name, source_module.identifier, excluded_import_rule,
-                        source_module.identifier
+                        "(or its parent package(s)).",
+                        base_module_name,
+                        source_module.identifier,
+                        excluded_import_rule,
+                        source_module.identifier,
                     )
                     return []
 
@@ -424,8 +444,11 @@ class PyiModuleGraph(ModuleGraph):
                         if excluded_import_rule:
                             logger.debug(
                                 "Suppressing import of %r from module %r due to excluded import %r specified in a hook "
-                                "for %r (or its parent package(s)).", submodule_name, source_module.identifier,
-                                excluded_import_rule, source_module.identifier
+                                "for %r (or its parent package(s)).",
+                                submodule_name,
+                                source_module.identifier,
+                                excluded_import_rule,
+                                source_module.identifier,
                             )
                         else:
                             filtered_target_attr_names.append(target_attr_name)
@@ -521,11 +544,7 @@ class PyiModuleGraph(ModuleGraph):
                 hook_module = importlib_load_source(hook_fullname, hook.hook_filename)
 
                 # Object communicating changes made by this hook back to us.
-                hook_api = PreFindModulePathAPI(
-                    module_graph=self,
-                    module_name=fullname,
-                    search_dirs=search_dirs,
-                )
+                hook_api = PreFindModulePathAPI(module_graph=self, module_name=fullname, search_dirs=search_dirs)
 
                 # Run this hook, passed this object.
                 if not hasattr(hook_module, 'pre_find_module_path'):
@@ -680,6 +699,7 @@ class PyiModuleGraph(ModuleGraph):
             fully-qualified name.
 
         """
+
         def get_importer_edge_data(importer):
             edge = self.graph.edge_by_node(importer, name)
             # edge might be None in case an AliasModule was added.
@@ -716,7 +736,7 @@ class PyiModuleGraph(ModuleGraph):
         # Find runtime hooks that are implied by packages already imported. Get a temporary TOC listing all the scripts
         # and packages graphed so far. Assuming that runtime hooks apply only to modules and packages.
         temp_toc = self._make_toc(VALID_MODULE_TYPES)
-        for (mod_name, path, typecode) in temp_toc:
+        for mod_name, path, typecode in temp_toc:
             # Look if there is any run-time hook for given module.
             if mod_name in self._available_rthooks:
                 # There could be several run-time hooks for a module.
@@ -756,9 +776,7 @@ class PyiModuleGraph(ModuleGraph):
         Find modules that import a given **module**.
         """
         co_dict = {}
-        pure_python_module_types = PURE_PYTHON_MODULE_TYPES | {
-            'Script',
-        }
+        pure_python_module_types = PURE_PYTHON_MODULE_TYPES | {'Script'}
         node = self.find_node(module)
         if node:
             referrers = self.incoming(node)
@@ -799,9 +817,7 @@ class PyiModuleGraph(ModuleGraph):
         # Assume both are valid.
         for importlib_metadata in ["importlib.metadata", "importlib_metadata"]:
             out |= self._metadata_from(
-                importlib_metadata,
-                ["metadata", "distribution", "version", "files", "requires"],
-                [],
+                importlib_metadata, ["metadata", "distribution", "version", "files", "requires"], []
             )
 
         return out
@@ -864,7 +880,8 @@ class PyiModuleGraph(ModuleGraph):
         """
         # `node.identifier` might be an instance of `modulegraph.Alias`, hence explicit conversion to `str`.
         return [
-            str(node.identifier) for node in self.iter_graph(start=self._top_script_node)
+            str(node.identifier)
+            for node in self.iter_graph(start=self._top_script_node)
             if type(node).__name__ == 'Package'
         ]
 

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,15 +7,19 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import os.path
 
 from PyInstaller.compat import is_win
 from PyInstaller.utils.hooks import get_hook_config
-from PyInstaller.utils.hooks.gi import GiModuleInfo, collect_glib_etc_files, collect_glib_share_files, \
-    collect_glib_translations
+from PyInstaller.utils.hooks.gi import (
+    GiModuleInfo,
+    collect_glib_etc_files,
+    collect_glib_share_files,
+    collect_glib_translations,
+)
 
 
 def hook(hook_api):

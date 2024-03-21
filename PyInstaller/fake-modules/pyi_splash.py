@@ -67,7 +67,7 @@ def _log(level, msg, *args, **kwargs):
 # These constants define single characters which are needed to send commands to the bootloader. Those constants are
 # also set in the tcl script.
 CLOSE_CONNECTION = b'\x04'  # ASCII End-of-Transmission character
-FLUSH_CHARACTER = b'\x0D'  # ASCII Carriage Return character
+FLUSH_CHARACTER = b'\x0d'  # ASCII Carriage Return character
 
 # Module internal variables
 _initialized = False
@@ -103,9 +103,10 @@ try:
 except (KeyError, ValueError) as _err:
     # log-level: warning
     _log(
-        30, "The environment does not allow connecting to the splash screen. Are the splash resources attached to the "
+        30,
+        "The environment does not allow connecting to the splash screen. Are the splash resources attached to the "
         "bootloader or did an error occur?",
-        exc_info=_err
+        exc_info=_err,
     )
 except ConnectionError as _err:
     # log-level: error
@@ -118,6 +119,7 @@ def _check_connection(func):
 
     The wrapped function may raise a ConnectionError if the module was not initialized correctly.
     """
+
     def wrapper(*args, **kwargs):
         """
         Executes the wrapped function if the environment allows it.

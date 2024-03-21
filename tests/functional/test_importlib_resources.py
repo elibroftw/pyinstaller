@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # These tests run a test script (scripts/pyi_importlib_resources.py) in unfrozen and frozen form, in combination with
 # a custom test package (modules/pyi_pkg_resources_provider/package). In contrast to test_pkg_resources_provider.py,
@@ -68,7 +68,7 @@ def __get_test_package_path(package_type, tmpdir, monkeypatch):
 
 @skipif(
     not is_py39 and not check_requirement('importlib_resources'),
-    reason="Python prior to 3.9 requires importlib_resources."
+    reason="Python prior to 3.9 requires importlib_resources.",
 )
 @pytest.mark.parametrize('package_type', ['pkg'])  # Zipped egg ('egg') is not supported.
 def test_importlib_resources_source(package_type, tmpdir, script_dir, monkeypatch):
@@ -78,7 +78,7 @@ def test_importlib_resources_source(package_type, tmpdir, script_dir, monkeypatc
     test_script = 'pyi_importlib_resources.py'
     test_script = os.path.join(
         str(script_dir),  # not is_py36: str()
-        test_script
+        test_script,
     )
     ret = __exec_python_script(test_script, pathex=pathex)
     assert ret == 0, "Test script failed!"
@@ -86,7 +86,7 @@ def test_importlib_resources_source(package_type, tmpdir, script_dir, monkeypatc
 
 @skipif(
     not is_py39 and not check_requirement('importlib_resources'),
-    reason="Python prior to 3.9 requires importlib_resources."
+    reason="Python prior to 3.9 requires importlib_resources.",
 )
 @pytest.mark.parametrize('package_type', ['pkg'])  # Zipped egg ('egg') is not supported.
 def test_importlib_resources_frozen(pyi_builder, package_type, tmpdir, script_dir, monkeypatch):
@@ -97,10 +97,7 @@ def test_importlib_resources_frozen(pyi_builder, package_type, tmpdir, script_di
     pyi_args = ['--paths', pathex, '--hidden-import', 'pyi_pkgres_testpkg', '--additional-hooks-dir', hooks_dir]
     if is_darwin:
         pyi_args += ['--windowed']  # Also build and test .app bundle executable
-    pyi_builder.test_script(
-        test_script,
-        pyi_args=pyi_args,
-    )
+    pyi_builder.test_script(test_script, pyi_args=pyi_args)
 
 
 # A separate test for verifying that `importlib.resources.files()` works with PEP-420 namespace packages. See #7921.
@@ -115,7 +112,7 @@ def test_importlib_resources_frozen(pyi_builder, package_type, tmpdir, script_di
 # The test covers both scenarios via `as_package` parameter.
 @skipif(
     not is_py39 and not check_requirement('importlib_resources'),
-    reason="Python prior to 3.9 requires importlib_resources."
+    reason="Python prior to 3.9 requires importlib_resources.",
 )
 @pytest.mark.parametrize('as_package', [True, False])
 def test_importlib_resources_namespace_package_data_files(pyi_builder, as_package):

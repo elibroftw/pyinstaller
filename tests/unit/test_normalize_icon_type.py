@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import sys
@@ -63,7 +63,7 @@ def test_normalize_icon_pillow(tmp_path):
 
     # A .ico which is really a mislabelled .png: should be detected and normalised
 
-    for (i, suffix) in enumerate(["ico", "ICO"]):
+    for i, suffix in enumerate(["ico", "ICO"]):
         png = shutil.copy(icon, str(tmp_path / f"png-in-disguise-{i}.{suffix}"))
         normalised = normalize_icon_type(png, ("exe", "ico"), "ico", workpath)
         assert normalised != png

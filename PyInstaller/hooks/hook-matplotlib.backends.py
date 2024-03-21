@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from PyInstaller.compat import is_darwin
 from PyInstaller.utils.hooks import logger, get_hook_config
@@ -22,6 +22,7 @@ def _get_configured_default_backend():
     object, returns None
     """
     import matplotlib
+
     # matplotlib.rcParams overrides the __getitem__ implementation and attempts to determine and load the default
     # backend using pyplot.switch_backend(). Therefore, use dict.__getitem__().
     val = dict.__getitem__(matplotlib.rcParams, 'backend')
@@ -36,6 +37,7 @@ def _list_available_mpl_backends():
     Returns the names of all available matplotlib backends.
     """
     import matplotlib
+
     return matplotlib.rcsetup.all_backends
 
 
@@ -113,7 +115,9 @@ def _autodetect_used_backends(hook_api):
         logger.info(
             "The following Matplotlib backends were discovered by scanning for `matplotlib.use()` calls: %r. If your "
             "backend of choice is not in this list, either add a `matplotlib.use()` call to your code, or configure "
-            "the backend collection via hook options (see: %s).", used_backends, HOOK_CONFIG_DOCS
+            "the backend collection via hook options (see: %s).",
+            used_backends,
+            HOOK_CONFIG_DOCS,
         )
         return used_backends
 

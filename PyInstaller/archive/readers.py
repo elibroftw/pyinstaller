@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Python-based CArchive (PKG) reader implementation. Used only in the archive_viewer utility.
 """
@@ -94,8 +94,9 @@ class CArchiveReader:
             fp.seek(cookie_start_offset, os.SEEK_SET)
             cookie_data = fp.read(self._COOKIE_LENGTH)
 
-            magic, archive_length, toc_offset, toc_length, pyvers, pylib_name = \
-                struct.unpack(self._COOKIE_FORMAT, cookie_data)
+            magic, archive_length, toc_offset, toc_length, pyvers, pylib_name = struct.unpack(
+                self._COOKIE_FORMAT, cookie_data
+            )
 
             # Compute start of the the archive
             self._start_offset = (cookie_start_offset + self._COOKIE_LENGTH) - archive_length
@@ -144,12 +145,13 @@ class CArchiveReader:
         cur_pos = 0
         while cur_pos < len(data):
             # Read and parse the fixed-size TOC entry header
-            entry_length, entry_offset, data_length, uncompressed_length, compression_flag, typecode = \
-                struct.unpack(cls._TOC_ENTRY_FORMAT, data[cur_pos:(cur_pos + cls._TOC_ENTRY_LENGTH)])
+            entry_length, entry_offset, data_length, uncompressed_length, compression_flag, typecode = struct.unpack(
+                cls._TOC_ENTRY_FORMAT, data[cur_pos : (cur_pos + cls._TOC_ENTRY_LENGTH)]
+            )
             cur_pos += cls._TOC_ENTRY_LENGTH
             # Read variable-length name
             name_length = entry_length - cls._TOC_ENTRY_LENGTH
-            name, *_ = struct.unpack(f'{name_length}s', data[cur_pos:(cur_pos + name_length)])
+            name, *_ = struct.unpack(f'{name_length}s', data[cur_pos : (cur_pos + name_length)])
             cur_pos += name_length
             # Name string may contain up to 15 bytes of padding
             name = name.rstrip(b'\0').decode('utf-8')
@@ -181,6 +183,7 @@ class CArchiveReader:
 
         if compression_flag:
             import zlib
+
             data = zlib.decompress(data)
 
         return data

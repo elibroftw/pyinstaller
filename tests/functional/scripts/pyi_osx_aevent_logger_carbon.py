@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # This is a CLI-based AppleEvent logger application, intended for testing argv emulation and AppleEvent forwarding in
 # PyInstaller-generated macOS .app bundles.
@@ -22,36 +22,19 @@ import struct
 
 # The ctypes-based bindings for Carbon API are taken from py2app's argv_emulation.py
 class AEDesc(ctypes.Structure):
-    _fields_ = [
-        ("descKey", ctypes.c_int),
-        ("descContent", ctypes.c_void_p),
-    ]
+    _fields_ = [("descKey", ctypes.c_int), ("descContent", ctypes.c_void_p)]
 
 
 class EventTypeSpec(ctypes.Structure):
-    _fields_ = [
-        ("eventClass", ctypes.c_int),
-        ("eventKind", ctypes.c_uint),
-    ]
+    _fields_ = [("eventClass", ctypes.c_int), ("eventKind", ctypes.c_uint)]
 
 
 def _ctypes_setup():
     carbon = ctypes.CDLL("/System/Library/Carbon.framework/Carbon")
 
     ae_callback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)
-    carbon.AEInstallEventHandler.argtypes = [
-        ctypes.c_int,
-        ctypes.c_int,
-        ae_callback,
-        ctypes.c_void_p,
-        ctypes.c_char,
-    ]
-    carbon.AERemoveEventHandler.argtypes = [
-        ctypes.c_int,
-        ctypes.c_int,
-        ae_callback,
-        ctypes.c_char,
-    ]
+    carbon.AEInstallEventHandler.argtypes = [ctypes.c_int, ctypes.c_int, ae_callback, ctypes.c_void_p, ctypes.c_char]
+    carbon.AERemoveEventHandler.argtypes = [ctypes.c_int, ctypes.c_int, ae_callback, ctypes.c_char]
 
     carbon.AEProcessEvent.restype = ctypes.c_int
     carbon.AEProcessEvent.argtypes = [ctypes.c_void_p]
@@ -66,44 +49,22 @@ def _ctypes_setup():
     ]
 
     carbon.AEGetParamDesc.restype = ctypes.c_int
-    carbon.AEGetParamDesc.argtypes = [
-        ctypes.c_void_p,
-        ctypes.c_int,
-        ctypes.c_int,
-        ctypes.POINTER(AEDesc),
-    ]
+    carbon.AEGetParamDesc.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.POINTER(AEDesc)]
 
     carbon.AECountItems.restype = ctypes.c_int
-    carbon.AECountItems.argtypes = [
-        ctypes.POINTER(AEDesc),
-        ctypes.POINTER(ctypes.c_long),
-    ]
+    carbon.AECountItems.argtypes = [ctypes.POINTER(AEDesc), ctypes.POINTER(ctypes.c_long)]
 
     carbon.AEGetNthDesc.restype = ctypes.c_int
-    carbon.AEGetNthDesc.argtypes = [
-        ctypes.c_void_p,
-        ctypes.c_long,
-        ctypes.c_int,
-        ctypes.c_void_p,
-        ctypes.c_void_p,
-    ]
+    carbon.AEGetNthDesc.argtypes = [ctypes.c_void_p, ctypes.c_long, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p]
 
     carbon.AEGetDescDataSize.restype = ctypes.c_int
     carbon.AEGetDescDataSize.argtypes = [ctypes.POINTER(AEDesc)]
 
     carbon.AEGetDescData.restype = ctypes.c_int
-    carbon.AEGetDescData.argtypes = [
-        ctypes.POINTER(AEDesc),
-        ctypes.c_void_p,
-        ctypes.c_int,
-    ]
+    carbon.AEGetDescData.argtypes = [ctypes.POINTER(AEDesc), ctypes.c_void_p, ctypes.c_int]
 
     carbon.FSRefMakePath.restype = ctypes.c_int
-    carbon.FSRefMakePath.argtypes = [
-        ctypes.c_void_p,
-        ctypes.c_void_p,
-        ctypes.c_uint,
-    ]
+    carbon.FSRefMakePath.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint]
 
     return carbon
 
@@ -111,22 +72,22 @@ def _ctypes_setup():
 # Initialize Carbon bindings
 carbon = _ctypes_setup()
 
-kAEInternetSuite, = struct.unpack(">i", b"GURL")
-kAEGetURL, = struct.unpack(">i", b"GURL")
-kCoreEventClass, = struct.unpack(">i", b"aevt")
-kAEOpenApplication, = struct.unpack(">i", b"oapp")
-kAEReOpenApplication, = struct.unpack(">i", b"rapp")
-kAEActivate, = struct.unpack(">i", b"actv")
-kAEOpenDocuments, = struct.unpack(">i", b"odoc")
-keyDirectObject, = struct.unpack(">i", b"----")
-typeAEList, = struct.unpack(">i", b"list")
-typeChar, = struct.unpack(">i", b"TEXT")
-typeFSRef, = struct.unpack(">i", b"fsrf")
+(kAEInternetSuite,) = struct.unpack(">i", b"GURL")
+(kAEGetURL,) = struct.unpack(">i", b"GURL")
+(kCoreEventClass,) = struct.unpack(">i", b"aevt")
+(kAEOpenApplication,) = struct.unpack(">i", b"oapp")
+(kAEReOpenApplication,) = struct.unpack(">i", b"rapp")
+(kAEActivate,) = struct.unpack(">i", b"actv")
+(kAEOpenDocuments,) = struct.unpack(">i", b"odoc")
+(keyDirectObject,) = struct.unpack(">i", b"----")
+(typeAEList,) = struct.unpack(">i", b"list")
+(typeChar,) = struct.unpack(">i", b"TEXT")
+(typeFSRef,) = struct.unpack(">i", b"fsrf")
 FALSE = b"\0"
 TRUE = b"\1"
 eventLoopTimedOutErr = -9875
 
-kEventClassAppleEvent, = struct.unpack(">i", b"eppc")
+(kEventClassAppleEvent,) = struct.unpack(">i", b"eppc")
 kEventAppleEvent = 1
 
 ae_callback = carbon.AEInstallEventHandler.argtypes[2]
@@ -215,11 +176,7 @@ class Application:
         while time.time() < start + self.runtime:
             event = ctypes.c_void_p()
             status = carbon.ReceiveNextEvent(
-                1,
-                ctypes.byref(eventType),
-                max(start + self.runtime - time.time(), 0),
-                TRUE,
-                ctypes.byref(event),
+                1, ctypes.byref(eventType), max(start + self.runtime - time.time(), 0), TRUE, ctypes.byref(event)
             )
 
             if status == eventLoopTimedOutErr:

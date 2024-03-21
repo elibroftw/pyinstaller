@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 This module contains various helper functions for git DVCS.
 """
@@ -30,6 +30,7 @@ def get_repo_revision():
     if not path.exists(gitdir):
         try:
             from PyInstaller.utils._gitrevision import rev
+
             if not rev.startswith('$'):
                 # the format specifier has been substituted
                 return '+' + rev

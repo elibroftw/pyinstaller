@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Configure PyInstaller for the current Python installation.
 """
@@ -31,10 +31,7 @@ def _check_upx_availability(upx_dir):
     # Check if we can call `upx -V`.
     try:
         output = subprocess.check_output(
-            [upx_exe, '-V'],
-            stdin=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            encoding='utf-8',
+            [upx_exe, '-V'], stdin=subprocess.DEVNULL, stderr=subprocess.DEVNULL, encoding='utf-8'
         )
     except Exception:
         logger.debug('UPX is not available.')

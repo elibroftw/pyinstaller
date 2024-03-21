@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import types
 import pytest
@@ -83,6 +83,7 @@ def fresh_pyi_modgraph(monkeypatch):
     """
     Get a fresh PyiModuleGraph
     """
+
     def fake_base_modules(self):
         # speed up set up
         self._base_modules = ()
@@ -209,6 +210,7 @@ class FakeGraph(analysis.PyiModuleGraph):
     """
     A simplified module graph containing a single node module *foo* with user-defined content.
     """
+
     def __init__(self, source):
         self.code = compile(source, "<>", "exec")
 

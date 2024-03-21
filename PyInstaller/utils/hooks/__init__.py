@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from __future__ import annotations
 
@@ -51,6 +51,7 @@ def __exec_python_cmd(cmd, env=None, capture_stdout=True):
     """
     # 'PyInstaller.config' cannot be imported as other top-level modules.
     from PyInstaller.config import CONF
+
     if env is None:
         env = {}
     # Update environment. Defaults to 'os.environ'
@@ -163,6 +164,7 @@ def get_homebrew_path(formula: str = ''):
     Returns the path as a string or None if not found.
     """
     import subprocess
+
     brewcmd = ['brew', '--prefix']
     path = None
     if formula:
@@ -189,7 +191,7 @@ def remove_prefix(string: str, prefix: str):
     it returns the original string.
     """
     if string.startswith(prefix):
-        return string[len(prefix):]
+        return string[len(prefix) :]
     else:
         return string
 
@@ -201,7 +203,7 @@ def remove_suffix(string: str, suffix: str):
     """
     # Special case: if suffix is empty, string[:0] returns ''. So, test for a non-empty suffix.
     if suffix and string.endswith(suffix):
-        return string[:-len(suffix)]
+        return string[: -len(suffix)]
     else:
         return string
 
@@ -215,7 +217,7 @@ def remove_file_extension(filename: str):
     """
     for suff in compat.EXTENSION_SUFFIXES:
         if filename.endswith(suff):
-            return filename[0:filename.rfind(suff)]
+            return filename[0 : filename.rfind(suff)]
     # Fallback to ordinary 'splitext'.
     return os.path.splitext(filename)[0]
 
@@ -271,9 +273,11 @@ def get_module_attribute(module_name: str, attr_name: str):
     AttributeError
         If this attribute is undefined.
     """
+
     @isolated.decorate
     def _get_module_attribute(module_name, attr_name):
         import importlib
+
         module = importlib.import_module(module_name)
         return getattr(module, attr_name)
 
@@ -310,6 +314,7 @@ def get_module_file_attribute(package: str):
     if '.' not in package:
         try:
             import importlib.util
+
             loader = importlib.util.find_spec(package).loader
             filename = loader.get_filename(package)
             # Apparently in the past, ``None`` could be returned for built-in ``datetime`` module. Just in case this
@@ -327,6 +332,7 @@ def get_module_file_attribute(package: str):
         # with missing dependencies).
         try:
             import importlib.util
+
             loader = importlib.util.find_spec(package).loader
             filename = loader.get_filename(package)
             # Safe-guard against ``None`` being returned (see comment in the non-isolated codepath).
@@ -337,6 +343,7 @@ def get_module_file_attribute(package: str):
 
         # Fall back to import attempt
         import importlib
+
         p = importlib.import_module(package)
         return p.__file__
 
@@ -416,11 +423,7 @@ def check_requirement(requirement: str):
 
 # Keep the `is_module_satisfies` as an alias for backwards compatibility with existing hooks. The old fallback
 # to module version check does not work any more, though.
-def is_module_satisfies(
-    requirements: str,
-    version: None = None,
-    version_attr: None = None,
-):
+def is_module_satisfies(requirements: str, version: None = None, version_attr: None = None):
     """
     A compatibility wrapper for :func:`check_requirement`, intended for backwards compatibility with existing hooks.
 
@@ -463,6 +466,7 @@ def is_package(module_name: str):
     :param module_name: Module name to check.
     :return: True if module is a package else otherwise.
     """
+
     def _is_package(module_name: str):
         """
         Determines whether the given name represents a package or not. If the name represents a top-level module or
@@ -471,6 +475,7 @@ def is_package(module_name: str):
         """
         try:
             import importlib.util
+
             spec = importlib.util.find_spec(module_name)
             return bool(spec.submodule_search_locations)
         except Exception:
@@ -490,6 +495,7 @@ def get_all_package_paths(package: str):
     path, but PEP 420 namespace packages may be split across multiple locations. Returns an empty list if the specified
     package is not found or is not a package.
     """
+
     def _get_package_paths(package: str):
         """
         Retrieve package path(s), as advertised by submodule_search_paths attribute of the spec obtained via
@@ -500,6 +506,7 @@ def get_all_package_paths(package: str):
         """
         try:
             import importlib.util
+
             spec = importlib.util.find_spec(package)
             if not spec or not spec.submodule_search_locations:
                 return []
@@ -552,11 +559,7 @@ def get_package_paths(package: str):
     return pkg_base, pkg_dir
 
 
-def collect_submodules(
-    package: str,
-    filter: Callable[[str], bool] = lambda name: True,
-    on_error: str = "warn once",
-):
+def collect_submodules(package: str, filter: Callable[[str], bool] = lambda name: True, on_error: str = "warn once"):
     """
     List all submodules of a given package.
 
@@ -655,6 +658,7 @@ def _collect_submodules(name, on_error):
         # Catch all errors and either raise, warn, or ignore them as determined by the *on_error* parameter.
         if on_error in ("warn", "warn once"):
             from PyInstaller.log import logger
+
             ex = "".join(format_exception_only(type(ex), ex)).strip()
             logger.warning(f"Failed to collect submodules for '{name}' because importing '{name}' raised: {ex}")
             if on_error == "warn once":
@@ -701,11 +705,7 @@ def is_module_or_submodule(name: str, mod_or_submod: str):
 
 
 # Patterns of dynamic library filenames that might be bundled with some installed Python packages.
-PY_DYLIB_PATTERNS = [
-    '*.dll',
-    '*.dylib',
-    'lib*.so',
-]
+PY_DYLIB_PATTERNS = ['*.dll', '*.dylib', 'lib*.so']
 
 
 def collect_dynamic_libs(package: str, destdir: str | None = None, search_patterns: list = PY_DYLIB_PATTERNS):
@@ -833,7 +833,7 @@ def collect_data_files(
         # The number of ``cludes`` for which matching directories should be searched for all files under them.
         clude_len,
         # True if the list is includes, False for excludes.
-        is_include
+        is_include,
     ):
         for i, c in enumerate(cludes):
             for g in Path(pkg_dir).glob(c):
@@ -1029,10 +1029,9 @@ def get_installer(module: str):
 
         # Attempt to resolve the module file via macports' port command
         try:
-            output = subprocess.run(['port', 'provides', file_name],
-                                    check=True,
-                                    stdout=subprocess.PIPE,
-                                    encoding='utf-8').stdout
+            output = subprocess.run(
+                ['port', 'provides', file_name], check=True, stdout=subprocess.PIPE, encoding='utf-8'
+            ).stdout
             if 'is provided by' in output:
                 return 'macports'
         except ExecCommandFailed:
@@ -1168,11 +1167,7 @@ def get_hook_config(hook_api: PostGraphAPI, module_name: str, key: str):
     return value
 
 
-def include_or_exclude_file(
-    filename: str,
-    include_list: list | None = None,
-    exclude_list: list | None = None,
-):
+def include_or_exclude_file(filename: str, include_list: list | None = None, exclude_list: list | None = None):
     """
     Generic inclusion/exclusion decision function based on filename and list of include and exclude patterns.
 
@@ -1269,8 +1264,10 @@ def collect_delvewheel_libs_directory(package_name, libdir_name=None, datas=None
     # Collect the .load-order file; strictly speaking, this should be necessary only under python < 3.8, but let us
     # collect it for completeness sake. Differently named variants have been observed: `.load_order`, `.load-order`,
     # and `.load-order-Name`.
-    datas += [(str(load_order_file), str(load_order_file.parent.relative_to(pkg_base)))
-              for load_order_file in libs_dir.glob('.load[-_]order*')]
+    datas += [
+        (str(load_order_file), str(load_order_file.parent.relative_to(pkg_base)))
+        for load_order_file in libs_dir.glob('.load[-_]order*')
+    ]
 
     return datas, binaries
 
@@ -1279,8 +1276,10 @@ if compat.is_pure_conda:
     from PyInstaller.utils.hooks import conda as conda_support  # noqa: F401
 elif compat.is_conda:
     from PyInstaller.utils.hooks.conda import CONDA_META_DIR as _tmp
+
     logger.warning(
         "Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being "
-        "used on top, because the conda-meta folder %s does not exist.", _tmp
+        "used on top, because the conda-meta folder %s does not exist.",
+        _tmp,
     )
     del _tmp

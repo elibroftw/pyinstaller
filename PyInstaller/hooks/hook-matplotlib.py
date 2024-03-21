@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from PyInstaller import isolated
 from PyInstaller import compat
@@ -17,12 +17,11 @@ from PyInstaller.utils import hooks as hookutils
 @isolated.decorate
 def mpl_data_dir():
     import matplotlib
+
     return matplotlib.get_data_path()
 
 
-datas = [
-    (mpl_data_dir(), "matplotlib/mpl-data"),
-]
+datas = [(mpl_data_dir(), "matplotlib/mpl-data")]
 
 binaries = []
 

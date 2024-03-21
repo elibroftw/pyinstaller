@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from PyInstaller.utils.hooks import check_requirement
 
@@ -19,6 +19,7 @@ hiddenimports = []
 # ``_get_sysconfigdata_name()`` from regular ``sysconfig``.
 try:
     import sysconfig
+
     hiddenimports += [sysconfig._get_sysconfigdata_name()]
 except AttributeError:
     # Either sysconfig has no attribute _get_sysconfigdata_name (i.e., the function does not exist), or this is Windows

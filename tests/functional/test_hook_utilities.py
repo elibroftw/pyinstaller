@@ -21,6 +21,7 @@ def test_collect_entry_point(pyi_builder_spec, script_dir, tmpdir):
     point should be same after freezing.
     """
     from PyInstaller.compat import importlib_metadata
+
     plugins = sorted(i.module for i in importlib_metadata.entry_points(group="pytest11"))
 
     assert len(plugins), "The pytest11 entry point appears to have moved."

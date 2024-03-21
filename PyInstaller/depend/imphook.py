@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Code related to processing of import hooks.
 """
@@ -56,6 +56,7 @@ class ModuleHookCache(dict):
     with existing in-memory modules in other caches.
 
     """
+
     def __init__(self, module_graph, hook_dirs):
         """
         Cache all hook scripts in the passed directories.
@@ -179,17 +180,14 @@ _MAGIC_MODULE_HOOK_ATTRS = {
     'datas': (set, format_binaries_and_datas),
     'binaries': (set, format_binaries_and_datas),
     'excludedimports': (set, None),
-
     # Collections in which order is significant. This includes:
     #
     # * "hiddenimports", as order of importation is significant. On module importation, hook scripts are loaded and hook
     #   functions declared by these scripts are called. As these scripts and functions can have side effects dependent
     #   on module importation order, module importation itself can have side effects dependent on this order!
     'hiddenimports': (list, None),
-
     # Flags
     'warn_on_missing_hiddenimports': (lambda: True, bool),
-
     # Package/module collection mode dictionary.
     'module_collection_mode': (dict, _module_collection_mode_sanitizer),
 }
@@ -245,7 +243,7 @@ class ModuleHook:
         `_load_hook_module()` method _or_ `None` if this method has yet to be accessed.
     """
 
-    #-- Magic --
+    # -- Magic --
 
     def __init__(self, module_graph, module_name, hook_filename, hook_module_name_prefix):
         """
@@ -341,7 +339,7 @@ class ModuleHook:
         # called.
         return super().__setattr__(attr_name, attr_value)
 
-    #-- Loading --
+    # -- Loading --
 
     def _load_hook_module(self, keep_module_ref=False):
         """
@@ -368,7 +366,8 @@ class ModuleHook:
                 # Inform the user
                 logger.debug(
                     'Skipping module hook %r from %r because a hook for %s has already been loaded.',
-                    *os.path.split(self.hook_filename)[::-1], self.module_name
+                    *os.path.split(self.hook_filename)[::-1],
+                    self.module_name,
                 )
                 # Set the default attributes to empty instances of the type.
                 for attr_name, (attr_type, _) in _MAGIC_MODULE_HOOK_ATTRS.items():
@@ -410,10 +409,12 @@ class ModuleHook:
 
         # If module_collection_mode has an entry with None key, reassign it to the hooked module's name.
         setattr(
-            self, 'module_collection_mode', {
+            self,
+            'module_collection_mode',
+            {
                 key if key is not None else self.module_name: value
                 for key, value in getattr(self, 'module_collection_mode').items()
-            }
+            },
         )
 
         # Release the module if we do not need the reference. This is the case when hook is loaded during the analysis
@@ -421,7 +422,7 @@ class ModuleHook:
         if not keep_module_ref:
             self._hook_module = None
 
-    #-- Hooks --
+    # -- Hooks --
 
     def post_graph(self, analysis):
         """
@@ -515,12 +516,12 @@ class AdditionalFilesCache:
     """
     Cache for storing what binaries and datas were pushed by what modules when import hooks were processed.
     """
+
     def __init__(self):
         self._binaries = {}
         self._datas = {}
 
     def add(self, modname, binaries, datas):
-
         self._binaries.setdefault(modname, [])
         self._binaries[modname].extend(binaries or [])
         self._datas.setdefault(modname, [])

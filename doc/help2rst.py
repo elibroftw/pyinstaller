@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2015-2023, PyInstaller Development Team.
 # Copyright (c) 2015-2020, Hartmut Goebel.
 #
@@ -9,7 +9,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 This script reformats the output of `myprog --help` to decent rst.
 
@@ -46,7 +46,8 @@ SECTION_REGEX = re.compile(
 
     # Followed by a non-zero number of either blank lines or indented lines.
     (?:(?:\ +.*)?\n)+
-""", re.MULTILINE | re.VERBOSE
+""",
+    re.MULTILINE | re.VERBOSE,
 )
 
 
@@ -93,7 +94,8 @@ OPTION_REGEX = re.compile(
     # Blank lines are allowed.
     (((?:\1\ +(.*))?\n)*)
 
-""", re.MULTILINE | re.VERBOSE
+""",
+    re.MULTILINE | re.VERBOSE,
 )
 
 

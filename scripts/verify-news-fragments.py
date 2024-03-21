@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Verify that new news entries have valid filenames. Usage:
 
@@ -23,13 +23,22 @@ import sys
 from pathlib import Path
 
 CHANGELOG_GUIDE = (
-    "https://github.com/pyinstaller/pyinstaller/"
-    "blob/develop/doc/development/changelog-entries.rst#changelog-entries"
+    "https://github.com/pyinstaller/pyinstaller/" "blob/develop/doc/development/changelog-entries.rst#changelog-entries"
 )
 
 CHANGE_TYPES = {
-    'bootloader', 'breaking', 'bugfix', 'build', 'core', 'doc', 'feature', 'hooks', 'moduleloader', 'process', 'tests',
-    'deprecation'
+    'bootloader',
+    'breaking',
+    'bugfix',
+    'build',
+    'core',
+    'doc',
+    'feature',
+    'hooks',
+    'moduleloader',
+    'process',
+    'tests',
+    'deprecation',
 }
 
 NEWS_PATTERN = re.compile(r"(\d+)\.(\w+)\.(?:(\d+)\.)?rst")
