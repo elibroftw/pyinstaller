@@ -38,7 +38,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
         os: ['windows-latest', 'ubuntu-22.04', 'macos-12']
-      fail-fast: false
+      fail-fast: true
     steps:
       - uses: actions/checkout@v4
 
@@ -169,10 +169,20 @@ jobs:
         run: |
           echo "PYTEST_DEBUG_TEMPROOT=$RUNNER_TEMP" >> $GITHUB_ENV
 
-      - name: Run tests
-        run: >
-            pytest
-            -n 3 --maxfail 3 --durations 10 tests/unit tests/functional
+      - name: Run unit tests (show all errors)
+        run: |
+          pytest -n 3 --durations 10 tests/unit
+        continue-on-error: true
+
+      # Fails the current job and exits if any unit test errors were encountered. This is so we do not
+      # waste CI resources running the long functional tests if unit tests fail.
+      - name: Check unit test results
+        if: failure()
+        run: exit 1
+
+      - name: Run functional tests (continue on errors)
+        run: |
+          pytest -n 3 --maxfail 3 --durations 10 tests/functional
 
       # Install and test PyInstaller Hook Sample, to ensure that tests declared in
       # entry-points are discovered.
