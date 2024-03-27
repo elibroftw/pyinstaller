@@ -5,13 +5,13 @@ name: CI
 on:
   push:
     branches:
-      - 'develop'
-      - 'v4'
+      - "develop"
+      - "v4"
   pull_request:
     branches:
-      - '**'
-      - '!master'
-      - '!pyup/**'
+      - "**"
+      - "!master"
+      - "!pyup/**"
 
 env:
   # Colored pytest output on CI despite not having a tty
@@ -36,8 +36,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
-        os: ['windows-latest', 'ubuntu-22.04', 'macos-12']
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+        os: ["windows-latest", "ubuntu-22.04", "macos-12"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -119,9 +119,9 @@ jobs:
       - name: Check if bootloader is buildable for Windows ARM
         if: startsWith(matrix.os, 'windows')
         run: |
-            cd bootloader
-            python waf --tests --target-arch=64bit-arm all
-            ls ../PyInstaller/bootloader/Windows-64bit-arm
+          cd bootloader
+          python waf --tests --target-arch=64bit-arm all
+          ls ../PyInstaller/bootloader/Windows-64bit-arm
 
       - name: Install PyInstaller
         run: |
@@ -171,8 +171,8 @@ jobs:
 
       - name: Run tests
         run: >
-            pytest
-            -n 3 --maxfail 3 --durations 10 tests/unit tests/functional
+          pytest
+          -n 3 --maxfail 3 --durations 10 tests/unit tests/functional
 
       # Install and test PyInstaller Hook Sample, to ensure that tests declared in
       # entry-points are discovered.
@@ -197,19 +197,28 @@ jobs:
 
   test-alpine:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - run: docker build -f alpine.dockerfile -t foo .
       - run: >
           docker run
+          --rm
+          -v $(pwd)/coverage:/io/coverage
           foo
-          pytest
-          -n 3 --maxfail 3 --durations 10 tests/unit tests/functional
+          pytest --cov-report lcov:coverage/lcov.info --cov=tests/ -n 3 --maxfail 3 --durations 10 tests/unit tests/functional
+
+      - name: Publish coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Verify that installing from sdist works. This is mostly just a verification that the MANIFEST.in contains
       # all the extras needed to compile the bootloader.
       - run: |
-          git clean -xfdq .
+          sudo git clean -xfdq .
           python setup.py -qqq sdist
           docker build --target=wheel-factory -t bar -f alpine.dockerfile .
       - run: |
