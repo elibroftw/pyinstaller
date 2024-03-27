@@ -19,8 +19,14 @@ lint.select = [
   "E",       # pycodestyle errors
   "F",       # pyflakes
   "W",       # pycodestyle warnings
+  # "I"
 ]
 output-format = "full"
+[tool.ruff.format]
+quote-style = "preserve"
+skip-magic-trailing-comma = true
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
 
 [tool.towncrier]
 	filename = "doc/CHANGES.rst"

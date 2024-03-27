@@ -23,17 +23,18 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.8
+        python-version: 3.12
 
     - name: Install dependencies
-      run: pip install --upgrade ruff setuptools toml wheel yapf==0.32.0
+      run: pip install --upgrade ruff setuptools toml wheel
 
-    - name: Test that yapf has been applied
-      # If this check fails for your PR, run `yapf -rip .`
-      run: yapf --recursive --parallel --diff .
+    - name: Test that ruff has been applied
+      # if this check fails for your PR, run `ruff format .`
+      run: |
+        ruff format . --diff
 
     - name: Run Lint
-      run: ruff --output-format=github .
+      run: ruff check --output-format=github .
 
     - name: Test Packaging
       run: |
