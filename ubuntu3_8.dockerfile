@@ -33,9 +33,6 @@ RUN apt install -y zlib1g-dev
 # Linux headers to build psutil from source.
 RUN apt install -y linux-headers-generic
 
-# # Install setuptools using pip for Python 3.11
-# RUN pip install -U setuptools
-
 # Build/download wheels for all test requirements.
 RUN mkdir -p /io/tests
 WORKDIR /io
