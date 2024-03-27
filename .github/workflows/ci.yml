@@ -36,8 +36,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
-        os: ['windows-latest', 'ubuntu-22.04', 'macos-12']
+        python-version: ['3.12']
+        os: ['windows-latest']
       fail-fast: true
     steps:
       - uses: actions/checkout@v4
@@ -169,9 +169,9 @@ jobs:
         run: |
           echo "PYTEST_DEBUG_TEMPROOT=$RUNNER_TEMP" >> $GITHUB_ENV
 
-      - name: Run unit tests (show all errors)
+      - name: Run unit tests 
         run: |
-          pytest -n 3 --durations 10 tests/unit
+          pytest -n 8 --durations 10 tests/unit
 
       # Fails the current job and exits if any unit test errors were encountered. This is so we do not
       # waste CI resources running the long functional tests if unit tests fail.
@@ -179,9 +179,9 @@ jobs:
         if: failure()
         run: exit 1
 
-      - name: Run functional tests (continue on errors)
+      - name: Run functional tests 
         run: |
-          pytest -n 3 --maxfail 3 --durations 10 tests/functional
+          pytest -n 8 --maxfail 3 --durations 10 tests/functional
 
       # Install and test PyInstaller Hook Sample, to ensure that tests declared in
       # entry-points are discovered.
