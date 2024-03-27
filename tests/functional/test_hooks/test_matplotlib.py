@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Functional tests for Matplotlib.
 """
@@ -31,10 +31,7 @@ if check_requirement("matplotlib >= 3.5.0"):
         ('QtAgg', 'PySide6', 'pyside6'),
     ]
 else:
-    backend_rcParams_key_values = [
-        ('Qt5Agg', 'PyQt5', 'pyqt5'),
-        ('Qt5Agg', 'PySide2', 'pyside2'),
-    ]
+    backend_rcParams_key_values = [('Qt5Agg', 'PyQt5', 'pyqt5'), ('Qt5Agg', 'PySide2', 'pyside2')]
 
 # Same list, decorated to skip all backends whose packages are unimportable#.
 backend_rcParams_key_values_skipped_if_unimportable = [
@@ -65,13 +62,13 @@ def test_matplotlib(pyi_builder, monkeypatch, backend_name, package_name, bindin
     # available Qt packages. However, runtime PyInstaller hooks fail when multiple Qt packages are frozen into the same
     # application. For each such package, all other Qt packages must be excluded.
     pyi_args = [
-        '--exclude-module=' + package_name_excludable for package_name_excludable in package_names
+        '--exclude-module=' + package_name_excludable
+        for package_name_excludable in package_names
         if package_name_excludable != package_name
     ]
 
     # Script to be tested, enabling this Qt backend.
-    test_script = (
-        """
+    test_script = """
         import os
         import sys
         import tempfile
@@ -102,7 +99,6 @@ def test_matplotlib(pyi_builder, monkeypatch, backend_name, package_name, bindin
         # Try importing pyplot. This will attempt to activate the selected backend.
         from matplotlib import pyplot as plt
         """.format(backend_name=backend_name, binding=binding)
-    )
 
     # Test this script.
     pyi_builder.test_source(test_script, pyi_args=pyi_args)

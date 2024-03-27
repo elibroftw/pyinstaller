@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # This contains tests for the class:``Tree``, see
 # https://pyinstaller.readthedocs.io/en/latest/advanced-topics.html#the-tree-class
@@ -29,23 +29,25 @@ class Tree(PyInstaller.building.datastruct.Tree):
 TEST_MOD = 'Tree_files'
 _DATA_BASEPATH = join(os.path.dirname(os.path.abspath(__file__)), TEST_MOD)
 
-_TEST_FILES = sorted([
-    join('subpkg', 'twelve.py'),
-    join('subpkg', 'thirteen.txt'),
-    join('subpkg', 'init__.py'),
-    'two.py',
-    'dynamiclib.dylib',
-    join('py_files_not_in_package', 'sub_pkg', 'three.py'),
-    join('py_files_not_in_package', 'sub_pkg', 'init__.py'),
-    join('py_files_not_in_package', 'one.py'),
-    join('py_files_not_in_package', 'data', 'eleven.dat'),
-    join('py_files_not_in_package', 'ten.dat'),
-    'dynamiclib.dll',
-    'pyextension.pyd',
-    'nine.dat',
-    'init__.py',
-    'pyextension.so',
-])
+_TEST_FILES = sorted(
+    [
+        join('subpkg', 'twelve.py'),
+        join('subpkg', 'thirteen.txt'),
+        join('subpkg', 'init__.py'),
+        'two.py',
+        'dynamiclib.dylib',
+        join('py_files_not_in_package', 'sub_pkg', 'three.py'),
+        join('py_files_not_in_package', 'sub_pkg', 'init__.py'),
+        join('py_files_not_in_package', 'one.py'),
+        join('py_files_not_in_package', 'data', 'eleven.dat'),
+        join('py_files_not_in_package', 'ten.dat'),
+        'dynamiclib.dll',
+        'pyextension.pyd',
+        'nine.dat',
+        'init__.py',
+        'pyextension.so',
+    ]
+)
 
 _PARAMETERS = (
     (None, None, _TEST_FILES),

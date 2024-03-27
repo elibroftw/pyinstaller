@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -20,11 +20,12 @@ _MODULES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules
 # Test module exclusion; ensure that excluded modules are not collected. When exclusion is performed via hooks, also
 # test that hooks for excluded modules are not ran (by having hooks raise exceptions).
 @pytest.mark.parametrize(
-    "exclude_args,exclude_hooks", (
+    "exclude_args,exclude_hooks",
+    (
         pytest.param(True, False, id='args'),
         pytest.param(False, True, id='hooks'),
         pytest.param(True, True, id='args-and-hooks'),
-    )
+    ),
 )
 def test_module_exclusion(exclude_args, exclude_hooks, pyi_builder):
     pyi_args = ['--paths', os.path.join(_MODULES_DIR, 'pyi_module_exclusion', 'modules')]
@@ -47,5 +48,5 @@ def test_module_exclusion(exclude_args, exclude_hooks, pyi_builder):
         assert mymodule_main.feature3_available == False
         """,
         pyi_args=pyi_args,
-        run_from_path=True
+        run_from_path=True,
     )

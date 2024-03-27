@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # Tests for explicit TOC list normalization that replaced the implicit normalization with class:``TOC``.
 import copy
@@ -147,7 +147,7 @@ def test_normalize_toc_with_parent_pardir_loops():
             str(pathlib.PurePath('numpy.libs/libquadmath-2d0c479f.so.0.0.0')),
             '/path/to/venv/lib/python3.11/site-packages/numpy/core/../../numpy.libs/libquadmath-2d0c479f.so.0.0.0',
             'BINARY',
-        ),
+        )
     ]
 
     normalized_toc = normalize_toc(toc)

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # Basic tests for automatic binary vs. data file reclassification during anbalysis.
 
@@ -32,6 +32,7 @@ def _create_test_binary(filename):
     # Copy _ctypes extension
     import _ctypes
     import shutil
+
     shutil.copy2(_ctypes.__file__, filename)
 
 
@@ -42,9 +43,12 @@ def _create_test_build(pyi_builder, tmpdir, datas=None, binaries=None):
     for src_name, dest_name in binaries or []:
         extra_args += ['--add-binary', f"{src_name}{os.pathsep}{dest_name}"]
 
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         print("Hello world!")
-        """, pyi_args=extra_args)
+        """,
+        pyi_args=extra_args,
+    )
 
     # Return path to the generated Analysis-XX.toc in the build directory
     analysis_toc_file = list((pathlib.Path(tmpdir) / "build/test_source").glob("Analysis-*.toc"))

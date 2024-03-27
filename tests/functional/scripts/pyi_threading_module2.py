@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # Test bootloader behavior for threading code. The default behavior of Python interpreter is to wait for all threads
 # before exiting the main process. Bootloader should behave in the same way.
@@ -63,6 +63,6 @@ else:
         print(" +++++++ SUBPROCESS ERROR OUTPUT +++++++")
         print(err)
         raise SystemExit(
-            'Subprocess did not print ONE, TWO, THREE in correct order. (output was %r, return code was %s)' %
-            (out, proc.returncode)
+            'Subprocess did not print ONE, TWO, THREE in correct order. (output was %r, return code was %s)'
+            % (out, proc.returncode)
         )

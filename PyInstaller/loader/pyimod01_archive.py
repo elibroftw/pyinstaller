@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # **NOTE** This module is used during bootstrap.
 # Import *ONLY* builtin modules or modules that are collected into the base_library.zip archive.
@@ -41,6 +41,7 @@ class ZlibArchiveReader:
     Reader for PyInstaller's PYZ (ZlibArchive) archive. The archive is used to store collected byte-compiled Python
     modules, as individually-compressed entries.
     """
+
     _PYZ_MAGIC_PATTERN = b'PYZ\0'
 
     def __init__(self, filename, start_offset=None, check_pymagic=False):
@@ -88,7 +89,7 @@ class ZlibArchiveReader:
             return filename, offset
 
         try:
-            offset = int(filename[idx + 1:])
+            offset = int(filename[idx + 1 :])
             filename = filename[:idx]  # Remove the offset from filename
         except ValueError:
             # Ignore spurious "?" in the path (for example, like in Windows UNC \\?\<path>).

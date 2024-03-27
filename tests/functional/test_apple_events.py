@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 macOS-specific test to check handling of Apple Events in the bootloader.
 """
@@ -335,10 +335,5 @@ def _test_apple_events_handling(appname, tmpdir, pyi_builder_spec, monkeypatch, 
 def test_apple_event_handling_carbon(tmpdir, pyi_builder_spec, monkeypatch, build_mode, argv_emu):
     # Carbon-based event logger.
     return _test_apple_events_handling(
-        'pyi_osx_aevent_handling_carbon',
-        tmpdir,
-        pyi_builder_spec,
-        monkeypatch,
-        build_mode,
-        argv_emu,
+        'pyi_osx_aevent_handling_carbon', tmpdir, pyi_builder_spec, monkeypatch, build_mode, argv_emu
     )

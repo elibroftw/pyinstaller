@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Helper script for generating namespace packages for test-cases.
 """
@@ -107,10 +107,7 @@ make_package(
     declare_namespace_template=pkgutil_extend_path_template,
 )
 make_package(
-    'nspkg3-aaa',
-    ['nspkg3'],
-    ['nspkg3/aaa/__init__.py'],
-    declare_namespace_template=pkgutil_extend_path_template,
+    'nspkg3-aaa', ['nspkg3'], ['nspkg3/aaa/__init__.py'], declare_namespace_template=pkgutil_extend_path_template
 )
 make_package(
     'nspkg3-bbb',
@@ -119,16 +116,5 @@ make_package(
     zip_safe=True,
     declare_namespace_template=pkgutil_extend_path_template,
 )
-make_package(
-    'nspkg3-ccc',
-    ['nspkg3'],
-    ['nspkg3/ccc.py'],
-    declare_namespace_template=pkgutil_extend_path_template,
-)
-make_package(
-    'nspkg3-empty',
-    ['nspkg3'],
-    [],
-    zip_safe=True,
-    declare_namespace_template=pkgutil_extend_path_template,
-)
+make_package('nspkg3-ccc', ['nspkg3'], ['nspkg3/ccc.py'], declare_namespace_template=pkgutil_extend_path_template)
+make_package('nspkg3-empty', ['nspkg3'], [], zip_safe=True, declare_namespace_template=pkgutil_extend_path_template)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2017-2023, PyInstaller Development Team.
 # Author: Hartmut Goebel
 #
@@ -9,7 +9,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # Verify that given PE files have the expected arch-bits.
 #
@@ -26,7 +26,7 @@ import sys
 
 # A more complete list can be found at: https://stackoverflow.com/questions/1001404/
 IMAGE_FILE_MACHINE_AMD64 = 0x8664
-IMAGE_FILE_MACHINE_I386 = 0x14c
+IMAGE_FILE_MACHINE_I386 = 0x14C
 IMAGE_FILE_MACHINE_IA64 = 0x200
 
 

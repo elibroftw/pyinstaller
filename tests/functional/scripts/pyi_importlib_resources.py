@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # A test script for validation of importlib.resources / importlib_resources resource reader implementation.
 #
@@ -61,6 +61,7 @@ import pathlib
 # Ensure importlib.resources from python 3.9 stdlib or equivalent importlib_resources >= 1.3.
 try:
     import importlib.resources as importlib_resources
+
     if not hasattr(importlib_resources, "files"):
         raise ImportError("Built-in importlib.resources is too old!")
     is_builtin = True
@@ -68,6 +69,7 @@ try:
     print("Using built-in importlib.resources...")
 except ImportError:
     import importlib_resources
+
     is_builtin = False
     package_name = 'importlib_resources'
     print("Using backported importlib_resources...")

@@ -11,6 +11,7 @@
 """
 Templates for the splash screen tcl script.
 """
+
 from PyInstaller.compat import is_cygwin, is_darwin, is_win
 
 ipc_script = r"""
@@ -206,11 +207,7 @@ def build_script(text_options=None, always_on_top=False):
     This function builds the tcl script for the splash screen.
     """
     # Order is important!
-    script = [
-        ipc_script,
-        image_script,
-        splash_canvas_setup,
-    ]
+    script = [ipc_script, image_script, splash_canvas_setup]
 
     if text_options:
         # If the default font is used we need a different syntax

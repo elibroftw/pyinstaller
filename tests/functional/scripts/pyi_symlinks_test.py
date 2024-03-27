@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import sys
@@ -17,18 +17,9 @@ SECRET = 'secret'
 
 # Argument parser
 parser = argparse.ArgumentParser(description="symbolic link collection test")
+parser.add_argument('test_type', type=str, help='Test type', choices=['samedir', 'subdir', 'parentdir'])
 parser.add_argument(
-    'test_type',
-    type=str,
-    help='Test type',
-    choices=['samedir', 'subdir', 'parentdir'],
-)
-parser.add_argument(
-    '--link-only',
-    action='store_true',
-    dest='link_only',
-    default=False,
-    help="Symlink-only test variant.",
+    '--link-only', action='store_true', dest='link_only', default=False, help="Symlink-only test variant."
 )
 args = parser.parse_args()
 

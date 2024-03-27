@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -23,7 +23,7 @@ from PyInstaller.utils.tests import importorskip, requires, skipif
 PYQT5_NEED_OPENGL = pytest.mark.skipif(
     check_requirement('PyQt5 <= 5.10.1'),
     reason='PyQt5 v5.10.1 and older does not package ``opengl32sw.dll``, '
-    'the OpenGL software renderer, which this test requires.'
+    'the OpenGL software renderer, which this test requires.',
 )
 
 
@@ -91,7 +91,8 @@ def test_Qt_QtWidgets(pyi_builder, QtPyLib):
         else:
             res = app.exec_()
         sys.exit(res)
-        """.format(QtPyLib), **USE_WINDOWED_KWARG
+        """.format(QtPyLib),
+        **USE_WINDOWED_KWARG,
     )
 
 
@@ -140,7 +141,8 @@ def test_Qt_QtQml(pyi_builder, QtPyLib):
             res = app.exec_()
         del engine
         sys.exit(res)
-        """.format(QtPyLib), **USE_WINDOWED_KWARG
+        """.format(QtPyLib),
+        **USE_WINDOWED_KWARG,
     )
 
 
@@ -209,7 +211,8 @@ def test_Qt_QtNetwork_SSL_support(pyi_builder, QtPyLib):
             print(f"Active TLS backend: {{QSslSocket.activeBackend()}}")
             print(f"Available TLS backends: {{QSslSocket.availableBackends()}}")
             assert 'openssl' in QSslSocket.availableBackends(), "OpenSSL TLS backend not available!"
-        """.format(QtPyLib), **USE_WINDOWED_KWARG
+        """.format(QtPyLib),
+        **USE_WINDOWED_KWARG,
     )
 
 
@@ -318,7 +321,7 @@ def test_Qt_Ui_file(tmpdir, pyi_builder, data_dir, QtPyLib):
 @requires('PyQt5')
 @pytest.mark.skipif(
     check_requirement('PyQt5 == 5.11.3') and is_darwin,
-    reason='This version of the OS X wheel does not include QWebEngine.'
+    reason='This version of the OS X wheel does not include QWebEngine.',
 )
 def test_PyQt5_Qt(pyi_builder):
     pyi_builder.test_source('from PyQt5.Qt import QLibraryInfo', **USE_WINDOWED_KWARG)
@@ -541,8 +544,7 @@ def test_Qt_QtWebEngineWidgets_PyQt6(pyi_builder):
 @requires('PyQt6 >= 6.2.2')
 @requires('PyQt6-WebEngine')  # NOTE: base Qt6 must be 6.2.2 or newer, QtWebEngine can be older
 @pytest.mark.skipif(
-    check_requirement('PyQt6 == 6.6.0'),
-    reason='PyQt6 6.6.0 PyPI wheels are missing Qt6WebChannelQuick shared library.'
+    check_requirement('PyQt6 == 6.6.0'), reason='PyQt6 6.6.0 PyPI wheels are missing Qt6WebChannelQuick shared library.'
 )
 def test_Qt_QtWebEngineQuick_PyQt6(pyi_builder):
     _test_Qt_QtWebEngineQuick(pyi_builder, 'PyQt6')
@@ -551,7 +553,7 @@ def test_Qt_QtWebEngineQuick_PyQt6(pyi_builder):
 @requires('PySide6 >= 6.2.2')
 @pytest.mark.skipif(
     check_requirement('PySide6 == 6.5.0') and is_win,
-    reason='PySide6 6.5.0 PyPI wheels for Windows are missing opengl32sw.dll.'
+    reason='PySide6 6.5.0 PyPI wheels for Windows are missing opengl32sw.dll.',
 )
 def test_Qt_QtWebEngineWidgets_PySide6(pyi_builder):
     _test_Qt_QtWebEngineWidgets(pyi_builder, 'PySide6')
@@ -560,7 +562,7 @@ def test_Qt_QtWebEngineWidgets_PySide6(pyi_builder):
 @requires('PySide6 >= 6.2.2')
 @pytest.mark.skipif(
     check_requirement('PySide6 == 6.5.0') and is_win,
-    reason='PySide6 6.5.0 PyPI wheels for Windows are missing opengl32sw.dll.'
+    reason='PySide6 6.5.0 PyPI wheels for Windows are missing opengl32sw.dll.',
 )
 def test_Qt_QtWebEngineQuick_PySide6(pyi_builder):
     _test_Qt_QtWebEngineQuick(pyi_builder, 'PySide6')
@@ -577,7 +579,8 @@ def test_Qt_QtMultimedia_player_init(pyi_builder, QtPyLib):
 
         app = QtCore.QCoreApplication(sys.argv)
         player = QtMultimedia.QMediaPlayer(app)
-        """.format(QtPyLib), **USE_WINDOWED_KWARG
+        """.format(QtPyLib),
+        **USE_WINDOWED_KWARG,
     )
 
 
@@ -587,10 +590,7 @@ def test_Qt_QtMultimedia_player_init(pyi_builder, QtPyLib):
 # https://github.com/pyinstaller/pyinstaller/pull/6496#issuecomment-1011098019
 # https://github.com/qtproject/pyside-pyside-setup/blob/5.15.2/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/mapping.py#L577-L586
 # https://github.com/qtproject/pyside-pyside-setup/blob/v6.2.2.1/sources/shiboken6/shibokenmodule/files.dir/shibokensupport/signature/mapping.py#L614-L627
-@pytest.mark.parametrize('QtPyLib', [
-    qt_param('PySide2'),
-    qt_param('PySide6'),
-])
+@pytest.mark.parametrize('QtPyLib', [qt_param('PySide2'), qt_param('PySide6')])
 def test_Qt_QtMultimedia_with_true_property(pyi_builder, QtPyLib):
     pyi_builder.test_source(
         """
@@ -599,7 +599,8 @@ def test_Qt_QtMultimedia_with_true_property(pyi_builder, QtPyLib):
         from __feature__ import true_property
 
         app = QtCore.QCoreApplication(sys.argv)
-        """.format(QtPyLib), **USE_WINDOWED_KWARG
+        """.format(QtPyLib),
+        **USE_WINDOWED_KWARG,
     )
 
 
@@ -632,9 +633,13 @@ def _list_all_qt_submodules(package_name):
     except Exception:
         return []
 
-    return sorted([
-        module_info.name for module_info in pkgutil.iter_modules(package.__path__) if module_info.name.startswith("Qt")
-    ])
+    return sorted(
+        [
+            module_info.name
+            for module_info in pkgutil.iter_modules(package.__path__)
+            if module_info.name.startswith("Qt")
+        ]
+    )
 
 
 def _test_qt_bindings_import(bindings, module, pyi_builder_onedir):

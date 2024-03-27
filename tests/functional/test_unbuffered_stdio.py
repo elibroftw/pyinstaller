@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Test for unbuffered stdio (stdout/stderr) mode.
 """
@@ -22,7 +22,7 @@ from PyInstaller.compat import is_win
 
 @pytest.mark.skipif(
     os.environ.get('CI', 'false').lower() == 'true',
-    reason="The test does not support CI (pytest-xdist sometimes runs it in secondary thread)."
+    reason="The test does not support CI (pytest-xdist sometimes runs it in secondary thread).",
 )
 @pytest.mark.parametrize('stream_mode', ['binary', 'text'])
 @pytest.mark.parametrize('output_stream', ['stdout', 'stderr'])

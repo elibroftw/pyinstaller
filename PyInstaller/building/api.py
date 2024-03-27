@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 This module contains classes that are available for the .spec files.
 
@@ -26,8 +26,13 @@ from PyInstaller import log as logging
 from PyInstaller.archive.writers import CArchiveWriter, ZlibArchiveWriter
 from PyInstaller.building.datastruct import Target, _check_guts_eq, normalize_pyz_toc, normalize_toc
 from PyInstaller.building.utils import (
-    _check_guts_toc, _make_clean_directory, _rmtree, process_collected_binary, get_code_object, strip_paths_in_code,
-    compile_pymodule
+    _check_guts_toc,
+    _make_clean_directory,
+    _rmtree,
+    process_collected_binary,
+    get_code_object,
+    strip_paths_in_code,
+    compile_pymodule,
 )
 from PyInstaller.building.splash import Splash  # argument type validation in EXE
 from PyInstaller.compat import is_cygwin, is_darwin, is_linux, is_win, strict_collect_mode
@@ -38,7 +43,7 @@ import PyInstaller.utils.misc as miscutils
 logger = logging.getLogger(__name__)
 
 if is_win:
-    from PyInstaller.utils.win32 import (icon, versioninfo, winmanifest, winresource, winutils)
+    from PyInstaller.utils.win32 import icon, versioninfo, winmanifest, winresource, winutils
 
 if is_darwin:
     import PyInstaller.utils.osx as osxutils
@@ -48,6 +53,7 @@ class PYZ(Target):
     """
     Creates a zlib-based PYZ archive that contains byte-compiled pure Python modules.
     """
+
     def __init__(self, *tocs, **kwargs):
         """
         tocs
@@ -61,6 +67,7 @@ class PYZ(Target):
         """
         if kwargs.get("cipher"):
             from PyInstaller.exceptions import RemovedCipherFeatureError
+
             raise RemovedCipherFeatureError(
                 "Please remove the 'cipher' arguments to PYZ() and Analysis() in your spec file."
             )
@@ -156,6 +163,7 @@ class PKG(Target):
     Creates a CArchive. CArchive is the data structure that is embedded into the executable. This data structure allows
     to include various read-only data in a single-file deployment.
     """
+
     xformdict = {
         'PYMODULE': 'm',
         'PYSOURCE': 's',
@@ -183,7 +191,7 @@ class PKG(Target):
         upx_exclude=None,
         target_arch=None,
         codesign_identity=None,
-        entitlements_file=None
+        entitlements_file=None,
     ):
         """
         toc
@@ -335,6 +343,7 @@ class EXE(Target):
     """
     Creates the final executable of the frozen app. This bundles all necessary files together.
     """
+
     def __init__(self, *args, **kwargs):
         """
         args
@@ -432,10 +441,14 @@ class EXE(Target):
         if is_darwin:
             if self.target_arch is None:
                 import platform
+
                 self.target_arch = platform.machine()
             else:
-                assert self.target_arch in {'x86_64', 'arm64', 'universal2'}, \
-                    f"Unsupported target arch: {self.target_arch}"
+                assert self.target_arch in {
+                    'x86_64',
+                    'arm64',
+                    'universal2',
+                }, f"Unsupported target arch: {self.target_arch}"
             logger.info("EXE target arch: %s", self.target_arch)
         else:
             self.target_arch = None  # explicitly disable
@@ -479,6 +492,7 @@ class EXE(Target):
 
         if not kwargs.get('embed_manifest', True):
             from PyInstaller.exceptions import RemovedExternalManifestError
+
             raise RemovedExternalManifestError(
                 "Please remove the 'embed_manifest' argument to EXE() in your spec file."
             )
@@ -601,6 +615,7 @@ class EXE(Target):
         self.python_lib = bindepend.get_python_library_path()
         if self.python_lib is None:
             from PyInstaller.exceptions import PythonLibraryNotFoundError
+
             raise PythonLibraryNotFoundError()
 
         # Normalize TOC
@@ -617,7 +632,7 @@ class EXE(Target):
             upx_exclude=self.upx_exclude,
             target_arch=self.target_arch,
             codesign_identity=self.codesign_identity,
-            entitlements_file=self.entitlements_file
+            entitlements_file=self.entitlements_file,
         )
         self.dependencies = self.pkg.dependencies
 
@@ -682,6 +697,7 @@ class EXE(Target):
         Helper for anchoring relative paths to spec file location.
         """
         from PyInstaller.config import CONF
+
         if os.path.isabs(path):
             return path
         else:
@@ -841,7 +857,9 @@ class EXE(Target):
                 logger.info(
                     "Rewriting the executable's macOS SDK version (%d.%d.%d) to match the SDK version of the Python "
                     "library (%d.%d.%d) in order to avoid inconsistent behavior and potential UI issues in the "
-                    "frozen application.", *exe_version, *pylib_version
+                    "frozen application.",
+                    *exe_version,
+                    *pylib_version,
                 )
                 osxutils.set_macos_sdk_version(build_name, *pylib_version)
 
@@ -902,11 +920,7 @@ class EXE(Target):
 
             try:
                 winresource.copy_resources_from_pe_file(
-                    build_name,
-                    src_filename,
-                    [resource_type],
-                    [resource_name],
-                    [resource_lang],
+                    build_name, src_filename, [resource_type], [resource_name], [resource_lang]
                 )
             except Exception as e:
                 raise IOError(f"Failed to copy resources from PE file {src_filename!r}") from e
@@ -940,13 +954,7 @@ class EXE(Target):
                 with open(src_filename, 'rb') as fp:
                     data = fp.read()
 
-                winresource.add_or_update_resource(
-                    build_name,
-                    data,
-                    resource_type,
-                    [resource_name],
-                    [resource_lang],
-                )
+                winresource.add_or_update_resource(build_name, data, resource_type, [resource_name], [resource_lang])
             except Exception as e:
                 raise IOError(f"Failed to embed data file {src_filename!r} as Windows resource") from e
 
@@ -961,6 +969,7 @@ class EXE(Target):
         Attempt to execute the given function `max_attempts` number of times while catching exceptions that are usually
         associated with Windows anti-virus programs temporarily locking the access to the executable.
         """
+
         def _is_allowed_exception(e):
             """
             Helper to determine whether the given exception is eligible for retry or not.
@@ -1026,6 +1035,7 @@ class COLLECT(Target):
     """
     In one-dir mode creates the output folder with all necessary files.
     """
+
     def __init__(self, *args, **kwargs):
         """
         args
@@ -1162,9 +1172,8 @@ class COLLECT(Target):
                 # re-build attempts or when trying to move the application bundle. For binaries (and data files with
                 # executable bit set), we manually set the executable bits after copying the file.
                 shutil.copyfile(src_name, dest_path)
-            if (
-                typecode in ('EXTENSION', 'BINARY', 'EXECUTABLE')
-                or (typecode == 'DATA' and os.access(src_name, os.X_OK))
+            if typecode in ('EXTENSION', 'BINARY', 'EXECUTABLE') or (
+                typecode == 'DATA' and os.access(src_name, os.X_OK)
             ):
                 os.chmod(dest_path, 0o755)
         logger.info("Building COLLECT %s completed successfully.", self.tocbasename)
@@ -1178,6 +1187,7 @@ class MERGE:
     MERGE-processed Analysis gains onefile semantics, because it needs to extract its referenced dependencies from other
     executables into temporary directory before they can run.
     """
+
     def __init__(self, *args):
         """
         args
@@ -1249,8 +1259,10 @@ class MERGE:
                 # multiple times in TOCs (e.g., once as binary and once as data).
                 if dep_path.endswith(path_to_exe):
                     logger.debug(
-                        "Ignoring self-reference of %s for %s, located in %s - duplicated TOC entry?", src_name,
-                        path_to_exe, dep_path
+                        "Ignoring self-reference of %s for %s, located in %s - duplicated TOC entry?",
+                        src_name,
+                        path_to_exe,
+                        dep_path,
                     )
                     # The entry is a duplicate, and should be ignored (i.e., do not add it to either of output TOCs).
                     continue

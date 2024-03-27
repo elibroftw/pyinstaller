@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 __all__ = ('HOMEPATH', 'PLATFORM', '__version__', 'DEFAULT_DISTPATH', 'DEFAULT_SPECPATH', 'DEFAULT_WORKPATH')
 
@@ -43,6 +43,7 @@ if os.path.exists(os.path.join(HOMEPATH, 'setup.py')):
 else:
     # PyInstaller was installed by `python setup.py install'.
     from importlib.metadata import version
+
     __version__ = version('PyInstaller')
 # Default values of paths where to put files created by PyInstaller. If changing these, do not forget to update the
 # help text for corresponding command-line options, defined in build_main.

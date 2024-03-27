@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: Apache-2.0
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # The path to Qt's components may not default to the wheel layout for self-compiled PySide2 installations. Mandate the
 # wheel layout. See ``utils/hooks/qt.py`` for more details.
@@ -40,10 +40,9 @@ def _pyi_rthook():
         pyqt_path_res = os.path.normpath(
             os.path.join(sys._MEIPASS, '..', 'Resources', os.path.relpath(pyqt_path, sys._MEIPASS))
         )
-        os.environ['QML2_IMPORT_PATH'] = os.pathsep.join([
-            os.path.join(pyqt_path_res, 'qml'),
-            os.path.join(pyqt_path, 'qml'),
-        ])
+        os.environ['QML2_IMPORT_PATH'] = os.pathsep.join(
+            [os.path.join(pyqt_path_res, 'qml'), os.path.join(pyqt_path, 'qml')]
+        )
     else:
         os.environ['QML2_IMPORT_PATH'] = os.path.join(pyqt_path, 'qml')
 

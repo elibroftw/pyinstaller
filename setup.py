@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import sys
 import os
@@ -16,7 +16,7 @@ from typing import Type
 
 from setuptools import setup
 
-#-- plug-in building the bootloader
+# -- plug-in building the bootloader
 
 from distutils.core import Command
 from distutils.command.build import build
@@ -49,6 +49,7 @@ class build_bootloader(Command):
         # Checks if the console, non-debug bootloader exists
         from PyInstaller import HOMEPATH, PLATFORM
         from PyInstaller.compat import is_win, is_cygwin
+
         exe = 'run'
         if is_win or is_cygwin:
             exe = 'run.exe'
@@ -74,7 +75,7 @@ class build_bootloader(Command):
             return
         print(
             'No precompiled bootloader found or compile forced. Trying to compile the bootloader for you ...',
-            file=sys.stderr
+            file=sys.stderr,
         )
         self.compile_bootloader()
 
@@ -121,7 +122,7 @@ class Wheel(bdist_wheel):
                 "fake-modules/_pyi_rth_utils/*.py",
                 "hooks/rthooks.dat",
                 "lib/README.rst",
-            ],
+            ]
         }
         super().finalize_options()
 
@@ -170,7 +171,7 @@ PLATFORMS = {
 
 # Create a subclass of Wheel() for each platform.
 wheel_commands = {}
-for (pyi_plat_name, plat_name) in PLATFORMS.items():
+for pyi_plat_name, plat_name in PLATFORMS.items():
     # This is the name it will have on the setup.py command line.
     command_name = "wheel_" + pyi_plat_name.replace("-", "_").lower()
 
@@ -228,6 +229,7 @@ class bdist_wheels(Command):
     Build a wheel for every platform listed in the PLATFORMS dict, which has bootloaders available in
     `PyInstaller/bootloaders/[platform-name]`.
     """
+
     description = "Build all available wheel types"
 
     # Overload these to keep the abstract metaclass happy.
@@ -241,7 +243,7 @@ class bdist_wheels(Command):
 
     def run(self) -> None:
         command: Type[Wheel]
-        for (name, command) in wheel_commands.items():
+        for name, command in wheel_commands.items():
             if not command.has_bootloaders():
                 print("Skipping", name, "because no bootloaders were found in", command.bootloaders_dir())
                 continue
@@ -255,7 +257,7 @@ class bdist_wheels(Command):
             subprocess.run([sys.executable, __file__, "-q", name], stderr=subprocess.PIPE, check=True)
 
 
-#--
+# --
 
 # --- Prevent `python setup.py install` from building and installing eggs ---
 
@@ -267,6 +269,7 @@ if "bdist_egg" not in sys.argv:
         Disabled version of bdist_egg, which prevents `setup.py install` from performing setuptools' default
         easy_install, which is deprecated and should be avoided.
         """
+
         def run(self):
             raise SystemExit(
                 "Error: Aborting implicit building of eggs. To install from source, use `pip install .` instead of "
@@ -277,7 +280,7 @@ if "bdist_egg" not in sys.argv:
 else:
     bdist_egg_override = {}
 
-#--
+# --
 
 setup(
     setup_requires=["setuptools >= 42.0.0"],

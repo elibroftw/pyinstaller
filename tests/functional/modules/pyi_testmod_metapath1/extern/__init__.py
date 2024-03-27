@@ -28,7 +28,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-#--- Code of setuptools/extern/__init__.py starts here
+# --- Code of setuptools/extern/__init__.py starts here
 import importlib.util
 import sys
 
@@ -38,6 +38,7 @@ class VendorImporter:
     A PEP 302 meta path importer for finding optionally-vendored or otherwise naturally-installed
     packages from root_name.
     """
+
     def __init__(self, root_name, vendored_names=(), vendor_pkg=None):
         self.root_name = root_name
         self.vendored_names = set(vendored_names)

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import pytest
 
@@ -27,7 +27,8 @@ def test_exec_command_subprocess_wrong_encoding_reports_nicely(capsys):
 
 # List every known platform.machine() or waf's ctx.env.DEST_CPU (in the bootloader/wscript file) output on Linux here.
 @pytest.mark.parametrize(
-    "input, output", [
+    "input, output",
+    [
         ("x86_64", "intel"),
         ("x64", "intel"),
         ("i686", "intel"),
@@ -46,7 +47,7 @@ def test_exec_command_subprocess_wrong_encoding_reports_nicely(capsys):
         ("mips", "mips"),
         ("mips64", "mips"),
         ("something-alien", "unknown"),
-    ]
+    ],
 )
 def test_linux_machine(input, output):
     assert _pyi_machine(input, "Linux") == output

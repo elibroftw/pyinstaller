@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception OR MIT)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import logging
@@ -74,9 +74,11 @@ def use_imports():
     Test that import-ing is possible.
     """
     import string
+
     string.digits
 
     import psutil
+
     return psutil.boot_time()
 
 
@@ -122,12 +124,14 @@ def add_spam_to_environ():
     Set an environment variable.
     """
     import os
+
     os.environ["SPAM"] = "More Spam"
     return "Done it!"
 
 
 def get_spam_environ():
     import os
+
     return os.environ.get("SPAM")
 
 
@@ -176,6 +180,7 @@ def test_pipe_leakage():
     """
 
     from psutil import Process
+
     parent = Process()
 
     # Get this platform's *count open handles* method.
@@ -194,7 +199,7 @@ def test_pipe_leakage():
     # which closes two handles. Finally, we open file descriptors on the remaining two pipe end-point handles, and
     # perform os.fdopen() on those FDs to obtained buffered python "file" object. This adds two additional file
     # handles, bringing us to the total of six.
-    EXPECTED_INCREASE_IN_FDS = (2 if os.name != "nt" else 6)
+    EXPECTED_INCREASE_IN_FDS = 2 if os.name != "nt" else 6
 
     with child:
         assert open_fds() == old + EXPECTED_INCREASE_IN_FDS
@@ -227,6 +232,7 @@ def test_default_args():
     """
     Verify that default arguments are properly passed to the isolated function call.
     """
+
     def isolated_function(arg1='default1', arg2='default2', arg3='default3'):
         return arg1, arg2, arg3
 
@@ -245,6 +251,7 @@ def test_default_kwargs():
     """
     Verify that default keyword-only arguments are properly passed to the isolated function call.
     """
+
     def isolated_function(*args, kwarg1='default1', kwarg2='default2', kwarg3='default3'):
         return kwarg1, kwarg2, kwarg3
 
@@ -268,6 +275,7 @@ def test_shutdown_timeout_dangling_threads(strict_mode, caplog):
     This situation might arise when, as part of analysis, PyInstaller performs an isolated import of a module
     that spawns threads as part of executable statements that are ran on the first time the module is imported.
     """
+
     def isolated_function(*args):
         import threading
         import time
@@ -304,6 +312,7 @@ def test_shutdown_timeout_dangling_threads(strict_mode, caplog):
 def test_subprocess_crash():
     def crash(a):
         import os
+
         os.kill(os.getpid(), 9)
 
     with pytest.raises(

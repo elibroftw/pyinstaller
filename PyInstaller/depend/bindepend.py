@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Find external dependencies of binary libraries.
 """
@@ -34,7 +34,7 @@ _exe_machine_type = None
 if compat.is_win:
     _exe_machine_type = winutils.get_pe_file_machine_type(compat.python_executable)
 
-#- High-level binary dependency analysis
+# - High-level binary dependency analysis
 
 
 def _get_paths_for_parent_directory_preservation():
@@ -196,10 +196,13 @@ def binary_dependency_analysis(binaries, search_paths=None):
                 output_toc.append((str(dep_dest_path.name), str(dep_dest_path), 'SYMLINK'))
 
     # Display warnings about missing dependencies
-    seen_binaries = set([
-        os.path.normcase(os.path.basename(src_name)) for dest_name, src_name, typecode in output_toc
-        if typecode != 'SYMLINK'
-    ])
+    seen_binaries = set(
+        [
+            os.path.normcase(os.path.basename(src_name))
+            for dest_name, src_name, typecode in output_toc
+            if typecode != 'SYMLINK'
+        ]
+    )
     for dependency_name, referring_binary in missing_dependencies:
         # Ignore libraries that we would not collect in the first place.
         if not dylib.include_library(dependency_name):
@@ -219,7 +222,7 @@ def binary_dependency_analysis(binaries, search_paths=None):
     return output_toc
 
 
-#- Low-level import analysis
+# - Low-level import analysis
 
 
 def get_imports(filename, search_paths=None):
@@ -323,11 +326,7 @@ def _get_imports_ldd(filename, search_paths):
         LDD_PATTERN = re.compile(r"\s*(.*?)\s+=>\s+(.*?)\s+\(.*\)")
 
     p = subprocess.run(
-        ['ldd', filename],
-        stdin=subprocess.DEVNULL,
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        encoding='utf-8',
+        ['ldd', filename], stdin=subprocess.DEVNULL, stderr=subprocess.PIPE, stdout=subprocess.PIPE, encoding='utf-8'
     )
 
     ldd_warnings = []
@@ -551,7 +550,7 @@ def _get_imports_macholib(filename, search_paths):
     return output
 
 
-#- Library full path resolution
+# - Library full path resolution
 
 
 def resolve_library_path(name, search_paths=None):
@@ -741,7 +740,7 @@ def _get_so_name(filename):
     return m.group(1)
 
 
-#- Python shared library search
+# - Python shared library search
 
 
 def get_python_library_path():
@@ -762,6 +761,7 @@ def get_python_library_path():
     Custom Mac OS builds could possibly also have non-framework style libraries, so this method also checks for that
     variant as well.
     """
+
     def _find_lib_in_libdirs(*libdirs):
         for libdir in libdirs:
             for name in compat.PYDYLIB_NAMES:
@@ -825,10 +825,7 @@ def get_python_library_path():
 
         # Python compiled as Framework contains same values in sys.prefix and exec_prefix. That is why we can use just
         # sys.prefix. In virtualenv, PyInstaller is not able to find Python library. We need special care for this case.
-        python_libname = _find_lib_in_libdirs(
-            compat.base_prefix,
-            os.path.join(compat.base_prefix, 'lib'),
-        )
+        python_libname = _find_lib_in_libdirs(compat.base_prefix, os.path.join(compat.base_prefix, 'lib'))
         if python_libname:
             return python_libname
 
@@ -836,7 +833,7 @@ def get_python_library_path():
     return None
 
 
-#- Binary vs data (re)classification
+# - Binary vs data (re)classification
 
 
 def classify_binary_vs_data(filename):
@@ -864,7 +861,7 @@ if compat.is_linux:
         except Exception:
             return None
 
-        if sig != b"\x7FELF":
+        if sig != b"\x7fELF":
             return "DATA"
 
         # Verify the binary by checking if `objdump` recognizes the file. The preceding ELF signature check should
@@ -873,11 +870,7 @@ if compat.is_linux:
         cmd_args = ['objdump', '-a', filename]
         try:
             p = subprocess.run(
-                cmd_args,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                stdin=subprocess.DEVNULL,
-                encoding='utf8',
+                cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.DEVNULL, encoding='utf8'
             )
         except Exception:
             return None  # Failed to run `objdump` or `objdump` unavailable.

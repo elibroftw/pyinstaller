@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import glob
 import os
@@ -97,8 +97,10 @@ class QtModuleInfo:
         self.plugins = plugins or []
 
     def __repr__(self):
-        return f"(module={self.module!r}, shared_lib={self.shared_lib!r}, " \
-               f"translations={self.translations!r}, plugins={self.plugins!r}"
+        return (
+            f"(module={self.module!r}, shared_lib={self.shared_lib!r}, "
+            f"translations={self.translations!r}, plugins={self.plugins!r}"
+        )
 
 
 # QtLibraryInfo
@@ -246,8 +248,8 @@ class QtLibraryInfo:
         # wheels.
         resolved_qt_prefix_path = pathlib.Path(self.location['PrefixPath']).resolve()
         self.qt_inside_package = (
-            self.package_location == resolved_qt_prefix_path or  # PySide2 and PySide6 Windows PyPI wheels
-            self.package_location in resolved_qt_prefix_path.parents
+            self.package_location == resolved_qt_prefix_path  # PySide2 and PySide6 Windows PyPI wheels
+            or self.package_location in resolved_qt_prefix_path.parents
         )
 
         # Determine directory that contains Qt shared libraries. On non-Windows, this is typically location given by
@@ -286,7 +288,7 @@ class QtLibraryInfo:
                 module=entry.module,
                 shared_lib=f"Qt{self.qt_major}{entry.shared_lib}" if entry.shared_lib else None,
                 translations=entry.translations,
-                plugins=entry.plugins
+                plugins=entry.plugins,
             )
 
             # If we have python module (extension) name, create python-module-name -> info mapping.
@@ -377,7 +379,7 @@ class QtLibraryInfo:
         qtlib_search_paths = [
             # For PyQt5 and PyQt6 wheels, shared libraries should be in BinariesPath, while for PySide2 and PySide6,
             # they should be in PrefixPath.
-            self.location['BinariesPath' if self.is_pyqt else 'PrefixPath'],
+            self.location['BinariesPath' if self.is_pyqt else 'PrefixPath']
         ]
 
         # Walk through all the link-time dependencies of a dynamically-linked library (``.so``/``.dll``/``.dylib``).
@@ -393,8 +395,11 @@ class QtLibraryInfo:
             # Normalize the shared library name
             lib_name = self._normalize_shared_library_name(imported_lib_path)
             logger.debug(
-                '%s: imported library %r, full path %r -> parsed name %r.', self, imported_lib_name, imported_lib_path,
-                lib_name
+                '%s: imported library %r, full path %r -> parsed name %r.',
+                self,
+                imported_lib_name,
+                imported_lib_path,
+                lib_name,
             )
 
             # PySide2 and PySide6 on linux seem to link all extension modules against libQt5Core, libQt5Network, and
@@ -465,17 +470,20 @@ class QtLibraryInfo:
             else:
                 logger.warning(
                     '%s: could not find translations with base name %r! These translations will not be collected.',
-                    self, translation_base_name
+                    self,
+                    translation_base_name,
                 )
 
         # Convert hiddenimports to a list.
         hiddenimports = list(hiddenimports)
 
         logger.debug(
-            '%s: dependencies for %s:\n'
-            '  hiddenimports = %r\n'
-            '  binaries = %r\n'
-            '  datas = %r', self, module_name, hiddenimports, binaries, datas
+            '%s: dependencies for %s:\n' '  hiddenimports = %r\n' '  binaries = %r\n' '  datas = %r',
+            self,
+            module_name,
+            hiddenimports,
+            binaries,
+            datas,
         )
 
         return hiddenimports, binaries, datas
@@ -560,7 +568,7 @@ class QtLibraryInfo:
                 return (
                     False,
                     f"Qt dependency {imported_lib_name!r} ({str(imported_lib_path)!r}) has been resolved outside of "
-                    f"the Qt shared library directory ({str(self.qt_lib_dir)!r})."
+                    f"the Qt shared library directory ({str(self.qt_lib_dir)!r}).",
                 )
 
         return True, None
@@ -733,10 +741,7 @@ class QtLibraryInfo:
         # and narrow down the search for specific version.
         if openssl_version >= 0x10000000 and openssl_version < 0x10100000:
             # OpenSSL 1.0.x - used by old Qt5 builds
-            dll_names = (
-                'libeay32.dll',
-                'ssleay32.dll',
-            )
+            dll_names = ('libeay32.dll', 'ssleay32.dll')
             logger.debug("%s: QtNetwork: looking for OpenSSL 1.0.x DLLs: %r", self, dll_names)
         elif openssl_version >= 0x10100000 and openssl_version < 0x30000000:
             # OpenSSL 1.1.x
@@ -776,8 +781,11 @@ class QtLibraryInfo:
         # If we found at least one OpenSSL DLL in the bindings' python package directory, discard all external
         # OpenSSL DLLs.
         if found_in_package:
-            binaries = [(dll_src_path, dll_dest_path) for dll_src_path, dll_dest_path in binaries
-                        if package_parent_path in pathlib.Path(dll_src_path).parents]
+            binaries = [
+                (dll_src_path, dll_dest_path)
+                for dll_src_path, dll_dest_path in binaries
+                if package_parent_path in pathlib.Path(dll_src_path).parents
+            ]
 
         return binaries
 
@@ -826,17 +834,11 @@ class QtLibraryInfo:
         # As per above text, we need to worry only about Qt6, and thus OpenSSL 1.1.x or 3.0.x
         if openssl_version >= 0x10100000 and openssl_version < 0x30000000:
             # OpenSSL 1.1.x
-            dylib_names = (
-                'libcrypto.1.1.dylib',
-                'libssl.1.1.dylib',
-            )
+            dylib_names = ('libcrypto.1.1.dylib', 'libssl.1.1.dylib')
             logger.debug("%s: QtNetwork: looking for OpenSSL 1.1.x dylibs: %r", self, dylib_names)
         elif openssl_version >= 0x30000000 and openssl_version < 0x40000000:
             # OpenSSL 3.0.x
-            dylib_names = (
-                'libcrypto.3.dylib',
-                'libssl.3.dylib',
-            )
+            dylib_names = ('libcrypto.3.dylib', 'libssl.3.dylib')
             logger.debug("%s: QtNetwork: looking for OpenSSL 3.0.x dylibs: %r", self, dylib_names)
         else:
             dylib_names = []  # Nothing to search for
@@ -871,24 +873,15 @@ class QtLibraryInfo:
 
         if openssl_version >= 0x10000000 and openssl_version < 0x10100000:
             # OpenSSL 1.0.x - used by old Qt5 builds
-            shlib_names = (
-                'libcrypto.so.10',
-                'libssl.so.10',
-            )
+            shlib_names = ('libcrypto.so.10', 'libssl.so.10')
             logger.debug("%s: QtNetwork: looking for OpenSSL 1.0.x shared libraries: %r", self, shlib_names)
         elif openssl_version >= 0x10100000 and openssl_version < 0x30000000:
             # OpenSSL 1.1.x
-            shlib_names = (
-                'libcrypto.so.1.1',
-                'libssl.so.1.1',
-            )
+            shlib_names = ('libcrypto.so.1.1', 'libssl.so.1.1')
             logger.debug("%s: QtNetwork: looking for OpenSSL 1.1.x shared libraries: %r", self, shlib_names)
         elif openssl_version >= 0x30000000 and openssl_version < 0x40000000:
             # OpenSSL 3.0.x
-            shlib_names = (
-                'libcrypto.so.3',
-                'libssl.so.3',
-            )
+            shlib_names = ('libcrypto.so.3', 'libssl.so.3')
             logger.debug("%s: QtNetwork: looking for OpenSSL 3.0.x shared libraries: %r", self, shlib_names)
         else:
             shlib_names = []  # Nothing to search for
@@ -1075,9 +1068,13 @@ class QtLibraryInfo:
 
             # Determine the version directory - for now, we assume we are dealing with single-version framework;
             # i.e., the Versions directory contains only a single <version> directory, and Current symlink to it.
-            versions = sorted([
-                version for version in os.listdir(os.path.join(src_framework_path, 'Versions')) if version != 'Current'
-            ])
+            versions = sorted(
+                [
+                    version
+                    for version in os.listdir(os.path.join(src_framework_path, 'Versions'))
+                    if version != 'Current'
+                ]
+            )
             if len(versions) == 0:
                 raise RuntimeError("Could not determine version of the QtWebEngineCore.framework!")
             elif len(versions) > 1:
@@ -1130,14 +1127,16 @@ class QtLibraryInfo:
             resources = 'resources'
 
             # Translations
-            datas.append((
-                os.path.join(self.location['TranslationsPath'], locales),
-                os.path.join(rel_data_path, 'translations', locales),
-            ))
+            datas.append(
+                (
+                    os.path.join(self.location['TranslationsPath'], locales),
+                    os.path.join(rel_data_path, 'translations', locales),
+                )
+            )
 
             # Resources; ``DataPath`` is the base directory for ``resources``, as per the
             # `docs <https://doc.qt.io/qt-5.10/qtwebengine-deploying.html#deploying-resources>`_.
-            datas.append((os.path.join(self.location['DataPath'], resources), os.path.join(rel_data_path, resources)),)
+            datas.append((os.path.join(self.location['DataPath'], resources), os.path.join(rel_data_path, resources)))
 
             # Helper process executable (QtWebEngineProcess), located in ``LibraryExecutablesPath``.
             # The target directory is determined as `LibraryExecutablesPath` relative to `PrefixPath`. On Windows,
@@ -1152,8 +1151,10 @@ class QtLibraryInfo:
             # layout, by overriding relative helper path to just `libexec`.
             if compat.is_linux and rel_helper_path != "libexec":
                 logger.info(
-                    "%s: overriding relative destination path of QtWebEngineProcess helper from %r to %r!", self,
-                    rel_helper_path, "libexec"
+                    "%s: overriding relative destination path of QtWebEngineProcess helper from %r to %r!",
+                    self,
+                    rel_helper_path,
+                    "libexec",
                 )
                 rel_helper_path = "libexec"
 
@@ -1163,8 +1164,10 @@ class QtLibraryInfo:
             # `LibraryExecutablesPath` is `C:/Users/<user>/miniconda3/envs/<env-name>/Library/bin`.
             if compat.is_win and not self.is_pyqt and rel_helper_path != ".":
                 logger.info(
-                    "%s: overriding relative destination path of QtWebEngineProcess helper from %r to %r!", self,
-                    rel_helper_path, "."
+                    "%s: overriding relative destination path of QtWebEngineProcess helper from %r to %r!",
+                    self,
+                    rel_helper_path,
+                    ".",
                 )
                 rel_helper_path = "."
 
@@ -1178,6 +1181,7 @@ class QtLibraryInfo:
                 # The file seems to have been dropped from Qt 6.3 (and corresponding PySide6 and PyQt6) due to
                 # redundancy; however, we still need it in the frozen application - so generate our own.
                 from PyInstaller.config import CONF  # workpath
+
                 # Relative path to root prefix of bundled Qt - this corresponds to the "inverse" of `rel_helper_path`
                 # variable that we computed earlier.
                 if rel_helper_path == '.':
@@ -1238,18 +1242,9 @@ class QtLibraryInfo:
             logger.debug("%s: QtWebEngineCore is linked against libnss3.so; collecting NSS libraries...", self)
             if libnss_dir is not None:
                 # Libraries to search for
-                NSS_LIBS = [
-                    'libfreebl3.so',
-                    'libfreeblpriv3.so',
-                    'libnssckbi.so',
-                    'libnssdbm3.so',
-                    'libsoftokn3.so',
-                ]
+                NSS_LIBS = ['libfreebl3.so', 'libfreeblpriv3.so', 'libnssckbi.so', 'libnssdbm3.so', 'libsoftokn3.so']
                 # Directories (relative to `libnss_dir`) to search in. Also serve as relative destination paths.
-                NSS_LIB_SUBDIRS = [
-                    'nss',
-                    '.',
-                ]
+                NSS_LIB_SUBDIRS = ['nss', '.']
 
                 for subdir in NSS_LIB_SUBDIRS:
                     for lib_name in NSS_LIBS:
@@ -1355,7 +1350,9 @@ def exclude_extraneous_qt_bindings(hook_name, qt_bindings_order=None):
     if env_qt_bindings is not None and env_qt_bindings not in _QT_BINDINGS:
         logger.warning(
             "%s: ignoring unsupported Qt bindings specified via %s environment variable (supported values: %r)!",
-            hook_name, _QT_API_ENV, _QT_BINDINGS
+            hook_name,
+            _QT_API_ENV,
+            _QT_BINDINGS,
         )
         env_qt_bindings = None
 
@@ -1364,26 +1361,34 @@ def exclude_extraneous_qt_bindings(hook_name, qt_bindings_order=None):
     # have been run. This should cover cases when the entry-point script explicitly imports one of Qt bindings before
     # importing a package that supports multiple bindings.
     from PyInstaller.config import CONF
+
     seen_qt_bindings = CONF.get("_seen_qt_bindings")
     if seen_qt_bindings is not None:
         # If bindings are also specified via environment variable and they differ, display a warning.
         if env_qt_bindings is not None and env_qt_bindings != seen_qt_bindings:
             logger.warning(
-                "%s: ignoring %s environment variable (%r) because hook for %r has been run!", hook_name, _QT_API_ENV,
-                env_qt_bindings, seen_qt_bindings
+                "%s: ignoring %s environment variable (%r) because hook for %r has been run!",
+                hook_name,
+                _QT_API_ENV,
+                env_qt_bindings,
+                seen_qt_bindings,
             )
 
         logger.info(
-            "%s: selected %r as Qt bindings because hook for %r has been run before.", hook_name, seen_qt_bindings,
-            seen_qt_bindings
+            "%s: selected %r as Qt bindings because hook for %r has been run before.",
+            hook_name,
+            seen_qt_bindings,
+            seen_qt_bindings,
         )
         return _create_excludes(seen_qt_bindings)
 
     # Second choice: honor the QT_API environment variable, if it specified a valid Qt bindings package.
     if env_qt_bindings is not None:
         logger.info(
-            "%s: selected %r as Qt bindings as specified by the %s environment variable.", hook_name, env_qt_bindings,
-            _QT_API_ENV
+            "%s: selected %r as Qt bindings as specified by the %s environment variable.",
+            hook_name,
+            env_qt_bindings,
+            _QT_API_ENV,
         )
         return _create_excludes(env_qt_bindings)
 
@@ -1408,7 +1413,10 @@ def exclude_extraneous_qt_bindings(hook_name, qt_bindings_order=None):
         # Warn on multiple bindings, and tell user to use QT_API environment variable
         logger.warning(
             "%s: selected %r as Qt bindings, but multiple bindings are available: %r. Use the %s environment variable "
-            "to select different bindings and suppress this warning.", hook_name, selected_qt_bindings,
-            available_qt_bindings, _QT_API_ENV
+            "to select different bindings and suppress this warning.",
+            hook_name,
+            selected_qt_bindings,
+            available_qt_bindings,
+            _QT_API_ENV,
         )
     return _create_excludes(selected_qt_bindings)

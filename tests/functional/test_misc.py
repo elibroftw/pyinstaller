@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -27,17 +27,11 @@ def test_frozen_stdlib_modules(pyi_builder, script_dir, tmpdir):
     result_file = os.path.join(tmpdir, 'results.txt')
 
     # Run the test script unfrozen, to obtain reference results
-    ret = compat.exec_python_rc(
-        os.path.join(script_dir, test_script),
-        ref_result_file,
-    )
+    ret = compat.exec_python_rc(os.path.join(script_dir, test_script), ref_result_file)
     assert ret == 0, "Unfrozen test script failed!"
 
     # Freeze and run the test script
-    pyi_builder.test_script(
-        test_script,
-        app_args=[result_file],
-    )
+    pyi_builder.test_script(test_script, app_args=[result_file])
 
     # Process the results
     def _normalize_module_path(module_path, stdlib_dir):
@@ -60,12 +54,14 @@ def test_frozen_stdlib_modules(pyi_builder, script_dir, tmpdir):
         for name, file_attr, state_filename, state_origname in data[1:]:
             # Remove sys._stdlib_dir prefix from __file__ attribute and filename from __spec__.loader_state, and remove
             # the .py/.pyc suffix for easier comparison.
-            results.append((
-                name,
-                _normalize_module_path(file_attr, stdlib_dir),
-                _normalize_module_path(state_filename, stdlib_dir),
-                state_origname,
-            ))
+            results.append(
+                (
+                    name,
+                    _normalize_module_path(file_attr, stdlib_dir),
+                    _normalize_module_path(state_filename, stdlib_dir),
+                    state_origname,
+                )
+            )
 
         return results
 
@@ -104,7 +100,7 @@ def test_inspect_getmodule_from_stackframes(pyi_builder):
         assert module_names == expected_module_names
         """,
         pyi_args=['--paths', pathex],
-        run_from_path=True
+        run_from_path=True,
     )
 
 
@@ -129,7 +125,7 @@ def test_utf8_mode_xflag(xflag, enabled, pyi_builder):
         print("sys.flags:", sys.flags)
         assert sys.flags.utf8_mode == {}
         """.format(enabled),
-        pyi_args=["--python-option", xflag]
+        pyi_args=["--python-option", xflag],
     )
 
 
@@ -158,7 +154,7 @@ def test_dev_mode_xflag(xflag, enabled, pyi_builder):
         print("sys.flags:", sys.flags)
         assert sys.flags.dev_mode == {}
         """.format(enabled),
-        pyi_args=["--python-option", xflag]
+        pyi_args=["--python-option", xflag],
     )
 
 
@@ -170,7 +166,7 @@ def test_disable_hash_randomization(pyi_builder):
         print("sys.flags:", sys.flags)
         assert sys.flags.hash_randomization == 0
         """,
-        pyi_args=["--python-option", "hash_seed=0"]
+        pyi_args=["--python-option", "hash_seed=0"],
     )
 
 
@@ -209,7 +205,7 @@ def test_onefile_cleanup_symlinked_dir(pyi_builder, tmpdir):
             with open(output_file, 'w', encoding='utf-8') as fp:
                 fp.write(f'Output file #{idx}')
         """,
-        app_args=[output_dir]
+        app_args=[output_dir],
     )
 
     # Output directory should contain all five pre-existing and five new files.
@@ -239,7 +235,7 @@ def test_single_file_metadata(pyi_builder):
         assert dist.version == '1.0'
         assert dist.egg_name() == f'my_test_package-{dist.version}-py{sys.version_info[0]}.{sys.version_info[1]}'
         """,
-        pyi_args=['--paths', extra_path]
+        pyi_args=['--paths', extra_path],
     )
 
 
@@ -254,7 +250,7 @@ def test_program_importing_module_with_invalid_encoding1(pyi_builder):
         import mymodule1
         assert mymodule1.hello() == "hello"
         """,
-        pyi_args=['--paths', extra_path]
+        pyi_args=['--paths', extra_path],
     )
 
 
@@ -267,7 +263,7 @@ def test_program_importing_module_with_invalid_encoding2(pyi_builder):
         import mymodule2
         assert mymodule2.hello() == "hello"
         """,
-        pyi_args=['--paths', extra_path]
+        pyi_args=['--paths', extra_path],
     )
 
 
@@ -333,7 +329,7 @@ def test_bundled_shell_script(pyi_builder, tmpdir):
         print(output)
         assert output.strip() == "Hello world!"
         """,
-        pyi_args=['--add-data', str(script_file) + os.pathsep + '.']
+        pyi_args=['--add-data', str(script_file) + os.pathsep + '.'],
     )
 
 
@@ -351,7 +347,7 @@ def test_import_main_should_not_collect_pyinstaller1(pyi_builder):
         import __main__
         print(__main__)
         """,
-        pyi_args=['--additional-hooks-dir', hooks_dir]
+        pyi_args=['--additional-hooks-dir', hooks_dir],
     )
 
 
@@ -366,7 +362,7 @@ def test_import_main_should_not_collect_pyinstaller2(pyi_builder):
         except ImportError:
             pass
         """,
-        pyi_args=['--additional-hooks-dir', hooks_dir]
+        pyi_args=['--additional-hooks-dir', hooks_dir],
     )
 
 
@@ -392,7 +388,8 @@ def test_missing_relative_import_collects_unrelated_top_level_module(pyi_builder
     pyi_builder.test_source(
         """
         import mypackage
-        """, pyi_args=['--additional-hooks-dir', hooks_dir, '--paths', extra_path]
+        """,
+        pyi_args=['--additional-hooks-dir', hooks_dir, '--paths', extra_path],
     )
 
 

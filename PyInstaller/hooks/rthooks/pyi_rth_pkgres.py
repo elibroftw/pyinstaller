@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: Apache-2.0
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # To make pkg_resources work with frozen modules we need to set the 'Provider' class for PyiFrozenImporter. This class
 # decides where to look for resources and other stuff. 'pkg_resources.NullProvider' is dedicated to PEP302 import hooks
@@ -46,6 +46,7 @@ def _pyi_rthook():
         only .pyc modules - which are by design not returned by `PyiFrozenProvider`. So this implementation has been
         reduced to supporting only directories implied by collected packages.
         """
+
         def __init__(self, tree_node):
             self._tree = tree_node
 
@@ -77,6 +78,7 @@ def _pyi_rthook():
         """
         Custom pkg_resources provider for PyiFrozenImporter.
         """
+
         def __init__(self, module):
             super().__init__(module)
 

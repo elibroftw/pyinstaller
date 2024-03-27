@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import pytest
@@ -33,10 +33,11 @@ def __scan_code_for_ctypes(code, monkeypatch, extended_args):
         # Chuck in a load of preceding rubbish to test if the bytecode scanner can correctly
         # handle the EXTENDED_ARGS opcode.
         from test_bytecode import many_constants, many_globals
+
         code = many_constants() + many_globals() + code
 
     co = compile(code, 'dummy', 'exec')
-    #import pdb ; pdb.set_trace()
+    # import pdb ; pdb.set_trace()
     return utils.scan_code_for_ctypes(co)
 
 

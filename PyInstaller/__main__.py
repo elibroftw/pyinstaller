@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,10 +7,11 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Main command-line interface to PyInstaller.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -21,6 +22,7 @@ from collections import defaultdict
 
 from PyInstaller import __version__
 from PyInstaller import log as logging
+
 # Note: do not import anything else until compat.check_requirements function is run!
 from PyInstaller import compat
 
@@ -66,16 +68,13 @@ def run_makespec(filenames, **opts):
 
 def run_build(pyi_config, spec_file, **kwargs):
     import PyInstaller.building.build_main
+
     PyInstaller.building.build_main.main(pyi_config, spec_file, **kwargs)
 
 
 def __add_options(parser):
     parser.add_argument(
-        '-v',
-        '--version',
-        action='version',
-        version=__version__,
-        help='Show program version info and exit.',
+        '-v', '--version', action='version', version=__version__, help='Show program version info and exit.'
     )
 
 
@@ -176,7 +175,7 @@ def run(pyi_args: list | None = None, pyi_config: dict | None = None):
         except ValueError:
             index = len(pyi_args)
         args = parser.parse_args(pyi_args[:index])
-        spec_args = pyi_args[index + 1:]
+        spec_args = pyi_args[index + 1 :]
         PyInstaller.log.__process_options(parser, args)
 
         # Print PyInstaller version, Python version, and platform as the first line to stdout. This helps us identify
@@ -215,6 +214,7 @@ def run(pyi_args: list | None = None, pyi_config: dict | None = None):
         raise SystemExit("Aborted by user request.")
     except RecursionError:
         from PyInstaller import _recursion_too_deep_message
+
         _recursion_too_deep_message.raise_with_msg()
     finally:
         sys.argv = old_sys_argv

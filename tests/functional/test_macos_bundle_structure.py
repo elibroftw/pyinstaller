@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2022-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # Basic tests for macOS app bundle data relocation and code signing.
 
@@ -34,9 +34,12 @@ def test_macos_bundle_signing_metadata(pyi_builder, monkeypatch):
     monkeypatch.setenv("PYINSTALLER_STRICT_BUNDLE_CODESIGN_ERROR", "1")
     monkeypatch.setenv("PYINSTALLER_VERIFY_BUNDLE_SIGNATURE", "1")
 
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         import psutil
-        """, pyi_args=['--windowed', '--copy-metadata', 'psutil'])
+        """,
+        pyi_args=['--windowed', '--copy-metadata', 'psutil'],
+    )
 
 
 # Test that the bundle signing works even if we collect a package as source .py files, which we do not relocate.
@@ -53,12 +56,16 @@ def test_macos_bundle_signing_py_files(pyi_builder, monkeypatch):
         return Analysis(*args, **kwargs)
 
     import PyInstaller.building.build_main
+
     Analysis = PyInstaller.building.build_main.Analysis
     monkeypatch.setattr('PyInstaller.building.build_main.Analysis', AnalysisOverride)
 
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         import psutil
-        """, pyi_args=['--windowed'])
+        """,
+        pyi_args=['--windowed'],
+    )
 
 
 # Test that the codesigning works even if we collect a package as .pyc files, which we do not relocate.
@@ -75,12 +82,16 @@ def test_macos_bundle_signing_pyc_files(pyi_builder, monkeypatch):
         return Analysis(*args, **kwargs)
 
     import PyInstaller.building.build_main
+
     Analysis = PyInstaller.building.build_main.Analysis
     monkeypatch.setattr('PyInstaller.building.build_main.Analysis', AnalysisOverride)
 
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         import psutil
-        """, pyi_args=['--windowed'])
+        """,
+        pyi_args=['--windowed'],
+    )
 
 
 # The following tests explicitly check the structure of generated macOS .app bundles w.r.t. binaries and data resources
@@ -97,9 +108,12 @@ def _create_app_bundle(pyi_builder, monkeypatch, tmpdir, datas=None, binaries=No
     for src_name, dest_name in binaries or []:
         extra_args += ['--add-binary', f"{src_name}{os.pathsep}{dest_name}"]
 
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         print("Hello world!")
-        """, pyi_args=['--windowed', *extra_args])
+        """,
+        pyi_args=['--windowed', *extra_args],
+    )
 
     # Return path to the generated .app bundle, so calling test can inspect it
     return os.path.join(tmpdir, 'dist/test_source.app')
@@ -117,6 +131,7 @@ def _create_test_binary(filename):
     # Copy _struct extension
     import _struct
     import shutil
+
     shutil.copy2(_struct.__file__, filename)
 
 

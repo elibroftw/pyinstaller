@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Manipulating with dynamic libraries.
 """
@@ -60,7 +60,6 @@ _win_includes = {
     # missing DLL errors when the frozen application is run on a system that does not have the corresponding VC
     # runtime installed. The VC runtime DLLs may be dependencies of python shared library itself or of extension
     # modules provided by 3rd party packages.
-
     # Visual Studio 2010 (VC10) runtime
     # http://msdn.microsoft.com/en-us/library/8kche8ah(v=vs.100).aspx
     r'atl100\.dll',
@@ -71,7 +70,6 @@ _win_includes = {
     r'mfcmifc80\.dll',
     r'mfcm100\.dll',
     r'mfcm100u\.dll',
-
     # Visual Studio 2012 (VC11) runtime
     # https://docs.microsoft.com/en-us/visualstudio/releases/2013/2012-redistribution-vs
     #
@@ -103,7 +101,6 @@ _win_includes = {
     r'vcomp110\.dll',
     # DIA SDK
     r'msdia110\.dll',
-
     # Visual Studio 2013 (VC12) runtime
     # https://docs.microsoft.com/en-us/visualstudio/releases/2013/2013-redistribution-vs
     #
@@ -139,7 +136,6 @@ _win_includes = {
     r'zumosdk120.winrt\.dll',
     # Cpp REST SDK
     r'casablanca120\.dll',
-
     # Universal C Runtime Library (since Visual Studio 2015)
     #
     # NOTE: these should be put under a switch, as they need not to be bundled if deployment target is Windows 10
@@ -150,7 +146,6 @@ _win_includes = {
     r'api-ms-win-core.*',
     r'api-ms-win-crt.*',
     r'ucrtbase\.dll',
-
     # Visual Studio 2015/2017/2019/2022 (VC14) runtime
     # https://docs.microsoft.com/en-us/visualstudio/releases/2022/redistribution
     #
@@ -170,7 +165,6 @@ _win_includes = {
     r'vcomp140\.dll',
     # DIA SDK
     r'msdia140\.dll',
-
     # Allow pythonNN.dll, pythoncomNN.dll, pywintypesNN.dll
     r'py(?:thon(?:com(?:loader)?)?|wintypes)\d+\.dll',
 }
@@ -179,7 +173,6 @@ _win_excludes = {
     # On Windows, only .dll files can be loaded.
     r'.*\.so',
     r'.*\.dylib',
-
     # MS assembly excludes
     r'Microsoft\.Windows\.Common-Controls',
 }

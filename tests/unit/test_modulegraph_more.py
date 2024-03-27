@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import ast
 import os
@@ -71,7 +71,7 @@ def test_package(tmpdir):
     assert node.packagepath == [pysrc.dirname]
 
 
-#-- Extension modules
+# -- Extension modules
 
 
 @pytest.mark.parametrize(
@@ -87,7 +87,7 @@ def test_package(tmpdir):
         (4, "myextpkg.subpkg", modulegraph.ExtensionPackage),
         # importing a module beside, but from a sub-package
         (5, "myextpkg.subpkg.other", modulegraph.Extension),
-    )
+    ),
 )
 def test_package_init_is_extension(tmpdir, num, modname, expected_nodetype):
     # Regression: Recursion too deep
@@ -127,7 +127,7 @@ def test_package_init_is_extension(tmpdir, num, modname, expected_nodetype):
     assert node.filename == str(module_file)
 
 
-#-- Basic tests - these seem to be missing in the original modulegraph test-suite
+# -- Basic tests - these seem to be missing in the original modulegraph test-suite
 
 
 def test_relative_import_missing(tmpdir):
@@ -147,7 +147,7 @@ def test_relative_import_missing(tmpdir):
     assert isinstance(mg.find_node('pkg.x.y.DoesNotExist'), modulegraph.MissingModule)
 
 
-#-- Tests with a single module in a zip-file
+# -- Tests with a single module in a zip-file
 
 
 def _zip_directory(filename, path):
@@ -178,7 +178,7 @@ def test_zipped_module_source_and_compiled(tmpdir):
     assert node.filename.startswith(os.path.join(zipfilename, 'stuff.py'))
 
 
-#-- Tests with a package in a zip-file
+# -- Tests with a package in a zip-file
 
 
 def _zip_package(filename, path):
@@ -208,7 +208,7 @@ def test_zipped_package_source_and_compiled(tmpdir):
     assert node.packagepath == [os.path.join(zipfilename, 'stuff')]
 
 
-#-- Namespace packages
+# -- Namespace packages
 
 
 def test_nspackage_pep420(tmpdir):
@@ -292,7 +292,19 @@ def test_import_order_1(tmpdir):
 
     # This is the order Python imports these modules given that script.
     expected = [
-        'a', 'a.c', 'a.d', 'a.d.f', 'a.d.f.j', 'a.d.f.k', 'a.d.g', 'a.d.g.l', 'a.d.g.m', 'a.d.h', 'b', 'b.e', 'b.e.i'
+        'a',
+        'a.c',
+        'a.d',
+        'a.d.f',
+        'a.d.f.j',
+        'a.d.f.k',
+        'a.d.g',
+        'a.d.g.l',
+        'a.d.g.m',
+        'a.d.h',
+        'b',
+        'b.e',
+        'b.e.i',
     ]
     assert record == expected
 
@@ -337,13 +349,26 @@ def test_import_order_2(tmpdir):
 
     # This is the order Python imports these modules given that script.
     expected = [
-        'b', 'b.e', 'a', 'a.c', 'a.c.g', 'b.e.k', 'b.f', 'b.f.n', 'b.f.n.p', 'b.e.l', 'a.d', 'a.d.j', 'a.d.i', 'a.c.h'
+        'b',
+        'b.e',
+        'a',
+        'a.c',
+        'a.c.g',
+        'b.e.k',
+        'b.f',
+        'b.f.n',
+        'b.f.n.p',
+        'b.e.l',
+        'a.d',
+        'a.d.j',
+        'a.d.i',
+        'a.c.h',
     ]
     assert record == expected
     print(record)
 
 
-#---- scan bytecode
+# ---- scan bytecode
 
 
 def __scan_code(code, use_ast, monkeypatch):
@@ -382,7 +407,7 @@ def test_scan_code__basic(monkeypatch, use_ast):
     """
     module = __scan_code(code, use_ast, monkeypatch)
     assert len(module._deferred_imports) == 3
-    assert ([di[1][0] for di in module._deferred_imports] == ['os.path', 'sys', 'shutil'])
+    assert [di[1][0] for di in module._deferred_imports] == ['os.path', 'sys', 'shutil']
     assert module.is_global_attr('maxint')
     assert module.is_global_attr('os')
     assert module.is_global_attr('platform')
@@ -390,7 +415,7 @@ def test_scan_code__basic(monkeypatch, use_ast):
     assert not module.is_global_attr('exitfunc')
 
 
-#-- SWIG packages - pyinstaller specific tests
+# -- SWIG packages - pyinstaller specific tests
 
 
 def _test_swig_import_simple_common(tmpdir):
@@ -477,8 +502,8 @@ def test_swig_import_from_top_level(tmpdir):
     assert isinstance(mg.find_node('pyi_test_osgeo._pyi_gdal'), modulegraph.SourceModule)
     assert mg.find_node('_pyi_gdal') is None
     # This would be the correct implementation:
-    #assert mg.find_node('pyi_test_osgeo._pyi_gdal') is None
-    #assert isinstance(mg.find_node('_pyi_gdal'), modulegraph.SourceModule)
+    # assert mg.find_node('pyi_test_osgeo._pyi_gdal') is None
+    # assert isinstance(mg.find_node('_pyi_gdal'), modulegraph.SourceModule)
 
 
 def test_swig_import_from_top_level_missing(tmpdir):
@@ -526,8 +551,8 @@ def test_swig_import_from_top_level_but_nested(tmpdir):
     assert isinstance(mg.find_node('pyi_test_osgeo.x.y._pyi_gdal'), modulegraph.SourceModule)
     assert mg.find_node('_pyi_gdal') is None
     # This would be the correct implementation:
-    #assert mg.find_node('pyi_test_osgeo.x.y._pyi_gdal') is None
-    #assert isinstance(mg.find_node('_pyi_gdal'), modulegraph.SourceModule)
+    # assert mg.find_node('pyi_test_osgeo.x.y._pyi_gdal') is None
+    # assert isinstance(mg.find_node('_pyi_gdal'), modulegraph.SourceModule)
 
 
 def test_swig_top_level_but_no_swig_at_all(tmpdir):

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import re
 import importlib.util
@@ -30,6 +30,7 @@ if check_requirement('sqlalchemy >= 1.4'):
 @isolated.decorate
 def _get_dialect_modules(module_name):
     import importlib
+
     module = importlib.import_module(module_name)
     return [f"{module_name}.{submodule_name}" for submodule_name in module.__all__]
 

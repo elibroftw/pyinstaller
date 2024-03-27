@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # This contains tests for the class:``TOC``, see
 # https://pyinstaller.readthedocs.io/en/latest/advanced-topics.html#the-toc-and-tree-classes
@@ -22,10 +22,7 @@ ELEMS1 = (
     ('libreadline.so.6', '/lib64/libreadline.so.6', 'BINARY'),
 )
 
-ELEMS2 = (
-    ('li-la-lu', '/home/myself/li-la-su', 'SOMETHING'),
-    ('schubidu', '/home/otherguy/schibidu', 'PKG'),
-)
+ELEMS2 = (('li-la-lu', '/home/myself/li-la-su', 'SOMETHING'), ('schubidu', '/home/otherguy/schibidu', 'PKG'))
 
 ELEMS3 = (('PIL.Image.py', '/usr/lib/python2.7/encodings/__init__.py', 'PYMODULE'),)
 

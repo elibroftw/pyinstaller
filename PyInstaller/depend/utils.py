@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Utility functions related to analyzing/bundling dependencies.
 """
@@ -134,12 +134,10 @@ def __recursively_scan_code_objects_for_ctypes(code: CodeType):
         *any_alias("ctypes.PyDLL"),
         *any_alias("ctypes.pydll.LoadLibrary"),
     }
-    find_library_names = {
-        *any_alias("ctypes.util.find_library"),
-    }
+    find_library_names = {*any_alias("ctypes.util.find_library")}
 
     for calls in bytecode.recursive_function_calls(code).values():
-        for (name, args) in calls:
+        for name, args in calls:
             if not len(args) == 1 or not isinstance(args[0], str):
                 continue
             if name in ctypes_dll_names:
@@ -157,7 +155,8 @@ def __recursively_scan_code_objects_for_ctypes(code: CodeType):
                         libname = None
                         logger.warning(
                             'ctypes.util.find_library raised a FileNotFoundError. '
-                            'Supressing and assuming no lib with the name "%s" was found.', args[0]
+                            'Supressing and assuming no lib with the name "%s" was found.',
+                            args[0],
                         )
                     if libname:
                         # On Windows, `find_library` may return a full pathname. See issue #1934.
@@ -178,15 +177,23 @@ _ctypes_getattr_regex = bytecode.bytecode_regex(
 
     # Load the 'foo'.
     (
-      (?:(?:""" + bytecode._OPCODES_EXTENDED_ARG + rb""").)*
-      (?:""" + bytecode._OPCODES_FUNCTION_GLOBAL + rb""").
+      (?:(?:"""
+    + bytecode._OPCODES_EXTENDED_ARG
+    + rb""").)*
+      (?:"""
+    + bytecode._OPCODES_FUNCTION_GLOBAL
+    + rb""").
     )
 
     # Load the 'bar.whizz' (one opcode per name component, each possibly preceded by name reference extension).
     (
       (?:
-        (?:(?:""" + bytecode._OPCODES_EXTENDED_ARG + rb""").)*
-        (?:""" + bytecode._OPCODES_FUNCTION_LOAD + rb""").
+        (?:(?:"""
+    + bytecode._OPCODES_EXTENDED_ARG
+    + rb""").)*
+        (?:"""
+    + bytecode._OPCODES_FUNCTION_LOAD
+    + rb""").
       )+
     )
 """
@@ -324,6 +331,7 @@ def load_ldconfig_cache():
         return
 
     from distutils.spawn import find_executable
+
     ldconfig = find_executable('ldconfig')
     if ldconfig is None:
         # If `ldconfig` is not found in $PATH, search for it in some fixed directories. Simply use a second call instead
@@ -348,8 +356,8 @@ def load_ldconfig_cache():
     else:
         # Skip first line of the library list because it is just an informative line and might contain localized
         # characters. Example of first line with locale set to cs_CZ.UTF-8:
-        #$ /sbin/ldconfig -p
-        #V keši „/etc/ld.so.cache“ nalezeno knihoven: 2799
+        # $ /sbin/ldconfig -p
+        # V keši „/etc/ld.so.cache“ nalezeno knihoven: 2799
         #      libzvbi.so.0 (libc6,x86-64) => /lib64/libzvbi.so.0
         #      libzvbi-chains.so.0 (libc6,x86-64) => /lib64/libzvbi-chains.so.0
         ldconfig_arg = '-p'
@@ -387,7 +395,7 @@ def load_ldconfig_cache():
             bname = os.path.basename(path).split('.so', 1)[0]
             name = 'lib' + m.group(1)
             assert name.startswith(bname)
-            name = bname + '.so' + name[len(bname):]
+            name = bname + '.so' + name[len(bname) :]
         else:
             name = m.group(1)
         # ldconfig may know about several versions of the same lib, e.g., different arch, different libc, etc.

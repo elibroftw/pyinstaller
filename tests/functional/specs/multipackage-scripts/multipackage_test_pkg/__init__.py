@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2021-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,12 +7,13 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 def _test_basic_imports():
     # Import a very simple and rarely used pure-python lib ...
     import getopt  # noqa: F401
+
     # ... and a module importing a shared lib.
     import ssl  # noqa: F401
 
@@ -35,6 +36,7 @@ def _test_nested_data_file():
 def _test_nested_extensions():
     # Import psutil, which contains an extension in its package directory.
     import psutil  # noqa: F401
+
     print("Successfully imported psutil!")
 
 

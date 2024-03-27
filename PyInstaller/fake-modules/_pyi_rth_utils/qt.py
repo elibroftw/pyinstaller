@@ -95,12 +95,7 @@ def create_embedded_qt_conf(qt_bindings, prefix_path):
     qt_resource_data = qt_conf_size.to_bytes(4, 'big') + qt_conf
 
     # Register
-    succeeded = QtCore.qRegisterResourceData(
-        0x01,
-        _QT_CONF_RESOURCE_STRUCT,
-        _QT_CONF_RESOURCE_NAME,
-        qt_resource_data,
-    )
+    succeeded = QtCore.qRegisterResourceData(0x01, _QT_CONF_RESOURCE_STRUCT, _QT_CONF_RESOURCE_NAME, qt_resource_data)
     if not succeeded:
         return  # Tough luck
 
@@ -110,9 +105,5 @@ def create_embedded_qt_conf(qt_bindings, prefix_path):
     # collector might kick in at any time after we exit this helper function, and `qRegisterResourceData` does not seem
     # to make a copy of the data!).
     atexit.register(
-        QtCore.qUnregisterResourceData,
-        0x01,
-        _QT_CONF_RESOURCE_STRUCT,
-        _QT_CONF_RESOURCE_NAME,
-        qt_resource_data,
+        QtCore.qUnregisterResourceData, 0x01, _QT_CONF_RESOURCE_STRUCT, _QT_CONF_RESOURCE_NAME, qt_resource_data
     )

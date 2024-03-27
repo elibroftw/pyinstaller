@@ -1,11 +1,11 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License with exception
 # for distributing bootloader.
 #
 # The full license is in the file COPYING.txt, distributed with this software.
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Hooks to make ctypes.CDLL, .PyDLL, etc. look in sys._MEIPASS first.
 """
@@ -125,6 +125,7 @@ def install():
 if sys.platform.startswith('darwin'):
     try:
         from ctypes.macholib import dyld
+
         dyld.DEFAULT_LIBRARY_FALLBACK.insert(0, sys._MEIPASS)
     except ImportError:
         # Do nothing when module 'ctypes' is not available.

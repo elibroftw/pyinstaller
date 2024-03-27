@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,17 +7,23 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 import pytest
 import shutil
 import re
 
-from PyInstaller.utils.hooks import collect_data_files, collect_submodules, \
-    get_module_file_attribute, remove_prefix, remove_suffix, \
-    remove_file_extension, is_module_or_submodule, \
-    check_requirement
+from PyInstaller.utils.hooks import (
+    collect_data_files,
+    collect_submodules,
+    get_module_file_attribute,
+    remove_prefix,
+    remove_suffix,
+    remove_file_extension,
+    is_module_or_submodule,
+    check_requirement,
+)
 from PyInstaller.compat import exec_python, is_win
 from PyInstaller import log as logging
 
@@ -140,11 +146,11 @@ class TestCollectSubmodules(object):
             TEST_MOD,
             # Python extensions end with '.pyd' on Windows and with  '.so' on Linux, Mac OS, and other OSes.
             TEST_MOD + '.pyextension',
-            #TEST_MOD + '.raises_error_on_import_1',
-            #TEST_MOD + '.raises_error_on_import_2',
+            # TEST_MOD + '.raises_error_on_import_1',
+            # TEST_MOD + '.raises_error_on_import_2',
             TEST_MOD + '.subpkg',
             TEST_MOD + '.subpkg.twelve',
-            TEST_MOD + '.two'
+            TEST_MOD + '.two',
         ]
 
     # Dynamic libraries (.dll, .dylib) are not included in the list.
@@ -214,7 +220,8 @@ class TestCollectSubmodules(object):
         # error will be from raises_error_on_import_1 or raises_error_on_import_2.
         assert re.match(
             ".*Failed .* for 'hookutils_package.raises_error_on_import_[12]' because .* "
-            "raised: AssertionError: I cannot be imported", error
+            "raised: AssertionError: I cannot be imported",
+            error,
         )
         # Make sure that only one warning was issued.
         assert error.count("Failed") == 1
@@ -278,11 +285,7 @@ def test_collect_data_module():
             ),
         ),
         # Test collecting from a subpackage.
-        (
-            [TEST_MOD + '.subpkg'],
-            {},
-            (os.path.join('subpkg', 'thirteen.txt'),),
-        ),
+        ([TEST_MOD + '.subpkg'], {}, (os.path.join('subpkg', 'thirteen.txt'),)),
         (
             [TEST_MOD],
             dict(include_py_files=True, excludes=['**/__pycache__']),
@@ -329,11 +332,7 @@ def test_collect_data_module():
                 os.path.join('subpkg', 'thirteen.txt'),
             ),
         ),
-        (
-            [TEST_MOD],
-            dict(includes=['*.dat']),
-            ('nine.dat',),
-        ),
+        ([TEST_MOD], dict(includes=['*.dat']), ('nine.dat',)),
         (
             [TEST_MOD],
             dict(subdir="py_files_not_in_package", excludes=['**/__pycache__']),
@@ -343,7 +342,7 @@ def test_collect_data_module():
             ),
         ),
     ],
-    ids=['package', 'subpackage', 'package with py files', 'excludes', '** includes', 'includes', 'subdir']
+    ids=['package', 'subpackage', 'package with py files', 'excludes', '** includes', 'includes', 'subdir'],
 )
 def data_lists(monkeypatch, request):
     def _sort(sequence):

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import sys
 import pprint
@@ -34,12 +34,7 @@ for module_name in frozen_stdlib_modules:
 
     # Collect: module_name, __file__, filename and origname from __spec__.loaded_state
     loader_state = module.__spec__.loader_state
-    entry = (
-        module_name,
-        module.__file__,
-        loader_state.filename,
-        loader_state.origname,
-    )
+    entry = (module_name, module.__file__, loader_state.filename, loader_state.origname)
     output_data.append(entry)
 
 # Output: stdout or file

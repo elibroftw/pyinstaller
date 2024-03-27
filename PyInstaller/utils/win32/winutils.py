@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Utilities for Windows platform.
 """
@@ -195,7 +195,7 @@ def compute_exe_pe_checksum(exe_path):
         None,  # lpSecurityAttributes = NULL
         3,  # dwCreationDisposition = OPEN_EXISTING
         0x80,  # dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL
-        None  # hTemplateFile = NULL
+        None,  # hTemplateFile = NULL
     )
     if hFile == INVALID_HANDLE:
         err = GetLastError()
@@ -218,7 +218,7 @@ def compute_exe_pe_checksum(exe_path):
         0x02,  # flProtect = PAGE_READONLY
         0,  # dwMaximumSizeHigh = 0
         0,  # dwMaximumSizeLow = 0
-        None  # lpName = NULL
+        None,  # lpName = NULL
     )
     if not hMapping:
         err = GetLastError()
@@ -231,7 +231,7 @@ def compute_exe_pe_checksum(exe_path):
         4,  # dwDesiredAccess = FILE_MAP_READ
         0,  # dwFileOffsetHigh = 0
         0,  # dwFileOffsetLow = 0
-        0  # dwNumberOfBytesToMap = 0
+        0,  # dwNumberOfBytesToMap = 0
     )
     if baseAddress == 0:
         err = GetLastError()

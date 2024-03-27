@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # This requires a custom hand-crafted PyQt5 package, since some distributions do not include PyQt5.uic.port_v3
 # for Python 2 and the other way round.
@@ -27,6 +27,7 @@ print(PyQt5.uic.port_v3.__path__)
 
 try:
     import PyQt5.uic.port_v2
+
     print(PyQt5.uic.port_v2.__path__)
 except ImportError:
     print('PyQt5.uic.port_v2 not imported')

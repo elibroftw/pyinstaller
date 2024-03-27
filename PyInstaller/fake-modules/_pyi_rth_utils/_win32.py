@@ -32,25 +32,18 @@ PSID = ctypes.wintypes.LPVOID
 
 
 class SID_AND_ATTRIBUTES(ctypes.Structure):
-    _fields_ = [
-        ("Sid", PSID),
-        ("Attributes", ctypes.wintypes.DWORD),
-    ]
+    _fields_ = [("Sid", PSID), ("Attributes", ctypes.wintypes.DWORD)]
 
 
 class TOKEN_USER(ctypes.Structure):
-    _fields_ = [
-        ("User", SID_AND_ATTRIBUTES),
-    ]
+    _fields_ = [("User", SID_AND_ATTRIBUTES)]
 
 
 PTOKEN_USER = ctypes.POINTER(TOKEN_USER)
 
 
 class TOKEN_APPCONTAINER_INFORMATION(ctypes.Structure):
-    _fields_ = [
-        ("TokenAppContainer", PSID),
-    ]
+    _fields_ = [("TokenAppContainer", PSID)]
 
 
 PTOKEN_APPCONTAINER_INFORMATION = ctypes.POINTER(TOKEN_APPCONTAINER_INFORMATION)
@@ -148,8 +141,7 @@ def _win_error_to_message(error_code):
         error_code,  # dwMessageId
         0x400,  # dwLanguageId = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT)
         ctypes.cast(
-            ctypes.byref(message_wstr),
-            ctypes.wintypes.LPWSTR,
+            ctypes.byref(message_wstr), ctypes.wintypes.LPWSTR
         ),  # pointer to LPWSTR due to FORMAT_MESSAGE_ALLOCATE_BUFFER; needs to be cast to LPWSTR
         64,  # due to FORMAT_MESSAGE_ALLOCATE_BUFFER, this is minimum number of characters to allocate
         None,
@@ -180,11 +172,7 @@ def _get_process_sid(token_information_class):
 
     try:
         # Get access token for the current process
-        ret = kernel32.OpenProcessToken(
-            kernel32.GetCurrentProcess(),
-            TOKEN_QUERY,
-            ctypes.pointer(process_token),
-        )
+        ret = kernel32.OpenProcessToken(kernel32.GetCurrentProcess(), TOKEN_QUERY, ctypes.pointer(process_token))
         if ret == 0:
             error_code = kernel32.GetLastError()
             raise RuntimeError(f"Failed to open process token! Error code: 0x{error_code:X}")
@@ -193,11 +181,7 @@ def _get_process_sid(token_information_class):
         token_info_size = ctypes.wintypes.DWORD(0)
 
         ret = advapi32.GetTokenInformation(
-            process_token,
-            token_information_class,
-            None,
-            0,
-            ctypes.byref(token_info_size),
+            process_token, token_information_class, None, 0, ctypes.byref(token_info_size)
         )
 
         # We expect this call to fail with ERROR_INSUFFICIENT_BUFFER
@@ -211,11 +195,7 @@ def _get_process_sid(token_information_class):
         # Allocate buffer
         token_info = ctypes.create_string_buffer(token_info_size.value)
         ret = advapi32.GetTokenInformation(
-            process_token,
-            token_information_class,
-            token_info,
-            token_info_size,
-            ctypes.byref(token_info_size),
+            process_token, token_information_class, token_info, token_info_size, ctypes.byref(token_info_size)
         )
         if ret == 0:
             error_code = kernel32.GetLastError()
@@ -284,10 +264,7 @@ def secure_mkdir(dir_name):
     security_desc = ctypes.wintypes.LPVOID(None)
 
     ret = advapi32.ConvertStringSecurityDescriptorToSecurityDescriptorW(
-        security_desc_str,
-        SDDL_REVISION1,
-        ctypes.byref(security_desc),
-        None,
+        security_desc_str, SDDL_REVISION1, ctypes.byref(security_desc), None
     )
     if ret == 0:
         error_code = kernel32.GetLastError()
@@ -302,10 +279,7 @@ def secure_mkdir(dir_name):
     security_attr.bInheritHandle = False
 
     # Create directory
-    ret = kernel32.CreateDirectoryW(
-        dir_name,
-        security_attr,
-    )
+    ret = kernel32.CreateDirectoryW(dir_name, security_attr)
     if ret == 0:
         # Call failed; store error code immediately, to avoid it being overwritten in cleanup below.
         error_code = kernel32.GetLastError()

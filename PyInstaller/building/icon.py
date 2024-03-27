@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2022-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 from typing import Tuple
 
@@ -42,7 +42,7 @@ def normalize_icon_type(icon_path: str, allowed_types: Tuple[str], convert_type:
         signatures = hex_signatures[extension]
         with open(icon_path, "rb") as f:
             header = f.read(max(len(s) for s in signatures))
-        if any(list(header)[:len(s)] == s for s in signatures):
+        if any(list(header)[: len(s)] == s for s in signatures):
             return icon_path
 
     # The icon type is wrong! Let's try and import PIL
@@ -86,5 +86,5 @@ hex_signatures = {
     "png": [[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]],
     "exe": [[0x4D, 0x5A], [0x5A, 0x4D]],
     "ico": [[0x00, 0x00, 0x01, 0x00]],
-    "icns": [[0x69, 0x63, 0x6e, 0x73]],
+    "icns": [[0x69, 0x63, 0x6E, 0x73]],
 }

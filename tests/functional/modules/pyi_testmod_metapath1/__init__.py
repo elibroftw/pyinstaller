@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2015-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,14 +7,15 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # __import__ below works
 from pyi_testmod_metapath1.extern import aaa  # noqa: F401
+
 # __import__ below works
-#import pyi_testmod_metapath1.extern
+# import pyi_testmod_metapath1.extern
 # __import__ below fails!
-#import pyi_testmod_metapath1.extern.aaa
+# import pyi_testmod_metapath1.extern.aaa
 __import__('pyi_testmod_metapath1.extern.bbb')
 
 try:

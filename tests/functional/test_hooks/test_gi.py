@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 """
 Functional tests for PyGObject.
 """
@@ -45,7 +45,7 @@ gi_repositories_skipped_if_unimportable = [
     ('repository_name', 'version'),
     gi_repositories_skipped_if_unimportable,
     # Ensure human-readable test parameter names.
-    ids=gi_repository_names
+    ids=gi_repository_names,
 )
 def test_gi_repository(pyi_builder, repository_name, version):
     """

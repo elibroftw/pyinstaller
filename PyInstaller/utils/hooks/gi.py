@@ -45,6 +45,7 @@ class GiModuleInfo:
         @isolated.decorate
         def _get_module_info(module, version):
             import gi
+
             gi.require_version("GIRepository", "2.0")
             from gi.repository import GIRepository
 
@@ -66,11 +67,7 @@ class GiModuleInfo:
             else:
                 dependencies = repo.get_dependencies(module)
 
-            return {
-                'sharedlibs': sharedlibs,
-                'typelib': typelib,
-                'dependencies': dependencies,
-            }
+            return {'sharedlibs': sharedlibs, 'typelib': typelib, 'dependencies': dependencies}
 
         # Try to query information; if this fails, mark module as unavailable.
         try:
@@ -170,7 +167,6 @@ def gir_library_path_fix(path):
     # On Mac OS we need to recompile the GIR files to reference the loader path,
     # but this is not necessary on other platforms.
     if compat.is_darwin:
-
         # If using a virtualenv, the base prefix and the path of the typelib
         # have really nothing to do with each other, so try to detect that.
         common_path = os.path.commonprefix([compat.base_prefix, path])
@@ -188,7 +184,7 @@ def gir_library_path_fix(path):
         if not os.path.exists(gir_path):
             logger.error(
                 "Unable to find gir directory: %s.\nTry installing your platform's gobject-introspection package.",
-                gir_path
+                gir_path,
             )
             return None
         if not os.path.exists(gir_file):
@@ -227,8 +223,10 @@ def gir_library_path_fix(path):
 @isolated.decorate
 def get_glib_system_data_dirs():
     import gi
+
     gi.require_version('GLib', '2.0')
     from gi.repository import GLib
+
     return GLib.get_system_data_dirs()
 
 
@@ -244,8 +242,10 @@ def get_glib_sysconf_dirs():
     @isolated.call
     def data_dirs():
         import gi
+
         gi.require_version('GLib', '2.0')
         from gi.repository import GLib
+
         return GLib.get_system_config_dirs()
 
     return data_dirs

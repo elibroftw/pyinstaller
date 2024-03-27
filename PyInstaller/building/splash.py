@@ -55,6 +55,7 @@ class Splash(Target):
     A Splash has two outputs, one is itself and one is stored in splash.binaries. Both need to be passed to other
     build targets in order to enable the splash screen.
     """
+
     def __init__(self, image_file, binaries, datas, **kwargs):
         """
         :param str image_file:
@@ -129,6 +130,7 @@ class Splash(Target):
         :type always_on_top: bool
         """
         from ..config import CONF
+
         Target.__init__(self)
 
         # Splash screen is not supported on macOS. It operates in a secondary thread and macOS disallows UI operations
@@ -179,6 +181,7 @@ class Splash(Target):
             # build_main.py, instead we just want to inform the user that the splash screen feature is not supported on
             # his platform
             import _tkinter
+
             self._tkinter_module = _tkinter
             self._tkinter_file = self._tkinter_module.__file__
         except ModuleNotFoundError:
@@ -235,7 +238,8 @@ class Splash(Target):
                 # that are missing the license.terms file.
                 logger.warning(
                     "The local Tcl/Tk installation is missing the file %s. The behavior of the splash screen is "
-                    "therefore undefined and may be unsupported.", filename
+                    "therefore undefined and may be unsupported.",
+                    filename,
                 )
                 return False
             return True
@@ -327,8 +331,11 @@ class Splash(Target):
                 raise ValueError(
                     "The splash image dimensions (w: %d, h: %d) exceed max_img_size (w: %d, h:%d), but the image "
                     "cannot be resized due to missing PIL.Image! Either install the Pillow package, adjust the "
-                    "max_img_size, or use an image of compatible dimensions.", _orig_size[0], _orig_size[1],
-                    self.max_img_size[0], self.max_img_size[1]
+                    "max_img_size, or use an image of compatible dimensions.",
+                    _orig_size[0],
+                    _orig_size[1],
+                    self.max_img_size[0],
+                    self.max_img_size[1],
                 )
 
         # Open image file
@@ -360,7 +367,8 @@ class Splash(Target):
         else:
             raise ValueError(
                 "The image %s needs to be converted to a PNG file, but PIL.Image is not available! Either install the "
-                "Pillow package, or use a PNG image for you splash screen.", self.image_file
+                "Pillow package, or use a PNG image for you splash screen.",
+                self.image_file,
             )
 
         image_file.close()
@@ -373,7 +381,7 @@ class Splash(Target):
             tcltk_utils.TK_ROOTNAME,
             self.rundir,
             image,
-            self.script
+            self.script,
         )
 
     def test_tk_version(self):
@@ -384,15 +392,18 @@ class Splash(Target):
         if tcl_version < 8.6 or tk_version < 8.6:
             logger.warning(
                 "The installed Tcl/Tk (%s/%s) version might not work with the splash screen feature of the bootloader. "
-                "The bootloader is tested against Tcl/Tk 8.6", self._tkinter_module.TCL_VERSION,
-                self._tkinter_module.TK_VERSION
+                "The bootloader is tested against Tcl/Tk 8.6",
+                self._tkinter_module.TCL_VERSION,
+                self._tkinter_module.TK_VERSION,
             )
 
         # This should be impossible, since tcl/tk is released together with the same version number, but just in case
         if tcl_version != tk_version:
             logger.warning(
                 "The installed version of Tcl (%s) and Tk (%s) do not match. PyInstaller is tested against matching "
-                "versions", self._tkinter_module.TCL_VERSION, self._tkinter_module.TK_VERSION
+                "versions",
+                self._tkinter_module.TCL_VERSION,
+                self._tkinter_module.TK_VERSION,
             )
 
         # Ensure that Tcl is built with multi-threading support.
@@ -412,20 +423,23 @@ class Splash(Target):
         d = {}
         if self.text_pos is not None:
             logger.debug("Add text support to splash screen")
-            d.update({
-                'pad_x': self.text_pos[0],
-                'pad_y': self.text_pos[1],
-                'color': self.text_color,
-                'font': self.text_font,
-                'font_size': self.text_size,
-                'default_text': self.text_default,
-            })
+            d.update(
+                {
+                    'pad_x': self.text_pos[0],
+                    'pad_y': self.text_pos[1],
+                    'color': self.text_color,
+                    'font': self.text_font,
+                    'font_size': self.text_size,
+                    'default_text': self.text_default,
+                }
+            )
         script = splash_templates.build_script(text_options=d, always_on_top=self.always_on_top)
 
         if self.minify_script:
             # Remove any documentation, empty lines and unnecessary spaces
             script = '\n'.join(
-                line for line in map(lambda line: line.strip(), script.splitlines())
+                line
+                for line in map(lambda line: line.strip(), script.splitlines())
                 if not line.startswith('#')  # documentation
                 and line  # empty lines
             )

@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import fnmatch
 import glob
@@ -73,8 +73,9 @@ def _check_guts_toc(attr_name, old_toc, new_toc, last_build):
 
     Use this for input parameters.
     """
-    return _check_guts_eq(attr_name, old_toc, new_toc, last_build) or \
-        _check_guts_toc_mtime(attr_name, old_toc, new_toc, last_build)
+    return _check_guts_eq(attr_name, old_toc, new_toc, last_build) or _check_guts_toc_mtime(
+        attr_name, old_toc, new_toc, last_build
+    )
 
 
 def add_suffix_to_extension(dest_name, src_name, typecode):
@@ -99,7 +100,7 @@ def add_suffix_to_extension(dest_name, src_name, typecode):
         assert '.' not in base_name
         # Use this file's existing extension. For extensions such as ``libzmq.cp36-win_amd64.pyd``, we cannot use
         # ``os.path.splitext``, which would give only the ```.pyd`` part of the extension.
-        dest_name = dest_name + os.path.basename(src_name)[len(base_name):]
+        dest_name = dest_name + os.path.basename(src_name)[len(base_name) :]
 
     return dest_name, src_name, typecode
 
@@ -113,7 +114,7 @@ def process_collected_binary(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    strict_arch_validation=False
+    strict_arch_validation=False,
 ):
     """
     Process the collected binary using strip or UPX (or both), and apply any platform-specific processing. On macOS,
@@ -174,10 +175,7 @@ def process_collected_binary(
     # Prepare cache directory path. Cache is tied to python major/minor version, but also to various processing options.
     pyver = f'py{sys.version_info[0]}{sys.version_info[1]}'
     arch = platform.architecture()[0]
-    cache_dir = os.path.join(
-        CONF['cachedir'],
-        f'bincache{use_strip:d}{use_upx:d}{pyver}{arch}',
-    )
+    cache_dir = os.path.join(CONF['cachedir'], f'bincache{use_strip:d}{use_upx:d}{pyver}{arch}')
     if target_arch:
         cache_dir = os.path.join(cache_dir, target_arch)
     if is_darwin:
@@ -307,7 +305,7 @@ def process_collected_binary(
     if is_darwin:
         try:
             osxutils.binary_to_target_arch(cached_name, target_arch, display_name=src_name)
-            #osxutils.remove_signature_from_binary(cached_name)  # Disabled as per comment above.
+            # osxutils.remove_signature_from_binary(cached_name)  # Disabled as per comment above.
             target_rpath = str(
                 pathlib.PurePath('@loader_path', *['..' for level in pathlib.PurePath(dest_name).parent.parts])
             )
@@ -356,6 +354,7 @@ def _check_path_overlap(path):
     Raise SystemExit if there is overlap, return True otherwise
     """
     from PyInstaller.config import CONF
+
     specerr = 0
     if CONF['workpath'].startswith(path):
         logger.error('Specfile error: The output path "%s" contains WORKPATH (%s)', path, CONF['workpath'])
@@ -365,8 +364,8 @@ def _check_path_overlap(path):
         specerr += 1
     if specerr:
         raise SystemExit(
-            'Error: Please edit/recreate the specfile (%s) and set a different output name (e.g. "dist").' %
-            CONF['spec']
+            'Error: Please edit/recreate the specfile (%s) and set a different output name (e.g. "dist").'
+            % CONF['spec']
         )
     return True
 
@@ -390,6 +389,7 @@ def _rmtree(path):
     Remove directory and all its contents, but only after user confirmation, or if the -y option is set.
     """
     from PyInstaller.config import CONF
+
     if CONF['noconfirm']:
         choice = 'y'
     elif sys.stdout.isatty():
@@ -461,13 +461,13 @@ def format_binaries_and_datas(binaries_or_datas, workingdir=None):
             raise InvalidSrcDestTupleError(
                 (src_root_path_or_glob, trg_root_dir),
                 "Empty SRC is not allowed when adding binary and data files, as it would result in collection of the "
-                "whole current working directory."
+                "whole current working directory.",
             )
         if not trg_root_dir:
             raise InvalidSrcDestTupleError(
                 (src_root_path_or_glob, trg_root_dir),
                 "Empty DEST_DIR is not allowed - to collect files into application's top-level directory, use "
-                f"{os.curdir!r}."
+                f"{os.curdir!r}.",
             )
         # Disallow absolute target paths, as well as target paths that would end up pointing outside of the
         # application's top-level directory.
@@ -497,10 +497,12 @@ def format_binaries_and_datas(binaries_or_datas, workingdir=None):
         for src_root_path in src_root_paths:
             if os.path.isfile(src_root_path):
                 # Normalizing the result to remove redundant relative paths (e.g., removing "./" from "trg/./file").
-                toc_datas.add((
-                    os.path.normpath(os.path.join(trg_root_dir, os.path.basename(src_root_path))),
-                    os.path.normpath(src_root_path),
-                ))
+                toc_datas.add(
+                    (
+                        os.path.normpath(os.path.join(trg_root_dir, os.path.basename(src_root_path))),
+                        os.path.normpath(src_root_path),
+                    )
+                )
             elif os.path.isdir(src_root_path):
                 for src_dir, src_subdir_basenames, src_file_basenames in os.walk(src_root_path):
                     # Ensure the current source directory is a subdirectory of the passed top-level source directory.
@@ -521,9 +523,9 @@ def format_binaries_and_datas(binaries_or_datas, workingdir=None):
                         if os.path.isfile(src_file):
                             # Normalize the result to remove redundant relative paths (e.g., removing "./" from
                             # "trg/./file").
-                            toc_datas.add((
-                                os.path.normpath(os.path.join(trg_dir, src_file_basename)), os.path.normpath(src_file)
-                            ))
+                            toc_datas.add(
+                                (os.path.normpath(os.path.join(trg_dir, src_file_basename)), os.path.normpath(src_file))
+                            )
 
     return toc_datas
 
@@ -588,7 +590,7 @@ def strip_paths_in_code(co, new_filename=None):
         original_filename = os.path.normpath(co.co_filename)
         for f in replace_paths:
             if original_filename.startswith(f):
-                new_filename = original_filename[len(f):]
+                new_filename = original_filename[len(f) :]
                 break
 
         else:
@@ -775,10 +777,7 @@ def postprocess_binaries_toc_pywin32_anaconda(binaries):
         f"pythoncom{sys.version_info[0]}{sys.version_info[1]}.dll",
     }
 
-    DUPLICATE_DIRS = {
-        pathlib.PurePath('.'),
-        pathlib.PurePath('win32'),
-    }
+    DUPLICATE_DIRS = {pathlib.PurePath('.'), pathlib.PurePath('win32')}
 
     processed_binaries = []
     for dest_name, src_name, typecode in binaries:

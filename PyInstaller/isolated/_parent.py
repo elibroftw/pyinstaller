@@ -143,17 +143,14 @@ def child(read_from_parent: int, write_to_parent: int):
     """
     if os.name != 'nt':
         # Explicitly disabling close_fds is a requirement for making file descriptors inheritable by child processes.
-        extra_kwargs = {
-            "env": _subprocess_env(),
-            "close_fds": False,
-        }
+        extra_kwargs = {"env": _subprocess_env(), "close_fds": False}
     else:
         # On Windows, we can use subprocess.STARTUPINFO to explicitly pass the list of file handles to be inherited,
         # so we can avoid disabling close_fds
         extra_kwargs = {
             "env": _subprocess_env(),
             "close_fds": True,
-            "startupinfo": subprocess.STARTUPINFO(lpAttributeList={"handle_list": [read_from_parent, write_to_parent]})
+            "startupinfo": subprocess.STARTUPINFO(lpAttributeList={"handle_list": [read_from_parent, write_to_parent]}),
         }
 
     # Run the _child.py script directly passing it the two file descriptors it needs to talk back to the parent.
@@ -169,6 +166,7 @@ def _subprocess_env():
     Define the environment variables to be readable in a child process.
     """
     from PyInstaller.config import CONF
+
     python_path = CONF["pathex"]
     if "PYTHONPATH" in os.environ:
         python_path = python_path + [os.environ["PYTHONPATH"]]
@@ -204,6 +202,7 @@ class Python:
                 z = child.call(bazz, some_flag=True)
 
     """
+
     def __init__(self, strict_mode=None):
         self._child = None
 
@@ -415,6 +414,7 @@ def decorate(function):
             14.2
 
     """
+
     @functools.wraps(function)
     def wrapped(*args, **kwargs):
         return call(function, *args, **kwargs)

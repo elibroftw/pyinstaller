@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -8,7 +8,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import os
 
@@ -118,7 +118,7 @@ def test_idlelib(pyi_builder):
 @skipif(
     is_linux,
     reason="SecretStorage backend on linux requires active D-BUS session and initialized keyring, and may "
-    "need to unlock the keyring via UI prompt."
+    "need to unlock the keyring via UI prompt.",
 )
 def test_keyring(pyi_builder):
     pyi_builder.test_source("""
@@ -293,6 +293,7 @@ def test_usb(pyi_builder):
     # See if the usb package is supported on this platform.
     try:
         import usb
+
         # This will verify that the backend is present; if not, it will skip this test.
         usb.core.find()
     except (ImportError, usb.core.NoBackendError):
@@ -319,7 +320,7 @@ def test_zeep(pyi_builder):
 
 
 @importorskip('PIL')
-#@pytest.mark.xfail(reason="Fails with Pillow 3.0.0")
+# @pytest.mark.xfail(reason="Fails with Pillow 3.0.0")
 def test_pil_img_conversion(pyi_builder):
     datas = os.pathsep.join((str(_DATA_DIR.join('PIL_images')), '.'))
     pyi_builder.test_script(
@@ -410,9 +411,11 @@ def test_pandas_plotting_matplotlib(pyi_builder):
 @pytest.mark.skipif(not is_win, reason='pywin32-ctypes is supported only on Windows')
 @pytest.mark.parametrize('submodule', ['win32api', 'win32cred', 'pywintypes'])
 def test_pywin32ctypes(pyi_builder, submodule):
-    pyi_builder.test_source("""
+    pyi_builder.test_source(
+        """
         from win32ctypes.pywin32 import {0}
-        """.format(submodule))
+        """.format(submodule)
+    )
 
 
 @importorskip('setuptools')

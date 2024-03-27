@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2005-2023, PyInstaller Development Team.
 #
 # Distributed under the terms of the GNU General Public License (version 2
@@ -7,7 +7,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 import glob
 import os
@@ -81,10 +81,9 @@ def _generate_loader_cache(gdk_pixbuf_query_loaders, libdir, loader_libs):
     #
     # On Windows, the loaders lib directory is relative, starts with 'lib', and uses \\ as path separators
     # (escaped \).
-    cachedata = subprocess.run([gdk_pixbuf_query_loaders, *loader_libs],
-                               check=True,
-                               stdout=subprocess.PIPE,
-                               encoding='utf-8').stdout
+    cachedata = subprocess.run(
+        [gdk_pixbuf_query_loaders, *loader_libs], check=True, stdout=subprocess.PIPE, encoding='utf-8'
+    ).stdout
 
     output_lines = []
     prefix = '"' + os.path.join(libdir, 'gdk-pixbuf-2.0', '2.10.0')

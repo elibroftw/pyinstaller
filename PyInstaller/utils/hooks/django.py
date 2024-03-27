@@ -32,10 +32,7 @@ def django_dottedstring_imports(django_root_dir):
     # Extra search paths to add to sys.path:
     #  - parent directory of the django_root_dir
     #  - django_root_dir itself; often, Django users do not specify absolute imports in the settings module.
-    search_paths = [
-        PyInstaller.utils.misc.get_path_to_toplevel_modules(django_root_dir),
-        django_root_dir,
-    ]
+    search_paths = [PyInstaller.utils.misc.get_path_to_toplevel_modules(django_root_dir), django_root_dir]
     sys.path += search_paths
 
     # Set the path to project's settings module
@@ -67,7 +64,7 @@ def django_dottedstring_imports(django_root_dir):
     def _remove_class(class_name):
         return '.'.join(class_name.split('.')[0:-1])
 
-    #-- Changes in Django 1.7.
+    # -- Changes in Django 1.7.
 
     # Remove class names and keep just modules.
     if hasattr(settings, 'AUTHENTICATION_BACKENDS'):
