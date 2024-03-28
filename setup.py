@@ -280,7 +280,7 @@ else:
 #--
 
 setup(
-    name='cs489_pyinstaller_testable_1',
+    name='cs489_pyinstaller_testable_2',
     setup_requires=["setuptools >= 42.0.0"],
     cmdclass={
         'build_bootloader': build_bootloader,
