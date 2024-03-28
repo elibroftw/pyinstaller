@@ -36,8 +36,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ['3.12']
-        os: ['windows-latest']
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
+        os: ['windows-latest', 'ubuntu-22.04', 'macos-12']
       fail-fast: true
     steps:
       - uses: actions/checkout@v4
@@ -171,7 +171,7 @@ jobs:
 
       - name: Run unit tests 
         run: |
-          pytest -n 8 --durations 10 tests/unit
+          pytest -n 5 --durations 10 tests/unit
 
       # Fails the current job and exits if any unit test errors were encountered. This is so we do not
       # waste CI resources running the long functional tests if unit tests fail.
@@ -181,7 +181,7 @@ jobs:
 
       - name: Run functional tests 
         run: |
-          pytest -n 8 --maxfail 3 --durations 10 tests/functional
+          pytest -n 5 --maxfail 3 --durations 10 tests/functional
 
       # Install and test PyInstaller Hook Sample, to ensure that tests declared in
       # entry-points are discovered.
@@ -213,7 +213,7 @@ jobs:
           docker run
           foo
           pytest
-          -n 8 --maxfail 3 --durations 10 tests/unit tests/functional
+          -n 5 --maxfail 3 --durations 10 tests/unit tests/functional
 
       # Verify that installing from sdist works. This is mostly just a verification that the MANIFEST.in contains
       # all the extras needed to compile the bootloader.
