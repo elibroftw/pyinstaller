@@ -26,3 +26,6 @@ xmldiff
 
 # Used for strict validation of generated macOS .app bundles
 xattr; sys_platform == 'darwin'
+
+# Used for code coverage reports
+pytest-cov
